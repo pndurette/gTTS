@@ -1,7 +1,7 @@
 gTTS
 ====
 
-*gTTS* (Google Text to Speech): a Python interface to Google's Text to Speech API. Create an mp3 file with the `gTTS` module or `tts-cli.py` command line utility.
+**gTTS** (Google Text to Speech): a Python interface to Google's Text to Speech API. Create an mp3 file with the `gTTS` module or `tts-cli.py` command line utility.
 
 Module
 ------
@@ -24,11 +24,11 @@ Invoke `tts-cli.py`:
     tts-cli.py --help
     usage: tts-cli.py [-h] (-t TEXT | -f FILE) [-l LANG] [--debug] destination
 
-(Ex.) Read the string 'Hello' in English:
+(Ex.) Read the string 'Hello' in English to hello.mp3
 
     $ tts-cli.py -t "Hello" -l 'en' hello.mp3
 
-(Ex.) Read the contents of file 'hello.txt' in Czech:
+(Ex.) Read the contents of file 'hello.txt' in Czech to hello.mp3:
 
     $ tts-cli.py -f hello.txt -l 'cs' hello.mp3
 

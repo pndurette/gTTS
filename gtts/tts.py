@@ -71,10 +71,8 @@ class gTTS:
             text_parts = self._tokenize(text, self.MAX_CHARS)           
 
         # Clean 
-        def strip(x): return x.replace('\n', '').strip()
-        def empty(x): return len(x) > 0
-        text_parts = map(strip, text_parts)
-        text_parts = filter(empty, text_parts)
+        text_parts = map(lambda x: x.replace('\n', '').strip(), text_parts)
+        text_parts = filter(lambda x: len(x) > 0, text_parts)
         self.text_parts = text_parts
 
     def save(self, savefile):

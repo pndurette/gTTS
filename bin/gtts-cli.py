@@ -24,5 +24,5 @@ try:
     # TTSTF (Text to Speech to File)
     tts = gTTS(text=text, lang=args.lang, debug=args.debug)
     tts.save(args.destination)
-except Exception, e:
+except Exception as e:
     print(str(e))

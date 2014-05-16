@@ -85,12 +85,12 @@ class gTTS:
                             'total' : len(self.text_parts),
                             'idx' : idx,
                             'textlen' : len(part) }
-                if self.debug: print payload
+                if self.debug: print(payload)
                 try:
                     r = requests.get(self.GOOGLE_TTS_URL, params=payload)
                     for chunk in r.iter_content(chunk_size=1024):
                         f.write(chunk)
-                except Exception, e:
+                except Exception as e:
                     raise
 
     def _tokenize(self, text, max_size):

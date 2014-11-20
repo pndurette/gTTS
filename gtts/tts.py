@@ -19,6 +19,8 @@ class gTTS:
         'da' : 'Danish',
         'nl' : 'Dutch',
         'en' : 'English',
+        'en-us' : 'English (United States)',
+        'en-au' : 'English (Australia)',
         'eo' : 'Esperanto',
         'fi' : 'Finnish',
         'fr' : 'French',

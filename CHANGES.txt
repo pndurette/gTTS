@@ -3,3 +3,20 @@ Initial release.
 
 v.1.0.2, 2014-05-15 --
 Python 3.x support.
+
+v.1.0.3  2015-11-21 --
+Added 'en-us' : 'English (United States)'.
+Added 'en-au' : 'English (Australia)'.
+(Thanks to @leo-labs!)
+
+v.1.0.4 2015-05-11 --
+Added case insensitiveness to language codes.
+Replaced 'zh-CN' : 'Mandarin (simplified)' with 'zh-cn' : 'Chinese (Mandarin/China)'.
+Replaced 'zh-TW' : 'Mandarin (traditional)' with 'zh-tw' : 'Chinese (Mandarin/Taiwan)' (same voice as above, better description).
+Added 'zh-yue' : 'Chinese (Cantonese)'.
+Added 'en-uk' : 'English (United Kingdom)'.
+Added 'pt-br' : 'Portuguese (Brazil)'.
+Added 'es-es': 'Spanish (Spain)'.
+Added 'es-us' : 'Spanish (United StateS)'
+(Note about new languages: Not 100% sure for 'zh-yue' : 'Chinese (Cantonese)' (but it sounds right) or 'pt-br' : 'Portuguese (Brazil)'. If you can help, don't hesitate!)
+Added version display to gtts-cli, pretty printed and sorted available languages.

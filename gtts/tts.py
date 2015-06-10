@@ -12,15 +12,18 @@ class gTTS:
         'ar' : 'Arabic',
         'hy' : 'Armenian',
         'ca' : 'Catalan',
-        'zh-CN' : 'Mandarin (simplified)',
-        'zh-TW' : 'Mandarin (traditional)',
+        'zh' : 'Chinese',
+        'zh-cn' : 'Chinese (Mandarin/China)',
+        'zh-tw' : 'Chinese (Mandarin/Taiwan)',
+        'zh-yue' : 'Chinese (Cantonese)',
         'hr' : 'Croatian',
         'cs' : 'Czech',
         'da' : 'Danish',
         'nl' : 'Dutch',
         'en' : 'English',
-        'en-us' : 'English (United States)',
         'en-au' : 'English (Australia)',
+        'en-uk' : 'English (United Kingdom)',
+        'en-us' : 'English (United States)',
         'eo' : 'Esperanto',
         'fi' : 'Finnish',
         'fr' : 'French',
@@ -40,11 +43,14 @@ class gTTS:
         'no' : 'Norwegian',
         'pl' : 'Polish',
         'pt' : 'Portuguese',
+        'pt-br' : 'Portuguese (Brazil)',
         'ro' : 'Romanian',
         'ru' : 'Russian',
         'sr' : 'Serbian',
         'sk' : 'Slovak',
         'es' : 'Spanish',
+        'es-es' : 'Spanish (Spain)',
+        'es-us' : 'Spanish (United States)',
         'sw' : 'Swahili',
         'sv' : 'Swedish',
         'ta' : 'Tamil',
@@ -56,10 +62,10 @@ class gTTS:
 
     def __init__(self, text, lang = 'en', debug = False):
         self.debug = debug
-        if lang not in self.LANGUAGES:
+        if lang.lower() not in self.LANGUAGES:
             raise Exception('Language not supported: %s' % lang)
         else:
-            self.lang = lang
+            self.lang = lang.lower()
 
         if not text:
             raise Exception('No text to speak')

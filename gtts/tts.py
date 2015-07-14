@@ -87,20 +87,24 @@ class gTTS:
     def save(self, savefile):
         """ Do the Web request and save to `savefile` """
         with open(savefile, 'wb') as f:
-            for idx, part in enumerate(self.text_parts):
-                payload = { 'ie' : 'UTF-8',
-                            'tl' : self.lang,
-                            'q' : part,
-                            'total' : len(self.text_parts),
-                            'idx' : idx,
-                            'textlen' : len(part) }
-                if self.debug: print(payload)
-                try:
-                    r = requests.get(self.GOOGLE_TTS_URL, params=payload)
-                    for chunk in r.iter_content(chunk_size=1024):
-                        f.write(chunk)
-                except Exception as e:
-                    raise
+            self.write_to_fp(f)
+
+    def write_to_fp(self, fp):
+        """ Do the Web request and save to a file-like object """
+        for idx, part in enumerate(self.text_parts):
+            payload = { 'ie' : 'UTF-8',
+                        'tl' : self.lang,
+                        'q' : part,
+                        'total' : len(self.text_parts),
+                        'idx' : idx,
+                        'textlen' : len(part) }
+            if self.debug: print(payload)
+            try:
+                r = requests.get(self.GOOGLE_TTS_URL, params=payload)
+                for chunk in r.iter_content(chunk_size=1024):
+                    fp.write(chunk)
+            except Exception as e:
+                raise
 
     def _tokenize(self, text, max_size):
         """ Tokenizer on basic roman punctuation """ 

@@ -20,3 +20,6 @@ Added 'es-es': 'Spanish (Spain)'.
 Added 'es-us' : 'Spanish (United StateS)'
 (Note about new languages: Not 100% sure for 'zh-yue' : 'Chinese (Cantonese)' (but it sounds right) or 'pt-br' : 'Portuguese (Brazil)'. If you can help, don't hesitate!)
 Added version display to gtts-cli, pretty printed and sorted available languages.
+
+v.1.0.5 2015-07-15
+Added the option to use write_to_fp() to write to a file-like object instead of only to a file (Thanks @Holzhaus)

@@ -24,6 +24,15 @@ Instanciate:
   *  `text` is the text to speak to file;
   *  `lang` is the language to speak in. A ISO 639-1 language code supported by the Google Text to Speech API.
 
+Using a file-like object (Ex.):
+
+    >> from gtts import gTTS
+    >> from tempfile import TemporaryFile
+    >> tts = gTTS(text='Hello', lang='en')
+    >> f = TemporaryFile()
+    >> tts.write_to_fp(f)
+    >> f.close()
+
 Command line utility
 --------------------
 Invoke `gtts-cli`:

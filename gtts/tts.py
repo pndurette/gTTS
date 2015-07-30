@@ -93,6 +93,7 @@ class gTTS:
         """ Do the Web request and save to a file-like object """
         for idx, part in enumerate(self.text_parts):
             payload = { 'ie' : 'UTF-8',
+                        'client' : 't',
                         'tl' : self.lang,
                         'q' : part,
                         'total' : len(self.text_parts),
@@ -101,6 +102,10 @@ class gTTS:
             if self.debug: print(payload)
             try:
                 r = requests.get(self.GOOGLE_TTS_URL, params=payload)
+                if self.debug:
+                    print("Headers: {}".format(r.request.headers))
+                    print("Reponse: {}, Redirects: {}".format(r.status_code, r.history))
+                r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
             except Exception as e:

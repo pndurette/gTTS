@@ -4,7 +4,8 @@ python:
   - "3.3"
   - "3.2"
   - "2.7"
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: "pip install ."
-# # command to run tests, e.g. python setup.py test
-script:  "python -m unittest discover -v -s gtts/tests/"
+sudo: false
+install:
+  - pip install .
+script:
+  - python -m unittest discover -v -s gtts/tests/

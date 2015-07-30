@@ -23,3 +23,7 @@ Added version display to gtts-cli, pretty printed and sorted available languages
 
 v.1.0.5 2015-07-15
 Added the option to use write_to_fp() to write to a file-like object instead of only to a file (Thanks @Holzhaus)
+
+v.1.0.6 2015-07-30
+Added the newly required 'client=t' parameter to the http request (Issue #7) (thanks @zainkhan_ on Twitter)
+Added an exception raise on bad http reponse (4xx or 5xx)

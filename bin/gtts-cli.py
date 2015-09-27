@@ -13,22 +13,15 @@ def languages():
 desc = "Creates an mp3 file from spoken text via the Google Text-to-Speech API ({v})".format(v=__version__)
 parser = argparse.ArgumentParser(description=desc, formatter_class=argparse.RawTextHelpFormatter)
 
-parser.add_argument('text', nargs='?', help="text to speak")
+text_group = parser.add_mutually_exclusive_group(required=True)
+text_group.add_argument('text', nargs='?', help="text to speak")      
+text_group.add_argument('-f', '--file', help="file to speak")
 
-parser.add_argument('-f', '--file', help="file to speak")
 parser.add_argument("-o", '--destination', help="destination mp3 file", action='store')
 parser.add_argument('-l', '--lang', default='en', help="ISO 639-1/IETF language tag to speak in:\n" + languages())
 parser.add_argument('--debug', default=False, action="store_true")
 
 args = parser.parse_args()
-
-if args.text and args.file:
-    print("Only 'string' or -f allowed, not both")
-    exit(1)
-
-if not args.text and not args.file:
-    print("Require text or file argument")
-    exit(1)
 
 try:
     if args.text:

@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+from __future__ import print_function
 from gtts import gTTS
 from gtts import __version__
 import sys
@@ -39,4 +40,8 @@ try:
         tts.write_to_fp(sys.stdout)
 
 except Exception as e:
-    print(str(e))
+    if args.destination:
+        print(str(e))
+    else:
+        print("ERROR: ", e, file=sys.stderr)
+        

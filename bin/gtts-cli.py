@@ -13,7 +13,7 @@ def languages():
 desc = "Creates an mp3 file from spoken text via the Google Text-to-Speech API ({v})".format(v=__version__)
 parser = argparse.ArgumentParser(description=desc, formatter_class=argparse.RawTextHelpFormatter)
 
-parser.add_argument('text', help="text to speak")
+parser.add_argument('text', nargs='?', help="text to speak")
 
 parser.add_argument('-f', '--file', help="file to speak")
 parser.add_argument("-o", '--destination', help="destination mp3 file", action='store')
@@ -21,8 +21,6 @@ parser.add_argument('-l', '--lang', default='en', help="ISO 639-1/IETF language 
 parser.add_argument('--debug', default=False, action="store_true")
 
 args = parser.parse_args()
-
-print(args)
 
 if args.text and args.file:
     print("Only 'string' or -f allowed, not both")
@@ -45,7 +43,6 @@ try:
     if args.destination:
         tts.save(args.destination)
     else:
-        print('writing to buffer')
         tts.write_to_fp(sys.stdout)
 
 except Exception as e:

@@ -27,3 +27,10 @@ Added the option to use write_to_fp() to write to a file-like object instead of 
 v.1.0.6 2015-07-30
 Added the newly required 'client=t' parameter to the http request (Issue #7) (thanks @zainkhan_ on Twitter)
 Added an exception raise on bad http reponse (4xx or 5xx)
+
+v.1.0.7 2015-10-07
+Changed the gtts-cli arguments to make it pipeable and more standard:
+> usage: gtts-cli.py [-h] [-f FILE] [-o DESTINATION] [-l LANG] [--debug] [text]
+Made '<text to speak>' the positional argument (replacing -t / --text)
+Made '<destination file>' optional and using -o / --destination. Defaults to STDOUT for piping.
+(Thanks to @Dr-Horv!)

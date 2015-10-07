@@ -38,15 +38,15 @@ Command line utility
 Invoke `gtts-cli`:
 
     gtts-cli.py --help
-    usage: gtts-cli.py [-h] (-t TEXT | -f FILE) [-l LANG] [--debug] destination
+    usage: gtts-cli.py [-h] (["text to speak"] | -f FILE) [-l LANG] [--debug] [-o destination_file]
 
 (Ex.) Read the string 'Hello' in English to hello.mp3
 
-    $ gtts-cli.py -t "Hello" -l 'en' hello.mp3
+    $ gtts-cli.py "Hello" -l 'en' -o hello.mp3
 
 (Ex.) Read the contents of file 'hello.txt' in Czech to hello.mp3:
 
-    $ gtts-cli.py -f hello.txt -l 'cs' hello.mp3
+    $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
 
 Supported Languages
 -------------------

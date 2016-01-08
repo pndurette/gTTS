@@ -3,6 +3,7 @@ import re
 import requests
 
 
+
 def rshift(val, n): return val>>n if val >= 0 else (val+0x100000000)>>n
 
 class gTTS:
@@ -63,6 +64,11 @@ class gTTS:
         'vi' : 'Vietnamese',
         'cy' : 'Welsh'
     }
+
+    GOOGLE_TRANSLATE_URL = "http://translate.google.com"
+    SALT_1 = "+-a^+6"
+    SALT_2 = "+-3^+b+-f"
+
 
     def __init__(self, text, lang = 'en', debug = False):
         self.debug = debug
@@ -137,7 +143,7 @@ class gTTS:
 
     def calculate_token(self, text, seed=None):
         if self.token_key is None and seed is None:
-            r = requests.get("http://translate.google.com")
+            r = requests.get(GOOGLE_TRANSLATE_URL)
             m = re.search(r"TKK='(\d+)'", r.text)
             self.token_key = int(m.group(1))
         tk = "tk"
@@ -171,8 +177,8 @@ class gTTS:
         a = seed if seed is not None else self.token_key
         for value in d:
             a += value
-            a = self.work_token(a, "+-a^+6")
-        a = self.work_token(a, "+-3^+b+-f")
+            a = self.work_token(a, SALT_1)
+        a = self.work_token(a, SALT_2)
         if 0 > a:
             a = (a & 2147483647) + 2147483648
         a %= 1E6

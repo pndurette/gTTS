@@ -146,7 +146,6 @@ class gTTS:
             r = requests.get(self.GOOGLE_TRANSLATE_URL)
             m = re.search(r"TKK='(\d+)'", r.text)
             self.token_key = int(m.group(1))
-        tk = "tk"
         e = 0
         f = 0
         d = [None] * len(text)
@@ -175,6 +174,8 @@ class gTTS:
                     e += 1
 
         a = seed if seed is not None else self.token_key
+        if seed is None:
+            seed = self.token_key
         for value in d:
             a += value
             a = self.work_token(a, self.SALT_1)
@@ -183,7 +184,7 @@ class gTTS:
             a = (a & 2147483647) + 2147483648
         a %= 1E6
         a = int(a)
-        return str(a) + "." + str(a ^ self.token_key)
+        return str(a) + "." + str(a ^ seed)
 
     def work_token(self, a, seed):
         for i in range(0, len(seed) - 2, 3):

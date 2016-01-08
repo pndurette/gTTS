@@ -1,6 +1,3 @@
-/**
- * Created by Boudewijn on 8-1-2016.
- */
 var cM = function(a) {
             return function() {
                 return a
@@ -29,10 +26,11 @@ var dd = ".";
 fM = function(a) {
     var b;
     if (null === eM) {
-        var c = cM(String.fromCharCode(84));
-        b = cM(String.fromCharCode(75));
+        var c = cM(String.fromCharCode(84)); // char 84 is T
+        b = cM(String.fromCharCode(75)); // char 75 is K
         c = [c(), c()];
         c[1] = b();
+        // So basically we're getting window.TKK
         eM = Number(window[c.join(b())]) || 0
     }
     b = eM;
@@ -43,9 +41,9 @@ fM = function(a) {
     for (var c = cb + d.join(k) +
             of, d = [], e = 0, f = 0; f < a.length; f++) {
         var g = a.charCodeAt(f);
+
         128 > g ? d[e++] = g : (2048 > g ? d[e++] = g >> 6 | 192 : (55296 == (g & 64512) && f + 1 < a.length && 56320 == (a.charCodeAt(f + 1) & 64512) ? (g = 65536 + ((g & 1023) << 10) + (a.charCodeAt(++f) & 1023), d[e++] = g >> 18 | 240, d[e++] = g >> 12 & 63 | 128) : d[e++] = g >> 12 | 224, d[e++] = g >> 6 & 63 | 128), d[e++] = g & 63 | 128)
     }
-    console.log(d)
     a = b || 0;
     for (e = 0; e < d.length; e++) a += d[e], a = dM(a, Vb);
     a = dM(a, Ub);
@@ -54,4 +52,4 @@ fM = function(a) {
     return a.toString() + dd + (a ^ b)
 };
 
-console.log(fM("Hey asshole"));
+console.log(fM("Hello person"));

@@ -135,8 +135,8 @@ class gTTS:
             min_parts += self._minimize(p, " ", max_size)
         return min_parts
 
-    def calculate_token(self, text):
-        if self.token_key is None:
+    def calculate_token(self, text, seed=None):
+        if self.token_key is None and seed is None:
             r = requests.get("http://translate.google.com")
             m = re.search(r"TKK='(\d+)'", r.text)
             self.token_key = int(m.group(1))
@@ -168,7 +168,7 @@ class gTTS:
                     d[e] = g & 63 | 128
                     e += 1
 
-        a = self.token_key
+        a = seed if seed is not None else self.token_key
         for value in d:
             a += value
             a = self.work_token(a, "+-a^+6")

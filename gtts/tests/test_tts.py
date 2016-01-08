@@ -53,7 +53,7 @@ class TestInit(unittest.TestCase):
         lang = 'en'
         text = "Hey asshole"
         tts = gTTS(text, lang)
-        self.assertEqual("513085.127987", tts.calculate_token(text))
+        self.assertEqual("514801.130336", tts.calculate_token(text, seed=403409))
 
     def test_work_token(self):
         lang = 'en'

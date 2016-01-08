@@ -143,7 +143,7 @@ class gTTS:
 
     def calculate_token(self, text, seed=None):
         if self.token_key is None and seed is None:
-            r = requests.get(GOOGLE_TRANSLATE_URL)
+            r = requests.get(self.GOOGLE_TRANSLATE_URL)
             m = re.search(r"TKK='(\d+)'", r.text)
             self.token_key = int(m.group(1))
         tk = "tk"
@@ -177,8 +177,8 @@ class gTTS:
         a = seed if seed is not None else self.token_key
         for value in d:
             a += value
-            a = self.work_token(a, SALT_1)
-        a = self.work_token(a, SALT_2)
+            a = self.work_token(a, self.SALT_1)
+        a = self.work_token(a, self.SALT_2)
         if 0 > a:
             a = (a & 2147483647) + 2147483648
         a %= 1E6

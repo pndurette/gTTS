@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import requests
-
+import calendar
+import time
+import math
 
 
 def rshift(val, n): return val>>n if val >= 0 else (val+0x100000000)>>n
@@ -143,9 +145,9 @@ class gTTS:
 
     def calculate_token(self, text, seed=None):
         if self.token_key is None and seed is None:
-            r = requests.get(self.GOOGLE_TRANSLATE_URL)
-            m = re.search(r"TKK='(\d+)'", r.text)
-            self.token_key = int(m.group(1))
+            timestamp = calendar.timegm(time.gmtime())
+            hours = math.floor(timestamp / 3600)
+            self.token_key = hours
         e = 0
         f = 0
         d = [None] * len(text)

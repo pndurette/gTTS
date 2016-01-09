@@ -146,7 +146,7 @@ class gTTS:
     def calculate_token(self, text, seed=None):
         if self.token_key is None and seed is None:
             timestamp = calendar.timegm(time.gmtime())
-            hours = math.floor(timestamp / 3600)
+            hours = int(math.floor(timestamp / 3600))
             self.token_key = hours
         e = 0
         f = 0

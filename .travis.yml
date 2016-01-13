@@ -8,6 +8,7 @@ sudo: false
 install:
 - pip install .
 script:
+- pip install --upgrade pip
 - python -m unittest discover -v -s gtts/tests/
 deploy:
   provider: pypi

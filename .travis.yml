@@ -19,3 +19,4 @@ deploy:
     distributions: sdist
     repo: pndurette/gTTS
     branch: master
+    python: '3.4'

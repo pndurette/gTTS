@@ -1,3 +1,5 @@
+// Token calculating functions found inline on translate.google.com
+
 var cM = function(a) {
             return function() {
                 return a

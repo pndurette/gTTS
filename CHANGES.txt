@@ -33,4 +33,8 @@ Changed the gtts-cli arguments to make it pipeable and more standard:
 > usage: gtts-cli.py [-h] [-f FILE] [-o DESTINATION] [-l LANG] [--debug] [text]
 Made '<text to speak>' the positional argument (replacing -t / --text)
 Made '<destination file>' optional and using -o / --destination. Defaults to STDOUT for piping.
-(Thanks to @Dr-Horv!)
+(Pull Request #10 -- Thanks to @Dr-Horv!)
+
+v.1.1.0 2016-01-13
+Fixed the constant 502 errors (for now): generating http request tokens ('tk') the same way the Google Translate page does
+(Pull Requests #16, #17 -- Thanks to @Boudewijn26!)

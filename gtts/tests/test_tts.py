@@ -49,20 +49,6 @@ class TestInit(unittest.TestCase):
         text = ""
         self.assertRaises(Exception, gTTS, text, lang)
 
-    def test_token(self):
-        lang = 'en'
-        text = "Hello person"
-        tts = gTTS(text, lang)
-        self.assertEqual("654469.1039188", tts.calculate_token(text, seed=403409))
-
-    def test_work_token(self):
-        lang = 'en'
-        tokenkey = 403404
-        text = "Hello person"
-        seed = "+-a^+6"
-        tts = gTTS(text, lang)
-        self.assertEqual(415744659, tts.work_token(tokenkey, seed))
-
 class TestTokenizer(unittest.TestCase):
     """Tokenization when text is longer than what is allowed (MAX_CHARS)"""
 

@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-import re
-import requests
-import calendar
-import time
-import math
-
-
-def rshift(val, n): return val>>n if val >= 0 else (val+0x100000000)>>n
+import re, requests
+from .token import gToken
 
 class gTTS:
     """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
@@ -67,11 +61,6 @@ class gTTS:
         'cy' : 'Welsh'
     }
 
-    GOOGLE_TRANSLATE_URL = "http://translate.google.com"
-    SALT_1 = "+-a^+6"
-    SALT_2 = "+-3^+b+-f"
-
-
     def __init__(self, text, lang = 'en', debug = False):
         self.debug = debug
         if lang.lower() not in self.LANGUAGES:
@@ -95,7 +84,9 @@ class gTTS:
         text_parts = [strip(x) for x in text_parts]
         text_parts = [x for x in text_parts if len(x) > 0]
         self.text_parts = text_parts
-        self.token_key = None
+        
+        # Google Translate token
+        self.token = gToken()
 
     def save(self, savefile):
         """ Do the Web request and save to `savefile` """
@@ -113,7 +104,7 @@ class gTTS:
                         'idx' : idx,
                         'client' : 't',
                         'textlen' : len(part),
-                        'tk' : self.calculate_token(part)}
+                        'tk' : self.token.calculate_token(part)}
             headers = {
                 "Referer" : "http://translate.google.com/",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
@@ -142,60 +133,6 @@ class gTTS:
         for p in parts:
             min_parts += self._minimize(p, " ", max_size)
         return min_parts
-
-    def calculate_token(self, text, seed=None):
-        if self.token_key is None and seed is None:
-            timestamp = calendar.timegm(time.gmtime())
-            hours = int(math.floor(timestamp / 3600))
-            self.token_key = hours
-        e = 0
-        f = 0
-        d = [None] * len(text)
-        for c in text:
-            g = ord(c)
-            if 128 > g:
-                d[e] = g
-                e += 1
-            elif 2048 > g:
-                d[e] = g >> 6 | 192
-                e += 1
-            else:
-                if 55296 == (g & 64512) and f + 1 < len(text) and 56320 == (ord(text[f + 1]) & 64512):
-                    f += 1
-                    g = 65536 + ((g & 1023) << 10) + (ord(text[f]) & 1023)
-                    d[e] = g >> 18 | 240
-                    e += 1
-                    d[e] = g >> 12 & 63 | 128
-                    e += 1
-                else:
-                    d[e] = g >> 12 | 224
-                    e += 1
-                    d[e] = g >> 6 & 63 | 128
-                    e += 1
-                    d[e] = g & 63 | 128
-                    e += 1
-
-        a = seed if seed is not None else self.token_key
-        if seed is None:
-            seed = self.token_key
-        for value in d:
-            a += value
-            a = self.work_token(a, self.SALT_1)
-        a = self.work_token(a, self.SALT_2)
-        if 0 > a:
-            a = (a & 2147483647) + 2147483648
-        a %= 1E6
-        a = int(a)
-        return str(a) + "." + str(a ^ seed)
-
-    def work_token(self, a, seed):
-        for i in range(0, len(seed) - 2, 3):
-            char = seed[i + 2]
-            d = ord(char[0]) - 87 if char >= "a" else int(char)
-            d = rshift(a, d) if seed[i + 1] == "+" else a << d
-            a = a + d & 4294967295 if seed[i] == "+" else a ^ d
-        return a
-
 
     def _minimize(self, thestring, delim, max_size):
         """ Recursive function that splits `thestring` in chunks

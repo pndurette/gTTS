@@ -8,7 +8,7 @@ import argparse
 
 def languages():
     """Sorted pretty printed string of supported languages"""
-    return ", ".join(sorted("{}: '{}'".format(v,k) for k,v in gTTS.LANGUAGES.iteritems()))
+    return ", ".join(sorted("{}: '{}'".format(gTTS.LANGUAGES[k], k) for k in gTTS.LANGUAGES))
 
 # Args
 desc = "Creates an mp3 file from spoken text via the Google Text-to-Speech API ({v})".format(v=__version__)

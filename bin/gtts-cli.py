@@ -5,6 +5,7 @@ from gtts import gTTS
 from gtts import __version__
 import sys
 import argparse
+import os
 
 def languages():
     """Sorted pretty printed string of supported languages"""
@@ -37,7 +38,7 @@ try:
     if args.destination:
         tts.save(args.destination)
     else:
-        tts.write_to_fp(sys.stdout)
+        tts.write_to_fp(os.fdopen(sys.stdout.fileno(), "wb"))
 
 except Exception as e:
     if args.destination:

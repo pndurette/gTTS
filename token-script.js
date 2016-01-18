@@ -36,6 +36,8 @@ fM = function(a) {
         eM = Number(window[c.join(b())]) || 0
     }
     b = eM;
+
+    // All this does is convert turn d into the byte values of the utf-8 representation of a
     var d = cM(String.fromCharCode(116)),
         c = cM(String.fromCharCode(107)),
         d = [d(), d()];
@@ -46,6 +48,9 @@ fM = function(a) {
 
         128 > g ? d[e++] = g : (2048 > g ? d[e++] = g >> 6 | 192 : (55296 == (g & 64512) && f + 1 < a.length && 56320 == (a.charCodeAt(f + 1) & 64512) ? (g = 65536 + ((g & 1023) << 10) + (a.charCodeAt(++f) & 1023), d[e++] = g >> 18 | 240, d[e++] = g >> 12 & 63 | 128) : d[e++] = g >> 12 | 224, d[e++] = g >> 6 & 63 | 128), d[e++] = g & 63 | 128)
     }
+    // So now utf8(d) == a
+
+
     a = b || 0;
     for (e = 0; e < d.length; e++) a += d[e], a = dM(a, Vb);
     a = dM(a, Ub);

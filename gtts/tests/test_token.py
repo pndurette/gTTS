@@ -1,3 +1,5 @@
+# coding=UTF-8
+
 import unittest
 
 from gtts import gToken
@@ -22,17 +24,17 @@ class TestToken(unittest.TestCase):
 
     def test_token_accentuated(self):
         lang = 'en'
-        text = 'Hé'
+        text = u'Hé'
         self.assertEqual('63792.446860', self.tokenizer.calculate_token(text, seed=403644))
 
     def test_token_special_char(self):
         lang = 'en'
-        text = '€Hé'
+        text = u'€Hé'
         self.assertEqual('535990.918794', self.tokenizer.calculate_token(text, seed=403644))
 
     def test_token_very_special_char(self):
         lang = 'en'
-        text = "◐"
+        text = u"◐"
         self.assertEqual('457487.54195', self.tokenizer.calculate_token(text, seed=403644))
 
 if __name__ == '__main__':

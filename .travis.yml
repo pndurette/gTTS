@@ -11,7 +11,7 @@ script:
 - python -m unittest discover -v -s gtts/tests/
 deploy:
   provider: pypi
-  user: pndurette@gmail.com
+  user: pndurette
   password:
     secure: GTbUTja0D/LDnIxLLO4ohTHGugwrnx2nMqAw5n7a9JAsfxCVXz6+vu0fkNBmOSJV0bNsFcoj/Q+lcR1SCNsw2NibWWFLDMoYD/yqP/SrHTSUoTXt+o7H9/qvxR2MDr0t2S5kjAux4bw5uPg8WtYlPpD0VWgWkFCm3JmJG+cG1tA=
   on:
@@ -19,3 +19,4 @@ deploy:
     distributions: sdist
     repo: pndurette/gTTS
     branch: master
+    python: '3.4'

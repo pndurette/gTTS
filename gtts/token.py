@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-import calendar, time, math
+import calendar
+import math
+import time
+
 
 class gToken:
     """ gToken (Google Translate Token)
@@ -19,33 +22,7 @@ class gToken:
     def calculate_token(self, text, seed=None):
         """ Calculate the request token (`tk`) of a string """
 
-        e = 0
-        f = 0
-        d = [None] * len(text)
-        for c in text:
-            g = ord(c)
-            if 128 > g:
-                d[e] = g
-                e += 1
-            elif 2048 > g:
-                d[e] = g >> 6 | 192
-                e += 1
-            else:
-                if 55296 == (g & 64512) and f + 1 < len(text) and 56320 == (ord(text[f + 1]) & 64512):
-                    f += 1
-                    g = 65536 + ((g & 1023) << 10) + (ord(text[f]) & 1023)
-                    d[e] = g >> 18 | 240
-                    e += 1
-                    d[e] = g >> 12 & 63 | 128
-                    e += 1
-                else:
-                    d[e] = g >> 12 | 224
-                    e += 1
-                    d[e] = g >> 6 & 63 | 128
-                    e += 1
-                    d[e] = g & 63 | 128
-                    e += 1
-
+        d = list(bytearray(text.encode('UTF-8')))
         a = seed if seed is not None else self.token_key
         if seed is None:
             seed = self.token_key

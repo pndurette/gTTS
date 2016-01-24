@@ -15,7 +15,7 @@ setup(
     scripts=['bin/gtts-cli', 'bin/gtts-cli.py'],
     license='MIT',
     description='Create an mp3 file from spoken text via the Google TTS (Text-to-Speech) API',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         "requests"
     ],

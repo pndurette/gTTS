@@ -103,3 +103,10 @@ Supported Languages
   * 'vi' : 'Vietnamese'
   * 'cy' : 'Welsh'
 
+Contributing
+------------
+
+1. Fork [pndurette/gTTS](https://github.com/pndurette/gTTS) on GitHub and clone it locally
+2. Make sure you write tests for new features or modify the existing ones if necessary
+3. Open a new Pull Request from your feature branch to the `develop` branch.
+4. Thank you!

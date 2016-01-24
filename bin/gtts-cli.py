@@ -5,10 +5,11 @@ from gtts import gTTS
 from gtts import __version__
 import sys
 import argparse
+import os
 
 def languages():
     """Sorted pretty printed string of supported languages"""
-    return ", ".join(sorted("{}: '{}'".format(v,k) for k,v in gTTS.LANGUAGES.iteritems()))
+    return ", ".join(sorted("{}: '{}'".format(gTTS.LANGUAGES[k], k) for k in gTTS.LANGUAGES))
 
 # Args
 desc = "Creates an mp3 file from spoken text via the Google Text-to-Speech API ({v})".format(v=__version__)
@@ -37,7 +38,7 @@ try:
     if args.destination:
         tts.save(args.destination)
     else:
-        tts.write_to_fp(sys.stdout)
+        tts.write_to_fp(os.fdopen(sys.stdout.fileno(), "wb"))
 
 except Exception as e:
     if args.destination:

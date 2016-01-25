@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/) and
 This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [1.1.3] - 2016-01-24
 ### Added
 - Contributing section to README.md,
 
@@ -12,7 +14,7 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ### Fixed
 - Made `gtts-cli` work w/ Python 3.x, from @desbma
-- Handle non-ASCII chars correctly, from @Boudewijn26, h/t @desbma
+- Handle non-ASCII chars correctly (a wrong token would get generated resulting in a HTTP 403), from @Boudewijn26, h/t @desbma
 
 ### Removed
 - Dropped Python 3.2 support and in .travis.yml
@@ -77,7 +79,8 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.2...develop
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.3...develop
+[1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.0...v1.1.2
 [1.1.0]: https://github.com/pndurette/gTTS/compare/v1.0.7...v1.1.0
 [1.0.7]: https://github.com/pndurette/gTTS/compare/v1.0.6...v1.0.7

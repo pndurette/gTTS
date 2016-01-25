@@ -77,7 +77,7 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.2...develop
 [1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.0...v1.1.2
 [1.1.0]: https://github.com/pndurette/gTTS/compare/v1.0.7...v1.1.0
 [1.0.7]: https://github.com/pndurette/gTTS/compare/v1.0.6...v1.0.7

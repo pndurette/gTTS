@@ -80,7 +80,7 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 - Initial release
 
 [Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.3...develop
-[1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.2...v1.1.3
+[1.1.3]: https://github.com/pndurette/gTTS/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.0...v1.1.2
 [1.1.0]: https://github.com/pndurette/gTTS/compare/v1.0.7...v1.1.0
 [1.0.7]: https://github.com/pndurette/gTTS/compare/v1.0.6...v1.0.7

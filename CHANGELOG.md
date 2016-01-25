@@ -1,0 +1,88 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/) and
+This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
+
+## [Unreleased]
+### Added
+- Contributing section to README.md,
+
+### Changed
+- Better CHANGELOG.md replacing CHANGES.txt
+
+### Fixed
+- Made `gtts-cli` work w/ Python 3.x, from @desbma
+- Handle non-ASCII chars correctly, from @Boudewijn26, h/t @desbma
+
+### Removed
+- Dropped Python 3.2 support and in .travis.yml
+
+## [1.1.2] - 2016-01-13
+- Packaging and Travis CI changes
+
+## 1.1.1 - 2016-01-13 [YANKED]
+### Changed
+- Packaging and Travis CI changes
+
+## [1.1.0] - 2016-01-13 [YANKED]
+### Added
+- Google Translate API token (`tk`) generation like translate.google.com to fix the constant HTTP 403 errors (for now), from @Boudewijn26
+
+## [1.0.7] - 2015-10-07
+### Changed
+- `gtts-cli` can be piped, arguments made more standard, from @Dr-Horv.
+
+## [1.0.6] - 2015-07-30
+### Added:
+- Raise an exception on bad HTTP response (4xx or 5xx).
+
+### Fixed
+- New required 'client=t' parameter for the api HTTP request, h/t @zainkhan_ on Twitter.
+
+## [1.0.5] - 2015-07-15
+### Added:
+- Option to use `write_to_fp()` to write to a file-like object instead of only to a file, from @Holzhaus.
+
+## [1.0.4] - 2015-05-11
+### Added
+- `gtts-cli` shows the version and pretty printed and sorted available languages.
+- `zh-yue` : 'Chinese (Cantonese)'.
+- `en-uk` : 'English (United Kingdom)'.
+- `pt-br` : 'Portuguese (Brazil)'.
+- `es-es` : 'Spanish (Spain)'.
+- `es-us` : 'Spanish (United StateS)'
+
+## Changed
+- Language code are now case insensitive.
+- Same voices but renamed for uniformity, better description:
+  - `zh-CN` : 'Mandarin (simplified)' is now `zh-cn` : 'Chinese (Mandarin/China)'.
+  - `zh-TW` : 'Mandarin (traditional)' is now `zh-tw` : 'Chinese (Mandarin/Taiwan)'.
+
+
+## [1.0.3] - 2014-11-21
+### Added
+- 'en-us' : 'English (United States)' from @leo-labs.
+- 'en-au' : 'English (Australia)'. from @leo-labs.
+
+## [1.0.2] - 2014-05-15
+### Changed
+- Python 3.x support.
+
+## 1.0.1 - 2014-05-15 [YANKED]
+### Added
+- Travis CI changes
+- Following [SemVer](http://semver.org/).
+
+## 1.0 - 2014-05-08
+### Added
+- Initial release
+
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.0...v.1.1.2
+[1.1.0]: https://github.com/pndurette/gTTS/compare/v1.0.7...v.1.1.0
+[1.0.7]: https://github.com/pndurette/gTTS/compare/v1.0.6...v.1.0.7
+[1.0.6]: https://github.com/pndurette/gTTS/compare/v1.0.5...v.1.0.6
+[1.0.5]: https://github.com/pndurette/gTTS/compare/v1.0.4...v.1.0.5
+[1.0.4]: https://github.com/pndurette/gTTS/compare/v1.0.3...v.1.0.4
+[1.0.3]: https://github.com/pndurette/gTTS/compare/v1.0.2...v.1.0.3
+[1.0.2]: https://github.com/pndurette/gTTS/compare/v1.0...v.1.0.2

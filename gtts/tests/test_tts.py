@@ -20,9 +20,9 @@ class TestLanguages(unittest.TestCase):
         tts = gTTS(self.text, lang)
         tts.save(path)
         
-        # Check if file created is > 3k
+        # Check if file created is > 2k
         filesize = os.path.getsize(path)
-        self.assertTrue(filesize > 3000)
+        self.assertTrue(filesize > 2000)
         
         # Cleanup
         os.remove(path)

@@ -1,2 +1,2 @@
 from .version import __version__
-from .tts import gTTS, gToken
+from .tts import gTTS

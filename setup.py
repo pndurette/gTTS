@@ -17,7 +17,8 @@ setup(
     description='Create an mp3 file from spoken text via the Google TTS (Text-to-Speech) API',
     long_description=open('README.md').read(),
     install_requires=[
-        "requests"
+        "requests",
+        "gtts_token"
     ],
     classifiers=[
           'Environment :: Console',

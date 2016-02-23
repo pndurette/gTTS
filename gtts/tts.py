@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re, requests
-from .token import gToken
+from gtts_token.gtts_token import Token
 
 class gTTS:
     """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
@@ -86,7 +86,7 @@ class gTTS:
         self.text_parts = text_parts
         
         # Google Translate token
-        self.token = gToken()
+        self.token = Token()
 
     def save(self, savefile):
         """ Do the Web request and save to `savefile` """

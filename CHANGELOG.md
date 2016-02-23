@@ -5,6 +5,11 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
 
+## [1.1.4] - 2016-02-22
+
+### Changed
+- Token calculation moved to now spun-off module [gTTS-Token](https://github.com/Boudewijn26/gTTS-token) maintained by @Boudewijn26
+
 ## [1.1.3] - 2016-01-24
 ### Added
 - Contributing section to README.md,
@@ -79,7 +84,8 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.3...develop
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.4...develop
+[1.1.4]: https://github.com/pndurette/gTTS/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/pndurette/gTTS/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.0...v1.1.2
 [1.1.0]: https://github.com/pndurette/gTTS/compare/v1.0.7...v1.1.0

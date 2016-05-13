@@ -102,7 +102,7 @@ class gTTS:
                         'tl' : self.lang,
                         'total' : len(self.text_parts),
                         'idx' : idx,
-                        'client' : 't',
+                        'client' : 'tw-ob',
                         'textlen' : len(part),
                         'tk' : self.token.calculate_token(part)}
             headers = {

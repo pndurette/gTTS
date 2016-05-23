@@ -28,7 +28,7 @@ You may either use `gTTS` as a **__python module__** or as a **__command-line ut
 
 ###### _Parameters:_
 *  `text` - Text to be spoken (written to file instead)
-*  `lang` - [ISO 639-1 language code](https://github.com/pndurette/gTTS/README.md#Supported%20Languages) (supported by the Google _Text to Speech_ API) to speak in
+*  `lang` - [ISO 639-1 language code](#lang_list) (supported by the Google _Text to Speech_ API) to speak in
 
 ##### 3. Write to a file
 
@@ -66,7 +66,7 @@ $ # Read the contents of file 'hello.txt' in Czech to hello.mp3:
 $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
 ```
 
-##Supported Languages
+##Supported Languages<a name="lang_list"></a>
 
   * 'af' : 'Afrikaans'
   * 'sq' : 'Albanian'

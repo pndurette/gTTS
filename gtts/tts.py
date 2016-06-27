@@ -12,6 +12,7 @@ class gTTS:
         'sq' : 'Albanian',
         'ar' : 'Arabic',
         'hy' : 'Armenian',
+        'bn' : 'Bengali',
         'ca' : 'Catalan',
         'zh' : 'Chinese',
         'zh-cn' : 'Chinese (Mandarin/China)',

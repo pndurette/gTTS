@@ -55,8 +55,9 @@ Supported Languages
   * 'sq' : 'Albanian'
   * 'ar' : 'Arabic'
   * 'hy' : 'Armenian'
+  * 'bn' : 'Bengali'
   * 'ca' : 'Catalan'
-  * 'zh' : 'Chinese',
+  * 'zh' : 'Chinese'
   * 'zh-cn' : 'Chinese (Mandarin/China)'
   * 'zh-tw' : 'Chinese (Mandarin/Taiwan)'
   * 'zh-yue' : 'Chinese (Cantonese)'

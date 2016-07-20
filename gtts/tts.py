@@ -30,7 +30,6 @@ class gTTS:
         'fr' : 'French',
         'de' : 'German',
         'el' : 'Greek',
-        'ht' : 'Haitian Creole',
         'hi' : 'Hindi',
         'hu' : 'Hungarian',
         'is' : 'Icelandic',

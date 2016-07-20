@@ -5,6 +5,14 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
 
+## [1.1.6] - 2016-07-20
+### Added
+- 'bn' : 'Bengali' (thanks @sakibiqbal, @mshubhankar)
+
+### Removed
+- 'ht' : 'Haitian Creole' (removed by Google)
+- 'token-script.js' (clean up)
+
 ## [1.1.5] - 2016-05-13
 ### Fixed
 - Fixed HTTP 403s by updating the client argument to reflect new API usage
@@ -88,7 +96,8 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.5...develop
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.6...develop
+[1.1.6]: https://github.com/pndurette/gTTS/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/pndurette/gTTS/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/pndurette/gTTS/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/pndurette/gTTS/compare/v1.1.2...v1.1.3

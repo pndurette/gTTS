@@ -72,8 +72,9 @@ $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
   * 'sq' : 'Albanian'
   * 'ar' : 'Arabic'
   * 'hy' : 'Armenian'
+  * 'bn' : 'Bengali'
   * 'ca' : 'Catalan'
-  * 'zh' : 'Chinese',
+  * 'zh' : 'Chinese'
   * 'zh-cn' : 'Chinese (Mandarin/China)'
   * 'zh-tw' : 'Chinese (Mandarin/Taiwan)'
   * 'zh-yue' : 'Chinese (Cantonese)'
@@ -90,7 +91,6 @@ $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
   * 'fr' : 'French'
   * 'de' : 'German'
   * 'el' : 'Greek'
-  * 'ht' : 'Haitian Creole'
   * 'hi' : 'Hindi'
   * 'hu' : 'Hungarian'
   * 'is' : 'Icelandic'

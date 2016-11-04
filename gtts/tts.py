@@ -58,7 +58,8 @@ class gTTS:
         'th' : 'Thai',
         'tr' : 'Turkish',
         'vi' : 'Vietnamese',
-        'cy' : 'Welsh'
+        'cy' : 'Welsh',
+        'ua' : 'Ukrainian'
     }
 
     def __init__(self, text, lang = 'en', debug = False):

@@ -5,6 +5,23 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
 
+## [1.1.6] - 2016-07-20
+### Added
+- 'bn' : 'Bengali' (thanks @sakibiqbal, @mshubhankar)
+
+### Removed
+- 'ht' : 'Haitian Creole' (removed by Google)
+- 'token-script.js' (clean up)
+
+## [1.1.5] - 2016-05-13
+### Fixed
+- Fixed HTTP 403s by updating the client argument to reflect new API usage
+
+## [1.1.4] - 2016-02-22
+
+### Changed
+- Token calculation moved to now spun-off module [gTTS-Token](https://github.com/Boudewijn26/gTTS-token) maintained by @Boudewijn26
+
 ## [1.1.3] - 2016-01-24
 ### Added
 - Contributing section to README.md,
@@ -79,7 +96,10 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.3...develop
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.6...develop
+[1.1.6]: https://github.com/pndurette/gTTS/compare/v1.1.5...v1.1.6
+[1.1.5]: https://github.com/pndurette/gTTS/compare/v1.1.4...v1.1.5
+[1.1.4]: https://github.com/pndurette/gTTS/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/pndurette/gTTS/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/pndurette/gTTS/compare/v1.1.0...v1.1.2
 [1.1.0]: https://github.com/pndurette/gTTS/compare/v1.0.7...v1.1.0

@@ -1,55 +1,72 @@
-gTTS
-====
+#gTTS
 
-**gTTS** (Google Text to Speech): a Python interface to Google's Text to Speech API. Create an mp3 file with the `gTTS` module or `gtts-cli` command line utility. It allows for unlimited lengths of spoken text by tokenizing long sentences where the speech would naturally pause.
+**gTTS** (_Google Text to Speech_): a *Python* interface for Google's _Text to Speech_ API. Create an _mp3_ file with the `gTTS` module or `gtts-cli` command line utility. It allows unlimited lengths to be spoken by tokenizing long sentences where the speech would naturally pause.
 
 [![Build Status](https://travis-ci.org/pndurette/gTTS.svg?branch=master)](https://travis-ci.org/pndurette/gTTS)
 
-Install
--------
+## Install
 
     pip install gTTS
 
-Module
-------
+## Usage
 
-Instanciate:
+You may either use `gTTS` as a **__python module__** or as a **__command-line utility__**
 
-    >> from gtts import gTTS
-    >> tts = gTTS(text='Hello', lang='en')
-    >> tts.save("hello.mp3")
+### A. Module
 
-**Parameters**:
+##### 1. Import `gTTS`
 
-  *  `text` is the text to speak to file;
-  *  `lang` is the language to speak in. A ISO 639-1 language code supported by the Google Text to Speech API.
+```
+>> from gtts import gTTS
+```
 
-Using a file-like object (Ex.):
+##### 2. Create an instance
 
-    >> from gtts import gTTS
-    >> from tempfile import TemporaryFile
-    >> tts = gTTS(text='Hello', lang='en')
-    >> f = TemporaryFile()
-    >> tts.write_to_fp(f)
-    >> f.close()
+```
+>> tts = gTTS(text='Hello', lang='en')
+```
 
-Command line utility
---------------------
-Invoke `gtts-cli`:
+###### _Parameters:_
+*  `text` - Text to be spoken (written to file instead)
+*  `lang` - [ISO 639-1 language code](#lang_list) (supported by the Google _Text to Speech_ API) to speak in
 
-    gtts-cli.py --help
-    usage: gtts-cli.py [-h] (["text to speak"] | -f FILE) [-l LANG] [--debug] [-o destination_file]
+##### 3. Write to a file
 
-(Ex.) Read the string 'Hello' in English to hello.mp3
+* Using [`save(file_name)`](https://github.com/pndurette/gTTS/blob/master/gtts/tts.py#L91)
+   
+```
+>> tts.save("hello.mp3")
+```
 
-    $ gtts-cli.py "Hello" -l 'en' -o hello.mp3
+* Using [`write_to_fp(file_object)`](https://github.com/pndurette/gTTS/blob/master/gtts/tts.py#L97)
+   
+```  
+>> from gtts import gTTS
+>> from tempfile import TemporaryFile
+>> tts = gTTS(text='Hello', lang='en')
+>> f = TemporaryFile()
+>> tts.write_to_fp(f)
+>> f.close()
+```
 
-(Ex.) Read the contents of file 'hello.txt' in Czech to hello.mp3:
+### B. Command line utility
 
-    $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
+##### Command
+```
+gtts-cli.py [-h] (["text to speak"] | -f FILE) [-l LANG] [--debug] [-o destination_file]
+```
+ 
+###### _Example:_
+  
+```
+$ # Read the string 'Hello' in English to hello.mp3
+$ gtts-cli.py "Hello" -l 'en' -o hello.mp3
 
-Supported Languages
--------------------
+$ # Read the contents of file 'hello.txt' in Czech to hello.mp3:
+$ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
+```
+
+##Supported Languages<a name="lang_list"></a>
 
   * 'af' : 'Afrikaans'
   * 'sq' : 'Albanian'
@@ -106,7 +123,7 @@ Supported Languages
 Contributing
 ------------
 
-1. Fork [pndurette/gTTS](https://github.com/pndurette/gTTS) on GitHub and clone it locally
+1. _Fork_ [pndurette/gTTS](https://github.com/pndurette/gTTS) on GitHub and clone it locally
 2. Make sure you write tests for new features or modify the existing ones if necessary
-3. Open a new Pull Request from your feature branch to the `develop` branch.
+3. Open a new _Pull Request_ from your feature branch to the `develop` branch.
 4. Thank you!

@@ -6,6 +6,7 @@ from gtts import __version__
 import sys
 import argparse
 import os
+import codecs
 
 def languages():
     """Sorted pretty printed string of supported languages"""
@@ -29,7 +30,7 @@ try:
     if args.text:
         text = args.text
     else:
-        with open(args.file, "r") as f:
+        with codecs.open(args.file, "r", "utf-8") as f:
             text = f.read()
 
     # TTSTF (Text to Speech to File)

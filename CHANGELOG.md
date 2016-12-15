@@ -5,6 +5,10 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
 
+## [1.1.7] - 2016-12-14
+### Changed
+- Added utf-8 support to `gtts-cli.py`/`gtts-cli` (#{52} thanks @bakaiadam) 
+
 ## [1.1.6] - 2016-07-20
 ### Added
 - 'bn' : 'Bengali' (thanks @sakibiqbal, @mshubhankar)
@@ -96,7 +100,8 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.6...develop
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.1.7...develop
+[1.1.7]: https://github.com/pndurette/gTTS/compare/v1.1.6...v1.1.7
 [1.1.6]: https://github.com/pndurette/gTTS/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/pndurette/gTTS/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/pndurette/gTTS/compare/v1.1.3...v1.1.4

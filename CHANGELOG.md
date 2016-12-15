@@ -7,7 +7,7 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [1.1.7] - 2016-12-14
 ### Changed
-- Added utf-8 support to `gtts-cli.py`/`gtts-cli` (#{52} thanks @bakaiadam) 
+- Added utf-8 support to `gtts-cli.py`/`gtts-cli` (#52 thanks @bakaiadam) 
 
 ## [1.1.6] - 2016-07-20
 ### Added

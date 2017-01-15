@@ -28,7 +28,10 @@ args = parser.parse_args()
 
 try:
     if args.text:
-        text = args.text
+        if args.text == "-":
+            text = sys.stdin.read()
+        else:
+            text = args.text
     else:
         with codecs.open(args.file, "r", "utf-8") as f:
             text = f.read()

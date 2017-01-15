@@ -64,6 +64,9 @@ $ gtts-cli.py "Hello" -l 'en' -o hello.mp3
 
 $ # Read the contents of file 'hello.txt' in Czech to hello.mp3:
 $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3
+
+$ # Read the string 'Hello' from stdin in English to hello.mp3
+$ echo "Hello" | gtts-cli.py -l 'en' -o hello.mp3 -
 ```
 
 ##Supported Languages<a name="lang_list"></a>

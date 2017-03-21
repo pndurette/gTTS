@@ -92,7 +92,6 @@ class gTTS:
         """ Do the Web request and save to `savefile` """
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
-            f.close()
 
     def write_to_fp(self, fp):
         """ Do the Web request and save to a file-like object """

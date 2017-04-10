@@ -8,6 +8,10 @@
 
     pip install gTTS
 
+### Install on Ubuntu
+
+    sudo pip install setuptools gTTS
+
 ## Usage
 
 You may either use `gTTS` as a **__python module__** or as a **__command-line utility__**

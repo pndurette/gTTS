@@ -5,6 +5,12 @@ from gtts_token.gtts_token import Token
 class gTTS:
     """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
 
+    # Google TTS API supports two read speeds
+    # (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
+    class Speed:
+        SLOW = 0.3
+        NORMAL = 1
+
     GOOGLE_TTS_URL = 'https://translate.google.com/translate_tts'
     MAX_CHARS = 100 # Max characters the Google TTS API takes at a time
     LANGUAGES = {
@@ -61,7 +67,7 @@ class gTTS:
         'cy' : 'Welsh'
     }
 
-    def __init__(self, text, lang = 'en', debug = False):
+    def __init__(self, text, lang = 'en', slow = False, debug = False):
         self.debug = debug
         if lang.lower() not in self.LANGUAGES:
             raise Exception('Language not supported: %s' % lang)
@@ -72,6 +78,12 @@ class gTTS:
             raise Exception('No text to speak')
         else:
             self.text = text
+
+        # Read speed
+        if slow:
+            self.speed = self.Speed().SLOW
+        else:
+            self.speed = self.Speed().NORMAL
 
         # Split text in parts
         if len(text) <= self.MAX_CHARS: 
@@ -99,6 +111,7 @@ class gTTS:
             payload = { 'ie' : 'UTF-8',
                         'q' : part,
                         'tl' : self.lang,
+                        'ttsspeed' : self.speed,
                         'total' : len(self.text_parts),
                         'idx' : idx,
                         'client' : 'tw-ob',

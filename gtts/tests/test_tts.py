@@ -13,19 +13,29 @@ class TestLanguages(unittest.TestCase):
         self.text = "This is a test"
 
     def check_lang(self, lang):
-        """Create mp3 file"""
-        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_%s_' % lang) 
-        
-        # Create gTTS and save
+        """Create mp3 files"""
+        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang)) 
+        (f_slow, path_slow) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_slow'.format(lang))
+
+        # Create gTTS (normal) and save
         tts = gTTS(self.text, lang)
         tts.save(path)
         
-        # Check if file created is > 2k
+        # Create gTTS (slow) and save
+        tts = gTTS(self.text, lang, slow = True)
+        tts.save(path_slow)
+
+        # Check if files created is > 2k
+        # Check if slow speed file is larger than normal speed file
         filesize = os.path.getsize(path)
+        filesize_slow = os.path.getsize(path_slow)
         self.assertTrue(filesize > 2000)
+        self.assertTrue(filesize_slow > 2000)
+        self.assertTrue(filesize_slow > filesize)
         
         # Cleanup
         os.remove(path)
+        os.remove(path_slow)
 
 # Generate TestLanguages.check_lang tests (as TestLanguages.test_lang_<lang>) for each language
 # Based on: http://stackoverflow.com/a/1194012

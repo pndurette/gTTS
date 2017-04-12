@@ -22,7 +22,8 @@ text_group.add_argument('-f', '--file', help="file to speak")
 
 parser.add_argument("-o", '--destination', help="destination mp3 file", action='store')
 parser.add_argument('-l', '--lang', default='en', help="ISO 639-1/IETF language tag to speak in:\n" + languages())
-parser.add_argument('--debug', default=False, action="store_true")
+parser.add_argument('--slow', action="store_true", help="slower read speed")
+parser.add_argument('--debug', action="store_true")
 
 args = parser.parse_args()
 
@@ -37,13 +38,12 @@ try:
             text = f.read()
 
     # TTSTF (Text to Speech to File)
-    tts = gTTS(text=text, lang=args.lang, debug=args.debug)
+    tts = gTTS(text=text, lang=args.lang, slow=args.slow, debug=args.debug)
 
     if args.destination:
         tts.save(args.destination)
     else:
         tts.write_to_fp(os.fdopen(sys.stdout.fileno(), "wb"))
-
 except Exception as e:
     if args.destination:
         print(str(e))

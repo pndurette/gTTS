@@ -26,12 +26,10 @@ class TestLanguages(unittest.TestCase):
         tts.save(path_slow)
 
         # Check if files created is > 2k
-        # Check if slow speed file is larger than normal speed file
         filesize = os.path.getsize(path)
         filesize_slow = os.path.getsize(path_slow)
         self.assertTrue(filesize > 2000)
         self.assertTrue(filesize_slow > 2000)
-        self.assertTrue(filesize_slow > filesize)
         
         # Cleanup
         os.remove(path)

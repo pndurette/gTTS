@@ -53,7 +53,7 @@ You may either use `gTTS` as a **__python module__** or as a **__command-line ut
 
 ##### Command
 ```
-gtts-cli.py [-h] (["text to speak"] | -f FILE) [-l LANG] [--debug] [-o destination_file]
+gtts-cli.py [-h] (["text to speak"] | -f FILE) [-l LANG] [--slow] [--debug] [-o destination_file]
 ```
  
 ###### _Example:_
@@ -61,6 +61,9 @@ gtts-cli.py [-h] (["text to speak"] | -f FILE) [-l LANG] [--debug] [-o destinati
 ```
 $ # Read the string 'Hello' in English to hello.mp3
 $ gtts-cli.py "Hello" -l 'en' -o hello.mp3
+
+$ # Read the string 'Hello' in English (slow speed) to hello.mp3
+$ gtts-cli.py "Hello" -l 'en' -o hello.mp3 --slow
 
 $ # Read the contents of file 'hello.txt' in Czech to hello.mp3:
 $ gtts-cli.py -f hello.txt -l 'cs' -o hello.mp3

@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-import re, requests, warnings, urllib
+import re, requests, warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from gtts_token.gtts_token import Token
+
+try:
+    import urllib.request as urlreq
+except ImportError:
+    import urllib as urlreq
 
 class gTTS:
     """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
@@ -131,7 +136,7 @@ class gTTS:
                     r = requests.get(self.GOOGLE_TTS_URL,
                                      params=payload,
                                      headers=headers,
-                                     proxies=urllib.getproxies(),
+                                     proxies=urlreq.getproxies(),
                                      verify=False)
                 if self.debug:
                     print("Headers: {}".format(r.request.headers))

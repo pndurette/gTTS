@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-import re, requests
+import re, requests, warnings
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from gtts_token.gtts_token import Token
+
+try:
+    import urllib.request as urlreq
+except ImportError:
+    import urllib as urlreq
 
 class gTTS:
     """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
@@ -123,10 +129,18 @@ class gTTS:
             }
             if self.debug: print(payload)
             try:
-                r = requests.get(self.GOOGLE_TTS_URL, params=payload, headers=headers)
+                # Disable requests' ssl verify to accomodate certain proxies and firewalls
+                # Filter out urllib3's insecure warnings. We can live without ssl verify here
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=InsecureRequestWarning)
+                    r = requests.get(self.GOOGLE_TTS_URL,
+                                     params=payload,
+                                     headers=headers,
+                                     proxies=urlreq.getproxies(),
+                                     verify=False)
                 if self.debug:
                     print("Headers: {}".format(r.request.headers))
-                    print("Reponse: {}, Redirects: {}".format(r.status_code, r.history))
+                    print("Response: {}, Redirects: {}".format(r.status_code, r.history))
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)

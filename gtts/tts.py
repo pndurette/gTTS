@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import re, requests, warnings
+import re, requests, warnings, urllib
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from gtts_token.gtts_token import Token
 
@@ -124,11 +124,15 @@ class gTTS:
             }
             if self.debug: print(payload)
             try:
-                # Disable requests' ssl verify to accomodate proxies and corporate firewalls
-                # Filter out urllib3's insecure warnings. We can live without ssl here
+                # Disable requests' ssl verify to accomodate certain proxies and firewalls
+                # Filter out urllib3's insecure warnings. We can live without ssl verify here
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=InsecureRequestWarning)
-                    r = requests.get(self.GOOGLE_TTS_URL, params=payload, headers=headers, verify=False)
+                    r = requests.get(self.GOOGLE_TTS_URL,
+                                     params=payload,
+                                     headers=headers,
+                                     proxies=urllib.getproxies(),
+                                     verify=False)
                 if self.debug:
                     print("Headers: {}".format(r.request.headers))
                     print("Reponse: {}, Redirects: {}".format(r.status_code, r.history))

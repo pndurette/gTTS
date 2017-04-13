@@ -135,7 +135,7 @@ class gTTS:
                                      verify=False)
                 if self.debug:
                     print("Headers: {}".format(r.request.headers))
-                    print("Reponse: {}, Redirects: {}".format(r.status_code, r.history))
+                    print("Response: {}, Redirects: {}".format(r.status_code, r.history))
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)

@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 import re, requests, warnings
+from six.moves import urllib
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from gtts_token.gtts_token import Token
-
-try:
-    import urllib.request as urlreq
-except ImportError:
-    import urllib as urlreq
 
 class gTTS:
     """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
@@ -91,8 +87,9 @@ class gTTS:
         else:
             self.speed = self.Speed().NORMAL
 
+
         # Split text in parts
-        if len(text) <= self.MAX_CHARS: 
+        if self._len(text) <= self.MAX_CHARS:
             text_parts = [text]
         else:
             text_parts = self._tokenize(text, self.MAX_CHARS)           
@@ -121,7 +118,7 @@ class gTTS:
                         'total' : len(self.text_parts),
                         'idx' : idx,
                         'client' : 'tw-ob',
-                        'textlen' : len(part),
+                        'textlen' : self._len(part),
                         'tk' : self.token.calculate_token(part)}
             headers = {
                 "Referer" : "http://translate.google.com/",
@@ -136,16 +133,26 @@ class gTTS:
                     r = requests.get(self.GOOGLE_TTS_URL,
                                      params=payload,
                                      headers=headers,
-                                     proxies=urlreq.getproxies(),
+                                     proxies=urllib.request.getproxies(),
                                      verify=False)
                 if self.debug:
                     print("Headers: {}".format(r.request.headers))
+                    print("Request url: {}".format(r.request.url))
                     print("Response: {}, Redirects: {}".format(r.status_code, r.history))
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
             except Exception as e:
                 raise
+
+    def _len(self, text):
+        """ Get char len of `text`, after decoding if Python 2 """
+        try:
+            # Python 2
+            return len(text.decode('utf8'))
+        except AttributeError:
+            # Python 3
+            return len(text)
 
     def _tokenize(self, text, max_size):
         """ Tokenizer on basic roman punctuation """ 
@@ -164,7 +171,7 @@ class gTTS:
         """ Recursive function that splits `thestring` in chunks
         of maximum `max_size` chars delimited by `delim`. Returns list. """ 
         
-        if len(thestring) > max_size:
+        if self._len(thestring) > max_size:
             idx = thestring.rfind(delim, 0, max_size)
             return [thestring[:idx]] + self._minimize(thestring[idx:], delim, max_size)
         else:

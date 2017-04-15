@@ -3,6 +3,7 @@
 **gTTS** (_Google Text to Speech_): a *Python* interface for Google's _Text to Speech_ API. Create an _mp3_ file with the `gTTS` module or `gtts-cli` command line utility. It allows unlimited lengths to be spoken by tokenizing long sentences where the speech would naturally pause.
 
 [![Build Status](https://travis-ci.org/pndurette/gTTS.svg?branch=master)](https://travis-ci.org/pndurette/gTTS)
+[![PyPI version](https://badge.fury.io/py/gTTS.svg)](https://badge.fury.io/py/gTTS)
 
 ## Install
 

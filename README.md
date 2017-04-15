@@ -6,7 +6,9 @@
 
 ## Install
 
+```
 pip install gTTS
+```
 
 ## Usage
 

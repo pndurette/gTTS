@@ -45,6 +45,7 @@ class gTTS:
         'id' : 'Indonesian',
         'it' : 'Italian',
         'ja' : 'Japanese',
+        'km' : 'Khmer (Cambodian)',
         'ko' : 'Korean',
         'la' : 'Latin',
         'lv' : 'Latvian',
@@ -52,10 +53,10 @@ class gTTS:
         'no' : 'Norwegian',
         'pl' : 'Polish',
         'pt' : 'Portuguese',
-        'pt-br' : 'Portuguese (Brazil)',
         'ro' : 'Romanian',
         'ru' : 'Russian',
         'sr' : 'Serbian',
+        'si' : 'Sinhala',
         'sk' : 'Slovak',
         'es' : 'Spanish',
         'es-es' : 'Spanish (Spain)',
@@ -65,6 +66,7 @@ class gTTS:
         'ta' : 'Tamil',
         'th' : 'Thai',
         'tr' : 'Turkish',
+        'uk' : 'Ukrainian',
         'vi' : 'Vietnamese',
         'cy' : 'Welsh'
     }

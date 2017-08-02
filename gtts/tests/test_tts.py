@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import tempfile
 import unittest
@@ -74,6 +75,26 @@ class TestTokenizer(unittest.TestCase):
         """Tokenization on spaces"""
         tts = gTTS(self.text_long_no_punctuation, self.lang)
         self.assertEqual(len(tts.text_parts), 3)
+
+class TestTokenizerUnicode(unittest.TestCase):
+    """Tokenization of Unicode when text is longer than what is allowed (MAX_CHARS)"""
+
+    def setUp(self):
+        self.lang = 'zh-cn'
+        # Unicode literal for Python 2.x, 3.3+
+        self.text = u"""
+这是一个三岁的小孩
+在讲述她从一系列照片里看到的东西。
+对这个世界， 她也许还有很多要学的东西，
+但在一个重要的任务上， 她已经是专家了：
+去理解她所看到的东西。
+我们的社会已经在科技上取得了前所未有的进步。
+"""
+
+    def test_punctuation_tokenization(self):
+        """Tokenization on punctuation"""
+        tts = gTTS(self.text, self.lang)
+        self.assertEqual(len(tts.text_parts), 6)
 
 if __name__ == '__main__':
     unittest.main()

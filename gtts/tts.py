@@ -159,7 +159,7 @@ class gTTS:
     def _tokenize(self, text, max_size):
         """ Tokenizer on basic punctuation """
         
-        punc = "¡!()[]¿?.,;:—。、\n"
+        punc = "¡!()[]¿?.,،;:—。、：？！\n"
         punc_list = [re.escape(c) for c in punc]
         pattern = '|'.join(punc_list)
         parts = re.split(pattern, text)

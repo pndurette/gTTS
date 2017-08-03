@@ -151,15 +151,15 @@ class gTTS:
         """ Get char len of `text`, after decoding if Python 2 """
         try:
             # Python 2
-            return len(text.decode('utf8'))
-        except AttributeError:
+            return len(unicode(text))
+        except NameError:
             # Python 3
             return len(text)
 
     def _tokenize(self, text, max_size):
-        """ Tokenizer on basic roman punctuation """ 
+        """ Tokenizer on basic punctuation """
         
-        punc = "¡!()[]¿?.,;:—«»\n"
+        punc = "¡!()[]¿?.,،;:—。、：？！\n"
         punc_list = [re.escape(c) for c in punc]
         pattern = '|'.join(punc_list)
         parts = re.split(pattern, text)

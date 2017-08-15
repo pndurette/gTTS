@@ -5,6 +5,11 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
 
+## [1.2.2] - 2017-08-15
+### Added
+- Updated LICENSE copyright date
+- LICENSE file added to manifest (#77, thanks @mapreri!)
+
 ## [1.2.1] - 2017-08-02
 ### Added
 - More Unicode punctuation to the tokenizer (such as for Chinese and Japanese)
@@ -129,7 +134,8 @@ This file adheres to [Keep a CHANGELOG](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.2.1...master
+[Unreleased]: https://github.com/pndurette/gTTS/compare/v1.2.2...master
+[1.2.2]: https://github.com/pndurette/gTTS/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/pndurette/gTTS/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/pndurette/gTTS/compare/v1.1.8...v1.2.0
 [1.1.8]: https://github.com/pndurette/gTTS/compare/v1.1.7...v1.1.8

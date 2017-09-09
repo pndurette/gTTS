@@ -19,7 +19,7 @@ setup(
     install_requires=[
         "six",
         "requests",
-        "gtts_token"
+        "gtts_token", 'playsound'
     ],
     classifiers=[
           'Environment :: Console',

@@ -7,6 +7,7 @@ from gtts import gTTS
 
 LANGS = [lang for lang in gTTS.LANGUAGES.keys()]
 
+
 class TestLanguages(unittest.TestCase):
     """Test all supported languages and file save"""
 
@@ -15,15 +16,15 @@ class TestLanguages(unittest.TestCase):
 
     def check_lang(self, lang):
         """Create mp3 files"""
-        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang)) 
+        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang))
         (f_slow, path_slow) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_slow'.format(lang))
 
         # Create gTTS (normal) and save
         tts = gTTS(self.text, lang)
         tts.save(path)
-        
+
         # Create gTTS (slow) and save
-        tts = gTTS(self.text, lang, slow = True)
+        tts = gTTS(self.text, lang, slow=True)
         tts.save(path_slow)
 
         # Check if files created is > 2k
@@ -31,17 +32,21 @@ class TestLanguages(unittest.TestCase):
         filesize_slow = os.path.getsize(path_slow)
         self.assertTrue(filesize > 2000)
         self.assertTrue(filesize_slow > 2000)
-        
+
         # Cleanup
         os.remove(path)
         os.remove(path_slow)
+
 
 # Generate TestLanguages.check_lang tests (as TestLanguages.test_lang_<lang>) for each language
 # Based on: http://stackoverflow.com/a/1194012
 for l in LANGS:
     def ch(l):
         return lambda self: self.check_lang(l)
-    setattr(TestLanguages, "test_lang_%s" % l, ch(l)) 
+
+
+    setattr(TestLanguages, "test_lang_%s" % l, ch(l))
+
 
 class TestInit(unittest.TestCase):
     """Test gTTS init"""
@@ -57,6 +62,7 @@ class TestInit(unittest.TestCase):
         lang = 'en'
         text = ""
         self.assertRaises(Exception, gTTS, text, lang)
+
 
 class TestTokenizer(unittest.TestCase):
     """Tokenization when text is longer than what is allowed (MAX_CHARS)"""
@@ -75,6 +81,7 @@ class TestTokenizer(unittest.TestCase):
         """Tokenization on spaces"""
         tts = gTTS(self.text_long_no_punctuation, self.lang)
         self.assertEqual(len(tts.text_parts), 3)
+
 
 class TestTokenizerUnicode(unittest.TestCase):
     """Tokenization of Unicode when text is longer than what is allowed (MAX_CHARS)"""

@@ -10,7 +10,7 @@ setup(
     version=__version__,
     author='Pierre Nicolas Durette',
     author_email='pndurette@gmail.com',
-    url='https://github.com/pndurette/gTTS',
+    url='https://github.com/dixya/gTTS',
     packages=['gtts'],
     scripts=['bin/gtts-cli', 'bin/gtts-cli.py'],
     license='MIT',

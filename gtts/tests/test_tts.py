@@ -5,7 +5,13 @@ import unittest
 
 from gtts import gTTS
 
-LANGS = [lang for lang in gTTS.LANGUAGES.keys()]
+LANGS = [
+    'af', 'sq', 'ar', 'hy', 'bn', 'ca', 'zh', 'zh-cn', 'zh-tw', 'zh-yue', 'hr',
+    'cs', 'da', 'nl', 'en', 'en-au', 'en-uk', 'en-us', 'eo', 'fi', 'fr', 'de',
+    'el', 'hi', 'hu', 'is', 'id', 'it', 'ja', 'km', 'ko', 'la', 'lv', 'mk',
+    'no', 'pl', 'pt', 'ro', 'ru', 'sr', 'si', 'sk', 'es', 'es-es', 'es-us',
+    'sw', 'sv', 'ta', 'th', 'tr', 'uk', 'vi', 'cy',
+]
 
 class TestLanguages(unittest.TestCase):
     """Test all supported languages and file save"""

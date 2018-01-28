@@ -95,6 +95,7 @@ $ echo "Hello" | gtts-cli -l 'en' -o hello.mp3 -
   * 'en-uk' : 'English (United Kingdom)'
   * 'en-us' : 'English (United States)'
   * 'eo' : 'Esperanto'
+  * 'et' : 'Estonian'
   * 'fi' : 'Finnish'
   * 'fr' : 'French'
   * 'de' : 'German'

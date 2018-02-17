@@ -3,17 +3,15 @@ import os
 import tempfile
 import unittest
 
-from gtts import gTTS
+from gtts import gTTS, Languages
 
-LANGS = [lang for lang in gTTS.LANGUAGES.keys()]
-
-class TestLanguages(unittest.TestCase):
+class TestTTS(unittest.TestCase):
     """Test all supported languages and file save"""
 
     def setUp(self):
         self.text = "This is a test"
 
-    def check_lang(self, lang):
+    def check_tts(self, lang):
         """Create mp3 files"""
         (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang)) 
         (f_slow, path_slow) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_slow'.format(lang))
@@ -36,21 +34,26 @@ class TestLanguages(unittest.TestCase):
         os.remove(path)
         os.remove(path_slow)
 
-# Generate TestLanguages.check_lang tests (as TestLanguages.test_lang_<lang>) for each language
+def all_langs():
+    langs = Languages().get()
+    return langs
+
+# Generate TestTTS.check_tts tests (as TestTTS.test_tts_<lang>) for each language
 # Based on: http://stackoverflow.com/a/1194012
-for l in LANGS:
+for l in all_langs():
     def ch(l):
-        return lambda self: self.check_lang(l)
-    setattr(TestLanguages, "test_lang_%s" % l, ch(l)) 
+        return lambda self: self.check_tts(l)
+    setattr(TestTTS, "test_tts_%s" % l, ch(l)) 
 
 class TestInit(unittest.TestCase):
     """Test gTTS init"""
 
-    def test_unsupported_language(self):
-        """Raise Exception on unsupported language"""
+    def test_unsupported_language_check(self):
+        """Raise Exception on unsupported language (with language check)"""
         lang = 'xx'
         text = "Lorem ipsum"
-        self.assertRaises(Exception, gTTS, text, lang)
+        check = True
+        self.assertRaises(Exception, gTTS, text=text, lang=lang, check=check)
 
     def test_empty_string(self):
         """Raise Exception on empty string"""

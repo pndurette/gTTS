@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from . import Languages, LanguagesFetchError 
+
 import re, requests, warnings
 from six.moves import urllib
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -15,69 +17,24 @@ class gTTS:
 
     GOOGLE_TTS_URL = 'https://translate.google.com/translate_tts'
     MAX_CHARS = 100 # Max characters the Google TTS API takes at a time
-    LANGUAGES = {
-        'af' : 'Afrikaans',
-        'sq' : 'Albanian',
-        'ar' : 'Arabic',
-        'hy' : 'Armenian',
-        'bn' : 'Bengali',
-        'ca' : 'Catalan',
-        'zh' : 'Chinese',
-        'zh-cn' : 'Chinese (Mandarin/China)',
-        'zh-tw' : 'Chinese (Mandarin/Taiwan)',
-        'zh-yue' : 'Chinese (Cantonese)',
-        'hr' : 'Croatian',
-        'cs' : 'Czech',
-        'da' : 'Danish',
-        'nl' : 'Dutch',
-        'en' : 'English',
-        'en-au' : 'English (Australia)',
-        'en-uk' : 'English (United Kingdom)',
-        'en-us' : 'English (United States)',
-        'eo' : 'Esperanto',
-        'fi' : 'Finnish',
-        'fr' : 'French',
-        'de' : 'German',
-        'el' : 'Greek',
-        'hi' : 'Hindi',
-        'hu' : 'Hungarian',
-        'is' : 'Icelandic',
-        'id' : 'Indonesian',
-        'it' : 'Italian',
-        'ja' : 'Japanese',
-        'km' : 'Khmer (Cambodian)',
-        'ko' : 'Korean',
-        'la' : 'Latin',
-        'lv' : 'Latvian',
-        'mk' : 'Macedonian',
-        'no' : 'Norwegian',
-        'pl' : 'Polish',
-        'pt' : 'Portuguese',
-        'ro' : 'Romanian',
-        'ru' : 'Russian',
-        'sr' : 'Serbian',
-        'si' : 'Sinhala',
-        'sk' : 'Slovak',
-        'es' : 'Spanish',
-        'es-es' : 'Spanish (Spain)',
-        'es-us' : 'Spanish (United States)',
-        'sw' : 'Swahili',
-        'sv' : 'Swedish',
-        'ta' : 'Tamil',
-        'th' : 'Thai',
-        'tr' : 'Turkish',
-        'uk' : 'Ukrainian',
-        'vi' : 'Vietnamese',
-        'cy' : 'Welsh'
-    }
 
-    def __init__(self, text, lang = 'en', slow = False, debug = False):
+    def __init__(self, text, lang = 'en', slow = False, lang_check = False, debug = False):
         self.debug = debug
-        if lang.lower() not in self.LANGUAGES:
-            raise Exception('Language not supported: %s' % lang)
-        else:
-            self.lang = lang.lower()
 
+        # Language
+        if lang_check:
+            try:
+                all_langs = Languages().get()
+                if lang.lower() not in all_langs:
+                    raise Exception('Language not supported: %s' % lang)
+            except LanguagesFetchError as e:
+                # We ignore the language check but warn
+                print("Warning: {}".format(str(e)))
+
+        self.lang_check = lang_check
+        self.lang = lang.lower()
+
+        # Text
         if not text:
             raise Exception('No text to speak')
         else:
@@ -88,7 +45,6 @@ class gTTS:
             self.speed = self.Speed().SLOW
         else:
             self.speed = self.Speed().NORMAL
-
 
         # Split text in parts
         if self._len(text) <= self.MAX_CHARS:
@@ -145,6 +101,9 @@ class gTTS:
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
             except Exception as e:
+                if not self.lang_check and r.status_code == 404:
+                    # TODO Handle this better
+                    print("An unsupported language most likely did this")
                 raise
 
     def _len(self, text):
@@ -180,4 +139,4 @@ class gTTS:
             return [thestring]
 
 if __name__ == "__main__":
-        pass
+    pass

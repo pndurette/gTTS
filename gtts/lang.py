@@ -1,8 +1,7 @@
 import requests, re
 from bs4 import BeautifulSoup
 
-"""
-Google Translate loads a JavaScript Array of 'languages
+"""Google Translate loads a JavaScript Array of 'languages
 codes' that can be read. We intersect with all the
 languages Google Translate provides.
 """
@@ -11,13 +10,12 @@ class LanguagesFetchError(Exception):
     pass
 
 class Languages:
-    """ Supported languages by Google's Text to Speech API """
+    """Supported languages by Google's Text to Speech API"""
     
     URL_BASE = 'http://translate.google.com'
     JS_FILE = 'desktop_module_main.js'
    
-    """
-    Special undocumented language codes observed
+    """Special undocumented language codes observed
     to provide different dialects or accents
     """
     SPECIAL_LANGS = {
@@ -49,23 +47,28 @@ class Languages:
         self.langs.update(self.SPECIAL_LANGS)
         return self.langs
 
+    def get_list(self):
+        langs_dict = self.get()
+        langs_list = list(langs_dict.keys()) 
+        return langs_list
+
     def _fetch_langs(self):
         try:
-            """ Load HTML """
+            """Load HTML"""
             page = requests.get(self.URL_BASE)
             soup = BeautifulSoup(page.content, 'html.parser')
 
-            """ JavaScript URL
+            """JavaScript URL
             The <script src=''> path can change, but not the file.
             Ex: /zyx/abc/20180211/desktop_module_main.js
             """
             js_path = soup.find(src=re.compile(self.JS_FILE))['src']
             js_url = "{}/{}".format(self.URL_BASE, js_path)
 
-            """ Load JavaScript """
+            """Load JavaScript"""
             js_contents = str(requests.get(js_url).content)
 
-            """ Approximately extract TTS-enabled language codes
+            """Approximately extract TTS-enabled language codes
             RegEx pattern search because minified variables can change.
             Extra garbage will be dealt with later as we keep languages only.
             In: "[...]Fv={af:1,ar:1,[...],zh:1,"zh-cn":1,"zh-tw":1}[...]"
@@ -74,7 +77,7 @@ class Languages:
             pattern = '[{,\"](\w{2}|\w{2}-\w{2,3})(?=:1|\":1)'
             tts_langs = re.findall(pattern, js_contents)
 
-            """ Build lang. dict. from HTML lang. <select>
+            """Build lang. dict. from HTML lang. <select>
             Filtering with the TTS-enabled languages
             In: [<option value='af'>Afrikaans</option>, [...]]
             Out: {'af': 'Afrikaans', [...]}

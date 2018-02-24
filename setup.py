@@ -12,13 +12,19 @@ setup(
     author_email='pndurette@gmail.com',
     url='https://github.com/pndurette/gTTS',
     packages=['gtts'],
-    scripts=['bin/gtts-cli', 'bin/gtts-cli.py'],
+    #scripts=['bin/gtts-cli', 'bin/gtts-cli.py'],
+    entry_points={
+        'console_scripts': [
+            'gtts-cli = gtts.cli:tts_cli'
+        ]
+    },
     license='MIT',
     description='Create an mp3 file from spoken text via the Google TTS (Text-to-Speech) API',
     long_description=open('README.md').read(),
     install_requires=[
         "six",
         "bs4",
+        "click",
         "requests",
         "gtts_token"
     ],

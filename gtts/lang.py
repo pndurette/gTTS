@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import requests, re
+import requests
+import re
 from bs4 import BeautifulSoup
 
 """Google Translate loads a JavaScript Array of 'languages
@@ -7,15 +8,17 @@ codes' that can be read. We intersect with all the
 languages Google Translate provides.
 """
 
+
 class LanguagesFetchError(Exception):
     pass
 
+
 class Languages:
     """Supported languages by Google's Text to Speech API"""
-    
+
     URL_BASE = 'http://translate.google.com'
     JS_FILE = 'desktop_module_main.js'
-   
+
     """Special undocumented language codes observed
     to provide different dialects or accents
     """
@@ -28,7 +31,7 @@ class Languages:
         'en-us': 'English (US)',
         'en-ca': 'English (Canada)',
         'en-uk': 'English (UK)',
-        'en-gb': 'English (UK)', 
+        'en-gb': 'English (UK)',
         'en-au': 'English (Australia)',
         # French
         'fr-ca': 'French (Canada)',
@@ -36,9 +39,9 @@ class Languages:
         'pt-br': 'Portuguese (Brazil)',
         'pt-pt': 'Portuguese (Portugal)',
         # Spanish
-        'es-es' : 'Spanish (Spain)',
-        'es-us' : 'Spanish (United States)'
-    } 
+        'es-es': 'Spanish (Spain)',
+        'es-us': 'Spanish (United States)'
+    }
 
     def __init__(self):
         self.langs = dict()
@@ -50,7 +53,7 @@ class Languages:
 
     def get_list(self):
         langs_dict = self.get()
-        langs_list = list(langs_dict.keys()) 
+        langs_list = list(langs_dict.keys())
         return langs_list
 
     def _fetch_langs(self):
@@ -84,10 +87,13 @@ class Languages:
             Out: {'af': 'Afrikaans', [...]}
             """
             langs_html = soup.find('select', {'id': 'gt-sl'}).findAll('option')
-            langs = {l['value']:l.text for l in langs_html if l['value'] in tts_langs}
+            langs = {
+                l['value']: l.text for l in langs_html if l['value'] in tts_langs}
             return langs
         except Exception as e:
-            raise LanguagesFetchError("Unable to get language list: {}".format(str(e)))
+            raise LanguagesFetchError(
+                "Unable to get language list: {}".format(str(e)))
+
 
 if __name__ == "__main__":
     pass

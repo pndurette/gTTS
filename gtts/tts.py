@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
 from . import Languages, LanguagesFetchError 
-
-import re, requests, warnings
 from six.moves import urllib
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from gtts_token.gtts_token import Token
+import re, requests, warnings
+
+class gTTSError(Exception):
+    pass
+
+class Speed:
+    """Google TTS API read speeds"""
+    
+    # The API supports two speeds. 
+    # (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
+    SLOW = 0.3
+    NORMAL = 1
 
 class gTTS:
-    """ gTTS (Google Text to Speech): an interface to Google's Text to Speech API """
+    """gTTS (Google Text to Speech): an interface to Google's Text to Speech API"""
 
-    # Google TTS API supports two read speeds
-    # (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
-    class Speed:
-        SLOW = 0.3
-        NORMAL = 1
-
-    GOOGLE_TTS_URL = 'https://translate.google.com/translate_tts'
+    GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
     MAX_CHARS = 100 # Max characters the Google TTS API takes at a time
 
     def __init__(self, text, lang = 'en', slow = False, lang_check = False, debug = False):
@@ -24,27 +28,26 @@ class gTTS:
         # Language
         if lang_check:
             try:
-                all_langs = Languages().get()
-                if lang.lower() not in all_langs:
-                    raise Exception('Language not supported: %s' % lang)
+                if lang.lower() not in Languages().get():
+                    raise ValueError("Language not supported: %s" % lang)
             except LanguagesFetchError as e:
                 # We ignore the language check but warn
-                print("Warning: {}".format(str(e)))
+                print("Warning: %s" % str(e))
 
         self.lang_check = lang_check
         self.lang = lang.lower()
 
         # Text
         if not text:
-            raise Exception('No text to speak')
+            raise ValueError('No text to speak')
         else:
             self.text = text
 
         # Read speed
         if slow:
-            self.speed = self.Speed().SLOW
+            self.speed = Speed().SLOW
         else:
-            self.speed = self.Speed().NORMAL
+            self.speed = Speed().NORMAL
 
         # Split text in parts
         if self._len(text) <= self.MAX_CHARS:
@@ -62,12 +65,12 @@ class gTTS:
         self.token = Token()
 
     def save(self, savefile):
-        """ Do the Web request and save to `savefile` """
+        """Do the Web request and save to <savefile>"""
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
 
     def write_to_fp(self, fp):
-        """ Do the Web request and save to a file-like object """
+        """Do the Web request and save to a file-like object"""
         for idx, part in enumerate(self.text_parts):
             payload = { 'ie' : 'UTF-8',
                         'q' : part,
@@ -102,12 +105,13 @@ class gTTS:
                     fp.write(chunk)
             except Exception as e:
                 if not self.lang_check and r.status_code == 404:
-                    # TODO Handle this better
-                    print("An unsupported language most likely did this")
-                raise
+                    msg = "TTS API failed likely due to unsupported language '%s'. %s"
+                    raise gTTSError(msg % (self.lang, str(e)))
+                else:
+                    raise
 
     def _len(self, text):
-        """ Get char len of `text`, after decoding if Python 2 """
+        """Get char len of <text>, after decoding if Python 2"""
         try:
             # Python 2
             return len(unicode(text))
@@ -116,9 +120,9 @@ class gTTS:
             return len(text)
 
     def _tokenize(self, text, max_size):
-        """ Tokenizer on basic punctuation """
+        """Tokenizer on basic punctuation"""
         
-        punc = "¡!()[]¿?.,،;:—。、：？！\n"
+        punc = "¡!()[]¿?.,…‥،;:—。，、：？！\n"
         punc_list = [re.escape(c) for c in punc]
         pattern = '|'.join(punc_list)
         parts = re.split(pattern, text)
@@ -129,8 +133,8 @@ class gTTS:
         return min_parts
 
     def _minimize(self, thestring, delim, max_size):
-        """ Recursive function that splits `thestring` in chunks
-        of maximum `max_size` chars delimited by `delim`. Returns list. """ 
+        """Recursive function that splits <thestring> in chunks
+        of maximum <max_size> chars delimited by <delim>. Returns list.""" 
         
         if self._len(thestring) > max_size:
             idx = thestring.rfind(delim, 0, max_size)

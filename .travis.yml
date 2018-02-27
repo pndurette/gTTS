@@ -9,7 +9,7 @@ sudo: false
 install:
 - pip install .
 script:
-- python -m unittest discover -v -s gtts/tests/
+- python -m unittest discover -v -s gtts.tests
 deploy:
   provider: pypi
   user: pndurette

@@ -2,7 +2,7 @@
 from . import Languages, LanguagesFetchError
 from six.moves import urllib
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from gtts_token.gtts_token import Token
+from gtts_token import gtts_token
 import re
 import requests
 import warnings
@@ -73,7 +73,7 @@ class gTTS:
         self.text_parts = text_parts
 
         # Google Translate token
-        self.token = Token()
+        self.token = gtts_token.Token()
 
     def save(self, savefile):
         """Do the Web request and save to <savefile>"""
@@ -127,7 +127,7 @@ class gTTS:
                     raise
 
     def _len(self, text):
-        """Get char len of <text>, after decoding if Python 2"""
+        """Get char len of <text>, after Unicode encoding if Python 2"""
         try:
             # Python 2
             return len(unicode(text))
@@ -138,7 +138,7 @@ class gTTS:
     def _tokenize(self, text, max_size):
         """Tokenizer on basic punctuation"""
 
-        punc = "¡!()[]¿?.,…‥،;:—。，、：？！\n"
+        punc = u"¡!()[]¿?.,…‥،;:—。，、：？！\n"
         punc_list = [re.escape(c) for c in punc]
         pattern = '|'.join(punc_list)
         parts = re.split(pattern, text)
@@ -152,8 +152,15 @@ class gTTS:
         """Recursive function that splits <thestring> in chunks
         of maximum <max_size> chars delimited by <delim>. Returns list."""
 
+        # Remove <delim> from start of <thestring>
+        if thestring.startswith(delim):
+            thestring = thestring[len(delim):]
+
         if self._len(thestring) > max_size:
-            idx = thestring.rfind(delim, 0, max_size)
+            try:
+                idx = thestring.rindex(delim, 0, max_size)
+            except ValueError:
+                idx = max_size
             return [thestring[:idx]] + \
                 self._minimize(thestring[idx:], delim, max_size)
         else:

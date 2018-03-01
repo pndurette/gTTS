@@ -19,20 +19,28 @@ class Languages:
     URL_BASE = 'http://translate.google.com'
     JS_FILE = 'desktop_module_main.js'
 
-    """Special undocumented language codes observed
+    """Extra undocumented language codes observed
     to provide different dialects or accents
     """
-    SPECIAL_LANGS = {
+    EXTRA_LANGS = {
         # Chinese
         'zh-cn': 'Chinese (Mandarin/China)',
         'zh-tw': 'Chinese (Mandarin/Taiwan)',
-        # 'zh-yue': 'Chinese (Cantonese)',
+        #'zh-yue': 'Chinese (Cantonese)',
         # English
         'en-us': 'English (US)',
         'en-ca': 'English (Canada)',
         'en-uk': 'English (UK)',
         'en-gb': 'English (UK)',
         'en-au': 'English (Australia)',
+        'en-gh': 'English (Ghana)',
+        'en-in': 'English (India)',
+        'en-ie': 'English (Ireland)',
+        'en-nz': 'English (New Zealand)',
+        'en-ng': 'English (Nigeria)',
+        'en-ph': 'English (Philippines)',
+        'en-za': 'English (South Africa)',
+        'en-tz': 'English (Tanzania)',
         # French
         'fr-ca': 'French (Canada)',
         # Portuguese
@@ -48,13 +56,8 @@ class Languages:
 
     def get(self):
         self.langs = self._fetch_langs()
-        self.langs.update(self.SPECIAL_LANGS)
+        self.langs.update(self.EXTRA_LANGS)
         return self.langs
-
-    def get_list(self):
-        langs_dict = self.get()
-        langs_list = list(langs_dict.keys())
-        return langs_list
 
     def _fetch_langs(self):
         try:

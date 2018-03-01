@@ -28,7 +28,7 @@ class TestLanguages(unittest.TestCase):
         self.assertEqual(
             len(all_langs),
             len(scraped_langs) +
-            len(special_langs))
+            len(extra_langs))
 
     def test_fetch_langs_exception(self):
         languages = Languages()

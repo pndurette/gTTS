@@ -3,7 +3,8 @@ import os
 import tempfile
 import unittest
 
-from gtts import gTTS, Languages
+from gtts import gTTS, gTTSError, Languages
+
 
 class TestTTS(unittest.TestCase):
     """Test all supported languages and file save"""
@@ -13,15 +14,16 @@ class TestTTS(unittest.TestCase):
 
     def check_tts(self, lang):
         """Create mp3 files"""
-        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang)) 
-        (f_slow, path_slow) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_slow'.format(lang))
+        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang))
+        (f_slow, path_slow) = tempfile.mkstemp(
+            suffix='.mp3', prefix='test_{}_slow'.format(lang))
 
         # Create gTTS (normal) and save
         tts = gTTS(self.text, lang)
         tts.save(path)
-        
+
         # Create gTTS (slow) and save
-        tts = gTTS(self.text, lang, slow = True)
+        tts = gTTS(self.text, lang, slow=True)
         tts.save(path_slow)
 
         # Check if files created is > 2k
@@ -29,75 +31,68 @@ class TestTTS(unittest.TestCase):
         filesize_slow = os.path.getsize(path_slow)
         self.assertTrue(filesize > 2000)
         self.assertTrue(filesize_slow > 2000)
-        
+
         # Cleanup
         os.remove(path)
         os.remove(path_slow)
 
-def all_langs():
-    langs = Languages().get()
+
+def auto_langs():
+    langs = Languages()._fetch_langs()
     return langs
 
-# Generate TestTTS.check_tts tests (as TestTTS.test_tts_<lang>) for each language
+
+def extra_langs():
+    langs = Languages().EXTRA_LANGS
+    return langs
+
+
+# Generate TestTTS.check_tts tests for each language
 # Based on: http://stackoverflow.com/a/1194012
-for l in all_langs():
+for l in auto_langs():
     def ch(l):
         return lambda self: self.check_tts(l)
-    setattr(TestTTS, "test_tts_%s" % l, ch(l)) 
+    setattr(TestTTS, "test_tts_auto_%s" % l, ch(l))
+
+for l in extra_langs():
+    def ch(l):
+        return lambda self: self.check_tts(l)
+    setattr(TestTTS, "test_tts_extra_%s" % l, ch(l))
+
 
 class TestInit(unittest.TestCase):
     """Test gTTS init"""
 
     def test_unsupported_language_check(self):
-        """Raise Exception on unsupported language (with language check)"""
+        """Raise ValueError on unsupported language (with language check)"""
         lang = 'xx'
         text = "Lorem ipsum"
         check = True
-        self.assertRaises(Exception, gTTS, text=text, lang=lang, check=check)
+        with self.assertRaises(ValueError):
+            tts = gTTS(text=text, lang=lang, lang_check=check)
 
     def test_empty_string(self):
-        """Raise Exception on empty string"""
-        lang = 'en'
+        """Raise ValueError on empty string"""
         text = ""
-        self.assertRaises(Exception, gTTS, text, lang)
+        with self.assertRaises(ValueError):
+            tts = gTTS(text=text)
 
-class TestTokenizer(unittest.TestCase):
-    """Tokenization when text is longer than what is allowed (MAX_CHARS)"""
 
-    def setUp(self):
-        self.lang = 'en'
-        self.text_punctuated = "Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
-        self.text_long_no_punctuation = "Bacon ipsum dolor sit amet flank corned beef shankle bacon beef ribs biltong ribeye short ribs brisket ham turducken beef tongue landjaeger porchetta sirloin brisket turkey landjaeger turducken pancetta meatloaf pastrami venison shank strip steak ham porchetta ground round ham hock hamburger"
-
-    def test_punctuation_tokenization(self):
-        """Tokenization on punctuation"""
-        tts = gTTS(self.text_punctuated, self.lang)
-        self.assertEqual(len(tts.text_parts), 3)
-
-    def test_minimize_tokenization(self):
-        """Tokenization on spaces"""
-        tts = gTTS(self.text_long_no_punctuation, self.lang)
-        self.assertEqual(len(tts.text_parts), 3)
-
-class TestTokenizerUnicode(unittest.TestCase):
-    """Tokenization of Unicode when text is longer than what is allowed (MAX_CHARS)"""
+class TestWebRequest(unittest.TestCase):
+    """Test Web Requests"""
 
     def setUp(self):
-        self.lang = 'zh-cn'
-        # Unicode literal for Python 2.x, 3.3+
-        self.text = u"""
-这是一个三岁的小孩
-在讲述她从一系列照片里看到的东西。
-对这个世界， 她也许还有很多要学的东西，
-但在一个重要的任务上， 她已经是专家了：
-去理解她所看到的东西。
-我们的社会已经在科技上取得了前所未有的进步。
-"""
+        self.text = "Lorem ipsum"
 
-    def test_punctuation_tokenization(self):
-        """Tokenization on punctuation"""
-        tts = gTTS(self.text, self.lang)
-        self.assertEqual(len(tts.text_parts), 6)
+    def test_unsupported_language_no_check(self):
+        """Raise gTTSError on unsupported language (without language check)"""
+        lang = 'xx'
+        check = False
+        with self.assertRaises(Exception):
+            path = tempfile.mkstemp()
+            tts = gTTS(text=self.text, lang=lang, lang_check=check)
+            tts.save(path)
+
 
 if __name__ == '__main__':
     unittest.main()

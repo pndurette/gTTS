@@ -73,15 +73,12 @@ class gTTS:
 
     def __init__(self, text, lang = 'en', slow = False, debug = False):
         self.debug = debug
-        if lang.lower() not in self.LANGUAGES:
-            raise Exception('Language not supported: %s' % lang)
-        else:
-            self.lang = lang.lower()
-
-        if not text:
-            raise Exception('No text to speak')
-        else:
-            self.text = text
+        
+        assert lang.lower() in self.LANGUAGES, 'Language not supported: %s' % lang
+        assert text, 'No text to speak'
+                
+        self.lang = lang.lower()
+        self.text = text
 
         # Read speed
         if slow:
@@ -179,5 +176,3 @@ class gTTS:
         else:
             return [thestring]
 
-if __name__ == "__main__":
-        pass

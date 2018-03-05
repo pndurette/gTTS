@@ -17,7 +17,7 @@ desc = "Creates an mp3 file from spoken text via the Google Text-to-Speech API (
 parser = argparse.ArgumentParser(description=desc, formatter_class=argparse.RawTextHelpFormatter)
 
 text_group = parser.add_mutually_exclusive_group(required=True)
-text_group.add_argument('text', nargs='?', help="text to speak")      
+text_group.add_argument('text', nargs='?', type=lambda s: unicode(s, 'utf8'), help="text to speak")
 text_group.add_argument('-f', '--file', help="file to speak")
 
 parser.add_argument("-o", '--destination', help="destination mp3 file", action='store')
@@ -30,6 +30,7 @@ args = parser.parse_args()
 try:
     if args.text:
         if args.text == "-":
+            sys.stdin = codecs.getreader('utf-8')(sys.stdin)  # Assume stdin is unicode
             text = sys.stdin.read()
         else:
             text = args.text

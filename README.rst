@@ -7,7 +7,7 @@ gTTS
 spoken by tokenizing long sentences where the speech would naturally
 pause.
 
-|Build Status| |PyPI version|
+|Build Status| |PyPI version| |AppVeyor|
 
 Install
 -------
@@ -165,3 +165,5 @@ Contributing
    :target: https://travis-ci.org/pndurette/gTTS
 .. |PyPI version| image:: https://badge.fury.io/py/gTTS.svg
    :target: https://badge.fury.io/py/gTTS
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/e5v4ivunono2qhfp?svg=true
+   :target: https://ci.appveyor.com/project/scivision/gtts

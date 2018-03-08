@@ -25,6 +25,8 @@ setup(
         "requests",
         "gtts_token"
     ],
+    extras_require={'tests':['pytest']},
+    tests_requires=['pytest'],
     python_requires=">=2.7",
     classifiers=[
           'Environment :: Console',

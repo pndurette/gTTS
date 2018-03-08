@@ -8,10 +8,11 @@ python:
 - 2.7
 
 group: travis_latest
-install:
-- pip install .
-script:
-- python -m unittest discover -v -s gtts.tests
+
+install: pip install .[tests]
+
+script: pytest -v -s gtts.tests
+
 deploy:
   provider: pypi
   user: pndurette

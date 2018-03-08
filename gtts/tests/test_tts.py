@@ -72,9 +72,9 @@ class TestInit(unittest.TestCase):
             tts = gTTS(text=text, lang=lang, lang_check=check)
 
     def test_empty_string(self):
-        """Raise ValueError on empty string"""
+        """Raise AssertionError on empty string"""
         text = ""
-        with self.assertRaises(ValueError):
+        with self.assertRaises(AssertionError):
             tts = gTTS(text=text)
 
 

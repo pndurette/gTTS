@@ -1,0 +1,21 @@
+image:
+- Visual Studio 2017
+- Ubuntu
+
+stack: python 3
+
+environment:
+  PY_DIR: C:\Python36-x64
+
+clone_depth: 3
+
+before_build:
+- cmd: set PATH=%PY_DIR%;%PY_DIR%\Scripts;%PATH%
+
+build_script:
+- python --version
+- pip install -e .[tests]
+  
+after_build:
+- pytest -v -s gtts.tests
+

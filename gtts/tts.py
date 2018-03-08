@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 from . import Languages, LanguagesFetchError
-from six.moves import urllib
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from gtts_token import gtts_token
+from six.moves import urllib
 import re
+import urllib3
 import requests
-import warnings
-
-
-class gTTSError(Exception):
-    pass
+import logging
 
 
 class Speed:
@@ -24,17 +20,34 @@ class Speed:
 class gTTS:
     """gTTS (Google Text to Speech): an interface to Google's Text to Speech API"""
 
-    GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
     MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
+    GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
+    GOOGLE_TTS_HEADERS = {
+        "Referer": "http://translate.google.com/",
+        "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; WOW64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/47.0.2526.106 Safari/537.36"
+    }
 
     def __init__(
             self,
             text,
             lang='en',
             slow=False,
-            lang_check=False,
-            debug=False):
-        self.debug = debug
+            lang_check=False):
+
+        # Logger
+        self.log = logging.getLogger(__name__)
+        self.log.addHandler(logging.NullHandler())
+        self.debug = self.log.isEnabledFor(logging.DEBUG)
+
+        # Debug
+        if self.debug:
+            for k, v in locals().items():
+                if k == 'self':
+                    continue
+                self.log.debug("%s: %s", k, v)
 
         # Language
         if lang_check:
@@ -42,23 +55,23 @@ class gTTS:
                 if lang.lower() not in Languages().get():
                     raise ValueError("Language not supported: %s" % lang)
             except LanguagesFetchError as e:
-                # We ignore the language check but warn
-                print("Warning: %s" % str(e))
+                self.log.debug(str(e), exc_info=True)
+                self.log.warn(str(e))
 
         self.lang_check = lang_check
         self.lang = lang.lower()
 
         # Text
-        if not text:
+        if not text.strip():
             raise ValueError('No text to speak')
         else:
             self.text = text
 
         # Read speed
         if slow:
-            self.speed = Speed().SLOW
+            self.speed = Speed.SLOW
         else:
-            self.speed = Speed().NORMAL
+            self.speed = Speed.NORMAL
 
         # Split text in parts
         if self._len(text) <= self.MAX_CHARS:
@@ -72,16 +85,24 @@ class gTTS:
         text_parts = [x for x in text_parts if len(x) > 0]
         self.text_parts = text_parts
 
+        self.log.debug("text_parts: %i", len(self.text_parts))
+
         # Google Translate token
         self.token = gtts_token.Token()
 
     def save(self, savefile):
         """Do the Web request and save to <savefile>"""
+        # TODO handle exceptions for open
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
 
     def write_to_fp(self, fp):
         """Do the Web request and save to a file-like object"""
+
+        # When disabling ssl verify in requests (for proxies and firewalls),
+        # urllib3 prints an insecure warning on stdout. We disable that.
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
         for idx, part in enumerate(self.text_parts):
             payload = {'ie': 'UTF-8',
                        'q': part,
@@ -92,39 +113,33 @@ class gTTS:
                        'client': 'tw-ob',
                        'textlen': self._len(part),
                        'tk': self.token.calculate_token(part)}
-            headers = {
-                "Referer": "http://translate.google.com/",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
-            }
-            if self.debug:
-                print(payload)
+
+            self.log.debug("payload-%i: %s", idx, payload)
+
             try:
-                # Disable requests' ssl verify to accomodate certain proxies and firewalls
-                # Filter out urllib3's insecure warnings. We can live without
-                # ssl verify here
-                with warnings.catch_warnings():
-                    warnings.filterwarnings(
-                        "ignore", category=InsecureRequestWarning)
-                    r = requests.get(self.GOOGLE_TTS_URL,
-                                     params=payload,
-                                     headers=headers,
-                                     proxies=urllib.request.getproxies(),
-                                     verify=False)
-                if self.debug:
-                    print("Headers: {}".format(r.request.headers))
-                    print("Request url: {}".format(r.request.url))
-                    print(
-                        "Response: {}, Redirects: {}".format(
-                            r.status_code, r.history))
+                r = requests.get(self.GOOGLE_TTS_URL,
+                                 params=payload,
+                                 headers=self.GOOGLE_TTS_HEADERS,
+                                 proxies=urllib.request.getproxies(),
+                                 verify=False)
+
+                self.log.debug("headers-%i: %s", idx, r.request.headers)
+                self.log.debug("url-%i: %s", idx, r.request.url)
+                self.log.debug("status-%i: %s", idx, r.status_code)
+
                 r.raise_for_status()
+
+                # Write
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
+            except requests.exceptions.RequestException as e:
+                raise gTTSError(tts=self, response=r)
+            except AttributeError as e:
+                # TODO when fp is not a file-like object (no .write())
+                # Raise TypeError with that message
+                raise
             except Exception as e:
-                if not self.lang_check and r.status_code == 404:
-                    msg = "TTS API failed likely due to unsupported language '%s'. %s"
-                    raise gTTSError(msg % (self.lang, str(e)))
-                else:
-                    raise
+                raise
 
     def _len(self, text):
         """Get char len of <text>, after Unicode encoding if Python 2"""
@@ -136,7 +151,8 @@ class gTTS:
             return len(text)
 
     def _tokenize(self, text, max_size):
-        """Tokenizer on basic punctuation"""
+        """Tokenize <text> on speech-pausing punctuation
+        of maximum <max_size>. Returns list."""
 
         punc = u"¡!()[]¿?.,…‥،;:—。，、：？！\n"
         punc_list = [re.escape(c) for c in punc]
@@ -165,6 +181,38 @@ class gTTS:
                 self._minimize(thestring[idx:], delim, max_size)
         else:
             return [thestring]
+
+
+class gTTSError(Exception):
+    def __init__(self, msg=None, **kwargs):
+        self.tts = kwargs.pop('tts', None)
+        self.rsp = kwargs.pop('response', None)
+        if msg:
+            self.msg = msg
+        else:
+            self.msg = self.infer_msg(self.tts, self.rsp)
+        super(gTTSError, self).__init__(self.msg)
+
+    def infer_msg(self, tts, rsp):
+        """Attempt to guess what went wrong by using known
+        information (e.g. http response) and observed behaviour"""
+
+        # TODO: Fix passing of params, check for None.
+
+        # http://docs.python-requests.org/en/master/api/#requests.Response
+        status = rsp.status_code
+        reason = rsp.reason
+
+        cause = "Unknown"
+        if status == 403:
+            cause = "Bad token or upstream API changes"
+        elif status == 404 and not tts.lang_check:
+            cause = "Unsupported language '%s'" % self.tts.lang
+        elif status >= 500:
+            cause = "Uptream API error. Try again later."
+
+        return "%i (%s) from TTS API. Probable cause: %s" % (
+            status, reason, cause)
 
 
 if __name__ == "__main__":

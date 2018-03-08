@@ -14,27 +14,14 @@ class TestTTS(unittest.TestCase):
 
     def check_tts(self, lang):
         """Create mp3 files"""
-        (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang))
-        (f_slow, path_slow) = tempfile.mkstemp(
-            suffix='.mp3', prefix='test_{}_slow'.format(lang))
+        for slow in (False, True):
+            with tempfile.NamedTemporaryFile(suffix='.mp3', prefix='test_{}_'.format(lang)) as f:
+                # Create gTTS and save
+                tts = gTTS(self.text, lang, slow=slow)
+                tts.save(f.name)
 
-        # Create gTTS (normal) and save
-        tts = gTTS(self.text, lang)
-        tts.save(path)
-
-        # Create gTTS (slow) and save
-        tts = gTTS(self.text, lang, slow=True)
-        tts.save(path_slow)
-
-        # Check if files created is > 2k
-        filesize = os.path.getsize(path)
-        filesize_slow = os.path.getsize(path_slow)
-        self.assertTrue(filesize > 2000)
-        self.assertTrue(filesize_slow > 2000)
-
-        # Cleanup
-        os.remove(path)
-        os.remove(path_slow)
+                # Check if files created is > 2k
+                self.assertTrue(os.path.getsize(f.name) > 2000)
 
 
 def auto_langs():

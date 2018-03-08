@@ -11,7 +11,7 @@ group: travis_latest
 
 install: pip install .[tests]
 
-script: pytest -v -s gtts.tests
+script: pytest -v -s gtts/tests/
 
 deploy:
   provider: pypi

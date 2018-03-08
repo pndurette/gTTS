@@ -17,5 +17,5 @@ build_script:
 - pip install -e .[tests]
   
 after_build:
-- pytest -v -s gtts.tests
+- pytest -v -s gtts/tests/
 

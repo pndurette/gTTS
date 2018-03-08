@@ -17,15 +17,16 @@ class Speed:
 
     # The API supports two speeds.
     # (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
+
     SLOW = 0.3
     NORMAL = 1
-
 
 class gTTS:
     """gTTS (Google Text to Speech): an interface to Google's Text to Speech API"""
 
     GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
-    MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
+    MAX_CHARS = 100 # Max characters the Google TTS API takes at a time
+    
 
     def __init__(
             self,
@@ -36,6 +37,8 @@ class gTTS:
             debug=False):
         self.debug = debug
 
+        assert text, 'No text to speak'
+       
         # Language
         if lang_check:
             try:
@@ -47,12 +50,7 @@ class gTTS:
 
         self.lang_check = lang_check
         self.lang = lang.lower()
-
-        # Text
-        if not text:
-            raise ValueError('No text to speak')
-        else:
-            self.text = text
+        self.text = text
 
         # Read speed
         if slow:
@@ -60,18 +58,19 @@ class gTTS:
         else:
             self.speed = Speed().NORMAL
 
+
         # Split text in parts
         if self._len(text) <= self.MAX_CHARS:
             text_parts = [text]
         else:
-            text_parts = self._tokenize(text, self.MAX_CHARS)
+            text_parts = self._tokenize(text, self.MAX_CHARS)           
 
         # Clean
         def strip(x): return x.replace('\n', '').strip()
         text_parts = [strip(x) for x in text_parts]
         text_parts = [x for x in text_parts if len(x) > 0]
         self.text_parts = text_parts
-
+        
         # Google Translate token
         self.token = gtts_token.Token()
 
@@ -81,19 +80,19 @@ class gTTS:
             self.write_to_fp(f)
 
     def write_to_fp(self, fp):
-        """Do the Web request and save to a file-like object"""
+        """ Do the Web request and save to a file-like object """
         for idx, part in enumerate(self.text_parts):
-            payload = {'ie': 'UTF-8',
-                       'q': part,
-                       'tl': self.lang,
-                       'ttsspeed': self.speed,
-                       'total': len(self.text_parts),
-                       'idx': idx,
-                       'client': 'tw-ob',
-                       'textlen': self._len(part),
-                       'tk': self.token.calculate_token(part)}
+            payload = { 'ie' : 'UTF-8',
+                        'q' : part,
+                        'tl' : self.lang,
+                        'ttsspeed' : self.speed,
+                        'total' : len(self.text_parts),
+                        'idx' : idx,
+                        'client' : 'tw-ob',
+                        'textlen' : self._len(part),
+                        'tk' : self.token.calculate_token(part)}
             headers = {
-                "Referer": "http://translate.google.com/",
+                "Referer" : "http://translate.google.com/",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
             }
             if self.debug:
@@ -136,8 +135,8 @@ class gTTS:
             return len(text)
 
     def _tokenize(self, text, max_size):
-        """Tokenizer on basic punctuation"""
-
+        """ Tokenizer on basic punctuation """
+        
         punc = u"¡!()[]¿?.,…‥،;:—。，、：？！\n"
         punc_list = [re.escape(c) for c in punc]
         pattern = '|'.join(punc_list)
@@ -155,7 +154,7 @@ class gTTS:
         # Remove <delim> from start of <thestring>
         if thestring.startswith(delim):
             thestring = thestring[len(delim):]
-
+        
         if self._len(thestring) > max_size:
             try:
                 idx = thestring.rindex(delim, 0, max_size)
@@ -166,6 +165,3 @@ class gTTS:
         else:
             return [thestring]
 
-
-if __name__ == "__main__":
-    pass

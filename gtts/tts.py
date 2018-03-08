@@ -92,9 +92,9 @@ class gTTS:
 
     def save(self, savefile):
         """Do the Web request and save to <savefile>"""
-        # TODO handle exceptions for open
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
+            self.log.debug("Saved to %s" % savefile)
 
     def write_to_fp(self, fp):
         """Do the Web request and save to a file-like object"""
@@ -117,6 +117,7 @@ class gTTS:
             self.log.debug("payload-%i: %s", idx, payload)
 
             try:
+                # Request
                 r = requests.get(self.GOOGLE_TTS_URL,
                                  params=payload,
                                  headers=self.GOOGLE_TTS_HEADERS,
@@ -128,18 +129,16 @@ class gTTS:
                 self.log.debug("status-%i: %s", idx, r.status_code)
 
                 r.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                raise gTTSError(tts=self, response=r)
 
+            try:
                 # Write
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
-            except requests.exceptions.RequestException as e:
-                raise gTTSError(tts=self, response=r)
+                self.log.debug("part-%i written to %s", idx, fp)
             except AttributeError as e:
-                # TODO when fp is not a file-like object (no .write())
-                # Raise TypeError with that message
-                raise
-            except Exception as e:
-                raise
+                raise TypeError("'fp' must be a file-like object: %s" % str(e))
 
     def _len(self, text):
         """Get char len of <text>, after Unicode encoding if Python 2"""
@@ -184,22 +183,25 @@ class gTTS:
 
 
 class gTTSError(Exception):
+    """Exception that uses heuristics to present a meaningful error message"""
+
     def __init__(self, msg=None, **kwargs):
         self.tts = kwargs.pop('tts', None)
         self.rsp = kwargs.pop('response', None)
         if msg:
             self.msg = msg
-        else:
+        elif self.tts and self.rsp:
             self.msg = self.infer_msg(self.tts, self.rsp)
+        else:
+            self.msg = None  # "Unknown error"
         super(gTTSError, self).__init__(self.msg)
 
     def infer_msg(self, tts, rsp):
         """Attempt to guess what went wrong by using known
         information (e.g. http response) and observed behaviour"""
 
-        # TODO: Fix passing of params, check for None.
-
-        # http://docs.python-requests.org/en/master/api/#requests.Response
+        # rsp should be <requests.Response>
+        # http://docs.python-requests.org/en/master/api/
         status = rsp.status_code
         reason = rsp.reason
 

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from gtts import gTTS, Languages, __version__
+from gtts import gTTS, gTTSError, Languages, LanguagesFetchError, __version__
+import traceback
 import click
+import sys
 
 # Click settings
 CONTEXT_SETTINGS = {
@@ -27,9 +29,15 @@ def print_languages(ctx, param, value):
     """Prints sorted pretty-printed list of supported languages"""
     if not value or ctx.resilient_parsing:
         return
-    langs = Languages().get()
-    langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
-    click.echo('  ' + '\n  '.join(langs_str_list))
+    try:
+        langs = Languages().get()
+        langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
+        click.echo('  ' + '\n  '.join(langs_str_list))
+    except LanguagesFetchError as e:
+        # click.echo(str(e), err=True)
+        #(_, _, exc_traceback) = sys.exc_info()
+        traceback.print_exc()
+        raise click.ClickException("Couldn't fetch language list.")
     ctx.exit()
 
 
@@ -87,22 +95,39 @@ def tts_cli(text, file, output, slow, lang, nocheck, debug):
     # in the Click context at the time <lang> is used)
     check = not nocheck  # Readability
     if check:
-        if lang not in Languages().get():
-            msg = "Use --all to list languages, or add --nocheck to disable language check."
-            raise click.BadParameter(msg, param_hint="lang '{}'".format(lang))
+        try:
+            if lang.lower() not in Languages().get():
+                msg = "Use --all to list languages, or add --nocheck to disable language check."
+                raise click.BadParameter(msg, param_hint="lang '{}'".format(lang))
+        except LanguagesFetchError as e:
+            # We ignore the language check but warn
+            click.echo("Warning: %s" % str(e))
 
     # stdin for <text> (auto for <file>)
+    # TODO ValueError (when errors is 'strict')
+    # raise click.BadParameter
     if text is '-':
         text = click.get_text_stream('stdin').read()
 
     # stdout (when no <output>)
+    # TODO ValueError (when errors is 'strict')
+    # raise click.BadParameter
     if not output:
         output = click.get_binary_stream('stdout')
 
     # <file> input
+    # TODO ValueError (when errors is 'strict')
+    # raise click.FileError
     if file:
         text = file.read()
 
     # TTS
-    tts = gTTS(text=text, lang=lang, slow=slow, lang_check=check, debug=debug)
-    tts.write_to_fp(output)
+    try:
+        tts = gTTS(text=text, lang=lang, slow=slow, lang_check=check, debug=debug)
+        tts.write_to_fp(output)
+    except ValueError as e:
+        raise click.BadOptionUsage(str(e)) 
+    except gTTSError as e:
+        raise click.UsageError(str(e))
+    except Exception as e:
+        raise click.ClickException(str(e))

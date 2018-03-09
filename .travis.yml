@@ -1,15 +1,17 @@
 language: python
+fast_finish: true
 python:
-- '3.6'
-- '3.5'
-- '3.4'
-- '3.3'
-- '2.7'
-sudo: false
-install:
-- pip install .
-script:
-- python -m unittest discover -v -s gtts.tests
+- 3.6
+- 3.5
+- 3.4
+- 2.7
+
+group: travis_latest
+
+install: pip install .[tests]
+
+script: pytest -v -s gtts/tests/
+
 deploy:
   provider: pypi
   user: pndurette

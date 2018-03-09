@@ -13,6 +13,7 @@ class Speed:
 
     # The API supports two speeds.
     # (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
+
     SLOW = 0.3
     NORMAL = 1
 
@@ -49,6 +50,10 @@ class gTTS:
                     continue
                 self.log.debug("%s: %s", k, v)
 
+        # Text
+        assert text, 'No text to speak'
+        self.text = text
+
         # Language
         if lang_check:
             try:
@@ -60,12 +65,6 @@ class gTTS:
 
         self.lang_check = lang_check
         self.lang = lang.lower()
-
-        # Text
-        if not text.strip():
-            raise ValueError('No text to speak')
-        else:
-            self.text = text
 
         # Read speed
         if slow:
@@ -218,7 +217,3 @@ class gTTSError(Exception):
 
         return "%i (%s) from TTS API. Probable cause: %s" % (
             status, reason, cause)
-
-
-if __name__ == "__main__":
-    pass

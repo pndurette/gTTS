@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests
+import logging
 import re
 from bs4 import BeautifulSoup
 
@@ -54,9 +55,15 @@ class Languages:
     def __init__(self):
         self.langs = dict()
 
+        # Logger
+        self.log = logging.getLogger(__name__)
+        self.log.addHandler(logging.NullHandler())
+
     def get(self):
         self.langs = self._fetch_langs()
         self.langs.update(self.EXTRA_LANGS)
+
+        self.log.debug("langs: %s", self.langs)
         return self.langs
 
     def _fetch_langs(self):
@@ -94,8 +101,7 @@ class Languages:
                 l['value']: l.text for l in langs_html if l['value'] in tts_langs}
             return langs
         except Exception as e:
-            raise LanguagesFetchError(
-                "Unable to get language list: {}".format(str(e)))
+            raise LanguagesFetchError("Unable to get language list")
 
 
 if __name__ == "__main__":

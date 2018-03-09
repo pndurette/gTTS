@@ -99,6 +99,9 @@ class gTTS:
     def write_to_fp(self, fp):
         """Do the Web request and save to a file-like object"""
 
+        if not self.text_parts:
+            self.log.warn("Nothing to speak")
+
         # When disabling ssl verify in requests (for proxies and firewalls),
         # urllib3 prints an insecure warning on stdout. We disable that.
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

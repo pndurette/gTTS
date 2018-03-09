@@ -13,7 +13,7 @@ class TestTTS(unittest.TestCase):
         self.text = "This is a test"
 
     def check_tts(self, lang):
-        """Create mp3 files"""
+        """Create output .mp3 file successfully"""
         (f, path) = tempfile.mkstemp(suffix='.mp3', prefix='test_{}_'.format(lang))
         (f_slow, path_slow) = tempfile.mkstemp(
             suffix='.mp3', prefix='test_{}_slow'.format(lang))
@@ -33,6 +33,8 @@ class TestTTS(unittest.TestCase):
         self.assertTrue(filesize_slow > 2000)
 
         # Cleanup
+        f.close()
+        f_slow.close()
         os.remove(path)
         os.remove(path_slow)
 
@@ -89,9 +91,13 @@ class TestWebRequest(unittest.TestCase):
         lang = 'xx'
         check = False
         with self.assertRaises(Exception):
-            path = tempfile.mkstemp()
+            (f, path) = tempfile.mkstemp()
             tts = gTTS(text=self.text, lang=lang, lang_check=check)
             tts.save(path)
+
+            # Cleanup
+            f.close()
+            os.remove(path)
 
 
 if __name__ == '__main__':

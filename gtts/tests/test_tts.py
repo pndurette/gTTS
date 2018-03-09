@@ -33,8 +33,6 @@ class TestTTS(unittest.TestCase):
         self.assertTrue(filesize_slow > 2000)
 
         # Cleanup
-        f.close()
-        f_slow.close()
         os.remove(path)
         os.remove(path_slow)
 
@@ -96,7 +94,6 @@ class TestWebRequest(unittest.TestCase):
             tts.save(path)
 
             # Cleanup
-            f.close()
             os.remove(path)
 
 

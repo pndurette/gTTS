@@ -95,12 +95,10 @@ class TestWebRequest(unittest.TestCase):
         lang = 'xx'
         check = False
         with self.assertRaises(gTTSError):
-            (f, path) = tempfile.mkstemp()
-            tts = gTTS(text=self.text, lang=lang, lang_check=check)
-            tts.save(path)
-
-            # Cleanup
-            os.remove(path)
+            with tempfile.SpooledTemporaryFile() as f:
+                 # Create gTTS
+                tts = gTTS(text=self.text, lang=lang, lang_check=check)
+                tts.write_to_fp(f)
 
 
 if __name__ == '__main__':

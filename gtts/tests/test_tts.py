@@ -5,6 +5,15 @@ import unittest
 
 from gtts import gTTS, gTTSError, Languages
 
+# Testing all languages takes some time.
+# Set TEST_LANGS to choose with languages to test.
+#  * 'fetch': Languages fetched from the Web
+#  * 'extra': Languagee set in Languages.EXTRA_LANGS
+#  * 'all': All of the above
+#  * <csv>: Languages tags list to test
+# Unset TEST_LANGS to test everything ('all')
+# See: test_langs_dict()
+
 
 class TestTTS(unittest.TestCase):
     """Test all supported languages and file save"""
@@ -37,27 +46,37 @@ class TestTTS(unittest.TestCase):
         os.remove(path_slow)
 
 
-def auto_langs():
-    langs = Languages()._fetch_langs()
-    return langs
+def test_langs_dict():
+    """Construct a dict of suites of languages to test.
+    { '<suite name>' : <list or dict of language tags> }
 
-
-def extra_langs():
-    langs = Languages().EXTRA_LANGS
+    ex.: { 'fetch' : {'en': 'English', 'fr': 'French'},
+           'extra' : {'en': 'English', 'fr': 'French'} }
+    ex.: { 'environ' : ['en', 'fr'] }
+    """
+    langs = dict()
+    env = os.environ.get('TEST_LANGS', '')
+    if env == '' or env == 'all':
+        langs['fetch'] = Languages()._fetch_langs()
+        langs['extra'] = Languages().EXTRA_LANGS
+    elif env == 'fetch':
+        langs['fetch'] = Languages()._fetch_langs()
+    elif env == 'extra':
+        langs['extra'] = Languages().EXTRA_LANGS
+    else:
+        env_langs = env.split(',')
+        env_langs = [l for l in env_langs if l]
+        langs['environ'] = env_langs
     return langs
 
 
 # Generate TestTTS.check_tts tests for each language
 # Based on: http://stackoverflow.com/a/1194012
-for l in auto_langs():
-    def ch(l):
-        return lambda self: self.check_tts(l)
-    setattr(TestTTS, "test_tts_auto_%s" % l, ch(l))
-
-for l in extra_langs():
-    def ch(l):
-        return lambda self: self.check_tts(l)
-    setattr(TestTTS, "test_tts_extra_%s" % l, ch(l))
+for suite, langs in test_langs_dict().items():
+    for l in langs:
+        def ch(l):
+            return lambda self: self.check_tts(l)
+        setattr(TestTTS, "test_tts_%s_%s" % (suite, l), ch(l))
 
 
 class TestInit(unittest.TestCase):
@@ -88,7 +107,7 @@ class TestWebRequest(unittest.TestCase):
         """Raise gTTSError on unsupported language (without language check)"""
         lang = 'xx'
         check = False
-        with self.assertRaises(Exception):
+        with self.assertRaises(gTTSError):
             (f, path) = tempfile.mkstemp()
             tts = gTTS(text=self.text, lang=lang, lang_check=check)
             tts.save(path)

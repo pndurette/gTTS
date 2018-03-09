@@ -56,7 +56,7 @@ class gTTS:
                     raise ValueError("Language not supported: %s" % lang)
             except LanguagesFetchError as e:
                 self.log.debug(str(e), exc_info=True)
-                self.log.warn(str(e))
+                self.log.warning(str(e))
 
         self.lang_check = lang_check
         self.lang = lang.lower()
@@ -186,17 +186,17 @@ class gTTS:
 
 
 class gTTSError(Exception):
-    """Exception that uses heuristics to present a meaningful error message"""
+    """Exception that uses context to present a meaningful error message"""
 
     def __init__(self, msg=None, **kwargs):
         self.tts = kwargs.pop('tts', None)
         self.rsp = kwargs.pop('response', None)
         if msg:
             self.msg = msg
-        elif self.tts and self.rsp:
+        elif self.tts is not None and self.rsp is not None:
             self.msg = self.infer_msg(self.tts, self.rsp)
         else:
-            self.msg = None  # "Unknown error"
+            self.msg = None
         super(gTTSError, self).__init__(self.msg)
 
     def infer_msg(self, tts, rsp):

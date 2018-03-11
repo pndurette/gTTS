@@ -11,6 +11,7 @@ class TestLanguages(unittest.TestCase):
         pass
 
     def test_fetch_langs(self):
+        """Fetch languages successfully"""
         languages = Languages()
 
         # Downloaded Languages
@@ -31,6 +32,7 @@ class TestLanguages(unittest.TestCase):
             len(extra_langs))
 
     def test_fetch_langs_exception(self):
+        """Raise LanguagesFetchError on language fetch exception"""
         languages = Languages()
         languages.URL_BASE = 'http://abc.def.hij.biz'
         with self.assertRaises(LanguagesFetchError):

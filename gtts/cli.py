@@ -129,7 +129,7 @@ def set_debug(ctx, param, debug):
     default='en',
     show_default=True,
     callback=validate_lang,
-    help="IETF language tag. Language to speak in. List documented tags with -a/--all.")
+    help="IETF language tag. Language to speak in. List documented tags with --all.")
 @click.option(
     '--nocheck',
     default=False,
@@ -160,21 +160,28 @@ def tts_cli(text, file, output, slow, lang, nocheck):
 
     # stdin for <text> (auto for <file>)
     # TODO ValueError (when errors is 'strict')
-    # raise click.BadParameter
     if text is '-':
-        text = click.get_text_stream('stdin').read()
+        try:
+            text = click.get_text_stream('stdin').read()
+        except Exception as e:
+            raise click.ClickException("Error with <text>")
 
     # stdout (when no <output>)
     # TODO ValueError (when errors is 'strict')
-    # raise click.BadParameter
     if not output:
-        output = click.get_binary_stream('stdout')
+        try:
+            output = click.get_binary_stream('stdout')
+        except Exception as e:
+            raise click.ClickException("Error with <output>")
 
     # <file> input
     # TODO ValueError (when errors is 'strict')
-    # raise click.FileError
+    # TODO: If that's empty, die. (test test_text_empty())
     if file:
-        text = file.read()
+        try:
+            text = file.read()
+        except Exception as e:
+            raise click.ClickException("Error with <file>")
 
     # TTS
     try:

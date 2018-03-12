@@ -2,6 +2,7 @@
 import tempfile
 import unittest
 import click
+import six
 import sys
 import os
 from click.testing import CliRunner
@@ -83,7 +84,9 @@ class TestParams(unittest.TestCase):
         result = self.invoke(['--all'])
         # One or more of "  xy: name" (\n optional to match the last)
         # Ex. "<start>  xx: xxxxx\n  xx-yy: xxxxx\n  xx: xxxxx<end>"
-        self.assertRegex(
+        # NB: assertRegex needs Py3.1+, use six
+        six.assertRegex(
+            self,
             result.output,
             "^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$")
         self.assertEqual(result.exit_code, 0)

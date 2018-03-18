@@ -6,7 +6,7 @@ import unittest
 from gtts import gTTS, gTTSError, Languages
 
 # Testing all languages takes some time.
-# Set TEST_LANGS to choose with languages to test.
+# Set TEST_LANGS envvar to choose languages to test.
 #  * 'fetch': Languages fetched from the Web
 #  * 'extra': Languagee set in Languages.EXTRA_LANGS
 #  * 'all': All of the above
@@ -80,6 +80,12 @@ class TestInit(unittest.TestCase):
     def test_empty_string(self):
         """Raise AssertionError on empty string"""
         text = ""
+        with self.assertRaises(AssertionError):
+            tts = gTTS(text=text)
+
+    def test_no_text_parts(self):
+        """Raises AssertionError on no content to send to API (no text_parts)"""
+        text = "                                                                                                          ..,\n"
         with self.assertRaises(AssertionError):
             tts = gTTS(text=text)
 

@@ -34,11 +34,17 @@ class TestTokenizer(unittest.TestCase):
         self.lang = 'en'
         self.text_punctuated = "Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
         self.text_long_no_punctuation = "Bacon ipsum dolor sit amet flank corned beef shankle bacon beef ribs biltong ribeye short ribs brisket ham turducken beef tongue landjaeger porchetta sirloin brisket turkey landjaeger turducken pancetta meatloaf pastrami venison shank strip steak ham porchetta ground round ham hock hamburger"
+        self.text_long_decimals = "1.2.3. 00.00. 1,2,3. Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
 
     def test_punctuation_tokenization(self):
         """Tokenization on punctuation"""
         tts = gTTS(self.text_punctuated, self.lang)
         self.assertEqual(len(tts.text_parts), 3)
+
+    def test_decimals_tokenization(self):
+        """Decimal numbers should not be tokenized"""
+        tts = gTTS(self.text_long_decimals, self.lang)
+        self.assertEqual(len(tts.text_parts), 6)
 
     def test_minimize_tokenization(self):
         """Tokenization on spaces"""

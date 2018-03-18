@@ -153,9 +153,15 @@ class gTTS:
         """Tokenize <text> on speech-pausing punctuation
         of maximum <max_size>. Returns list."""
 
-        punc = u"¡!()[]¿?.,…‥،;:—。，、：？！\n"
+        punc = u"¡!()[]¿?…‥،;:—。，、：？！\n"
         punc_list = [re.escape(c) for c in punc]
         pattern = '|'.join(punc_list)
+
+        # Pattern add-ins
+        # Don't cut numbers
+        pattern += '|\.(?!\d)'  # or '.' except if followed by digit
+        pattern += '|\,(?!\d)'  # or ',' except if followed by digit
+
         parts = re.split(pattern, text)
 
         min_parts = []

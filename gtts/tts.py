@@ -141,13 +141,10 @@ class gTTS:
                 raise TypeError("'fp' must be a file-like object: %s" % str(e))
 
     def _len(self, text):
-        """Get char len of <text>, after Unicode encoding if Python 2"""
+        """Get real char len of <text>, via unicode() if Python 2"""
         try:
             # Python 2
             return len(unicode(text))
-        # TODO: Need this? Can only happen if file is input that was badly opened
-        #except UnicodeDecodeError:
-        #    return len(unicode(text, 'utf-8'))
         except NameError:
             # Python 3
             return len(text)

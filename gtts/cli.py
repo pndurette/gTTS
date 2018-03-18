@@ -2,6 +2,7 @@
 from gtts import gTTS, gTTSError, Languages, LanguagesFetchError, __version__
 import sys
 import click
+import locale
 import logging
 import logging.config
 
@@ -35,6 +36,11 @@ LOGGER_SETTINGS = {
 # Logger
 logging.config.dictConfig(LOGGER_SETTINGS)
 log = logging.getLogger('gtts')
+
+
+def sys_encoding():
+    """Return the charset that the user is likely using"""
+    return locale.getpreferredencoding() or sys.getdefaultencoding()
 
 
 def validate_text(ctx, param, text):
@@ -109,7 +115,7 @@ def set_debug(ctx, param, debug):
 @click.option(
     '-f',
     '--file',
-    type=click.File(),
+    type=click.File(encoding=sys_encoding()), # For py2.7/unicode. If encoding not None, io.open used
     help="Input is contents of FILENAME instead of TEXT (use '-' for stdin).")
 @click.option(
     '-o',
@@ -158,30 +164,38 @@ def tts_cli(text, file, output, slow, lang, nocheck):
     (use '-' as TEXT or as -f/--file FILENAME for stdin)
     """
 
-    # stdin for <text> (auto for <file>)
-    # TODO ValueError (when errors is 'strict')
-    if text is '-':
+    # stdin for <text>
+    # TODO: Need for try/except?
+    if text == '-':
         try:
             text = click.get_text_stream('stdin').read()
         except Exception as e:
-            raise click.ClickException("Error with <text>")
+            log.debug(str(e), exc_info=True)
+            raise click.ClickException("Input error: %s" % str(e))
 
     # stdout (when no <output>)
-    # TODO ValueError (when errors is 'strict')
+    # TODO: Need for try/except?
     if not output:
         try:
             output = click.get_binary_stream('stdout')
         except Exception as e:
-            raise click.ClickException("Error with <output>")
+            log.debug(str(e), exc_info=True)
+            raise click.ClickException("Output error: %s" % str(e))
 
-    # <file> input
-    # TODO ValueError (when errors is 'strict')
-    # TODO: If that's empty, die. (test test_text_empty())
+    # <file> input (click reads stdin on '-')
     if file:
         try:
             text = file.read()
+        # TODO: Test this.
+        except UnicodeDecodeError as e:
+            log.debug(str(e), exc_info=True)
+            raise click.FileError(
+                file.name,
+                "FILE must be encoded using system encoding (%s)." %
+                sys_encoding())
         except Exception as e:
-            raise click.ClickException("Error with <file>")
+            log.debug(str(e), exc_info=True)
+            raise click.FileError(file.name, str(e))
 
     # TTS
     try:
@@ -191,9 +205,10 @@ def tts_cli(text, file, output, slow, lang, nocheck):
             slow=slow,
             lang_check=not nocheck)
         tts.write_to_fp(output)
-    except ValueError as e:
-        raise click.BadOptionUsage(str(e))
-    except gTTSError as e:
+    except (ValueError, AssertionError) as e:
         raise click.UsageError(str(e))
+    except gTTSError as e:
+        raise click.ClickException(str(e))
     except Exception as e:
+        log.debug(str(e), exc_info=True)
         raise click.ClickException(str(e))

@@ -79,12 +79,13 @@ class gTTS:
             text_parts = self._tokenize(text, self.MAX_CHARS)
 
         # Clean
-        def strip(x): return x.replace('\n', '').strip()
+        def strip(x): return x.replace('\n', ' ').strip()
         text_parts = [strip(x) for x in text_parts]
         text_parts = [x for x in text_parts if len(x) > 0]
         self.text_parts = text_parts
 
         self.log.debug("text_parts: %i", len(self.text_parts))
+        assert self.text_parts, 'No text to send to TTS API'
 
         # Google Translate token
         self.token = gtts_token.Token()
@@ -97,9 +98,6 @@ class gTTS:
 
     def write_to_fp(self, fp):
         """Do the Web request and save to a file-like object"""
-
-        if not self.text_parts:
-            self.log.warn("Nothing to speak")
 
         # When disabling ssl verify in requests (for proxies and firewalls),
         # urllib3 prints an insecure warning on stdout. We disable that.
@@ -147,6 +145,9 @@ class gTTS:
         try:
             # Python 2
             return len(unicode(text))
+        # TODO: Need this? Can only happen if file is input that was badly opened
+        #except UnicodeDecodeError:
+        #    return len(unicode(text, 'utf-8'))
         except NameError:
             # Python 3
             return len(text)

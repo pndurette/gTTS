@@ -23,11 +23,11 @@ class TestParams(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.runner = CliRunner()
-        (f, self.empty_file) = tempfile.mkstemp(suffix='.txt')
+        (_, self.empty_file_path) = tempfile.mkstemp(suffix='.txt')
 
     @classmethod
     def tearDownClass(self):
-        os.remove(self.empty_file)
+        os.remove(self.empty_file_path)
 
     def invoke(self, args, input=None):
         return self.runner.invoke(tts_cli, args, input)
@@ -46,14 +46,14 @@ class TestParams(unittest.TestCase):
 
     def test_text_text_and_file(self):
         """<test> (arg) and <file> <opt> should not be set together"""
-        result = self.invoke_debug(['--file', self.empty_file, 'test'])
+        result = self.invoke_debug(['--file', self.empty_file_path, 'test'])
 
         self.assertIn("FILENAME can't be used together", result.output)
         self.assertNotEqual(result.exit_code, 0)
 
     def test_text_empty(self):
         """Exit on no text to speak (via <file>)"""
-        result = self.invoke_debug(['--file', self.empty_file])
+        result = self.invoke_debug(['--file', self.empty_file_path])
 
         self.assertIn("No text to speak", result.output)
         self.assertNotEqual(result.exit_code, 0)
@@ -234,16 +234,30 @@ How much will it cost the website doesn't have the theme i was going for."""
 
 class TestOutputs(unittest.TestCase):
     """Test all ouput methods"""
-    # TODO test-out
 
     def setUp(self):
-        pass
+        self.runner = CliRunner()
+        (_, self.save_file_path) = tempfile.mkstemp(suffix='.mp3')
+
+    def TearDown(self):
+        os.remove(self.save_file_path)
+
+    def invoke(self, args, input=None):
+        return self.runner.invoke(tts_cli, args, input)
 
     def test_stdout(self):
-        pass
+        result = self.invoke(['test'])
+
+        # The MP3 encoding (LAME 3.99.5) leaves a signature in the raw output
+        self.assertIn('LAME3.99.5', result.output)
+        self.assertEqual(result.exit_code, 0)
 
     def test_file(self):
-        pass
+        result = self.invoke(['test', '--output', self.save_file_path])
+
+        # Check if files created is > 2k
+        self.assertTrue(os.path.getsize(self.save_file_path) > 2000)
+        self.assertEqual(result.exit_code, 0)
 
 
 if __name__ == '__main__':

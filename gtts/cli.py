@@ -115,7 +115,8 @@ def set_debug(ctx, param, debug):
 @click.option(
     '-f',
     '--file',
-    type=click.File(encoding=sys_encoding()), # For py2.7/unicode. If encoding not None, io.open used
+    # For py2.7/unicode. If encoding not None Click uses io.open
+    type=click.File(encoding=sys_encoding()),
     help="Input is contents of FILENAME instead of TEXT (use '-' for stdin).")
 @click.option(
     '-o',
@@ -165,7 +166,6 @@ def tts_cli(text, file, output, slow, lang, nocheck):
     """
 
     # stdin for <text>
-    # TODO: Need for try/except?
     if text == '-':
         try:
             text = click.get_text_stream('stdin').read()
@@ -174,7 +174,6 @@ def tts_cli(text, file, output, slow, lang, nocheck):
             raise click.ClickException("Input error: %s" % str(e))
 
     # stdout (when no <output>)
-    # TODO: Need for try/except?
     if not output:
         try:
             output = click.get_binary_stream('stdout')
@@ -182,11 +181,10 @@ def tts_cli(text, file, output, slow, lang, nocheck):
             log.debug(str(e), exc_info=True)
             raise click.ClickException("Output error: %s" % str(e))
 
-    # <file> input (click reads stdin on '-')
+    # <file> input (stdin on '-' is handled by click.File)
     if file:
         try:
             text = file.read()
-        # TODO: Test this.
         except UnicodeDecodeError as e:
             log.debug(str(e), exc_info=True)
             raise click.FileError(

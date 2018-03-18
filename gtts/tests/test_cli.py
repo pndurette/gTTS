@@ -142,7 +142,8 @@ test
         # Text for <text> and <file>
         self.text = """Can you make pink a little more pinkish can you make pink a little more pinkish, nor can you make the font bigger?
 How much will it cost the website doesn't have the theme i was going for."""
-        self.textfile_ascii = os.path.join(pwd, 'test_cli_test_ascii.txt')
+        self.textfile_ascii = os.path.join(
+            pwd, 'input_files', 'test_cli_test_ascii.txt')
 
         # Text for <text> and <file> (Unicode)
         self.text_unicode = u"""这是一个三岁的小孩
@@ -150,7 +151,8 @@ How much will it cost the website doesn't have the theme i was going for."""
 对这个世界， 她也许还有很多要学的东西，
 但在一个重要的任务上， 她已经是专家了：
 去理解她所看到的东西。"""
-        self.textfile_utf8 = os.path.join(pwd, 'test_cli_test_utf8.txt')
+        self.textfile_utf8 = os.path.join(
+            pwd, 'input_files', 'test_cli_test_utf8.txt')
 
     def invoke(self, args, input=None):
         return self.runner.invoke(tts_cli, args, input)

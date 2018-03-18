@@ -27,6 +27,7 @@ class Languages:
         # Chinese
         'zh-cn': 'Chinese (Mandarin/China)',
         'zh-tw': 'Chinese (Mandarin/Taiwan)',
+        # Google seems to have removed Cantonese
         #'zh-yue': 'Chinese (Cantonese)',
         # English
         'en-us': 'English (US)',

@@ -1,4 +1,5 @@
 environment:
+    PYTHONIOENCODING: 'utf-8'
     matrix:
         # Python 3.6
         - PYTHON: "C:\\Python36-x64"

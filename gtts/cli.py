@@ -116,7 +116,7 @@ def set_debug(ctx, param, debug):
     '-f',
     '--file',
     # For py2.7/unicode. If encoding not None Click uses io.open
-    type=click.File(encoding=sys_encoding()),
+    type=click.File(), # TESTING WINDOWS encoding=sys_encoding()),
     help="Input is contents of FILENAME instead of TEXT (use '-' for stdin).")
 @click.option(
     '-o',

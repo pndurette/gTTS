@@ -14,14 +14,14 @@ environment:
         - PYTHON: "C:\\Python27-x64"
 
 install:
-    - pip install -e .[tests]
-    #- "%PYTHON%\\python.exe -m pip install wheel"
+    - "%PYTHON%\\python.exe -m pip install -e .[tests]"
 
 build: off
 
 test_script:
-    - python --version
-    - pytest -v -s gtts/tests/
+    - "echo %PYTHONIOENCODING%"
+    - "%PYTHON%\\python.exe --version"
+    - "%PYTHON%\\python.exe -m pytest -v -s gtts/tests/"
 
 #image:
 #- Visual Studio 2017

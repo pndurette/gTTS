@@ -1,5 +1,4 @@
 environment:
-    PYTHONIOENCODING: 'utf-8'
     matrix:
         # Python 3.6
         - PYTHON: "C:\\Python36-x64"
@@ -19,28 +18,6 @@ install:
 build: off
 
 test_script:
-    - "echo %PYTHONIOENCODING%"
     - "%PYTHON%\\python.exe --version" 
     - "%PYTHON%\\python.exe -c \"from gtts.cli import sys_encoding; print(sys_encoding())\""
     - "%PYTHON%\\python.exe -m pytest -v -s gtts/tests/"
-
-#image:
-#- Visual Studio 2017
-#- Ubuntu
-#
-#stack: python 3
-#
-#environment:
-#  PY_DIR: C:\Python36-x64
-#
-#clone_depth: 3
-#
-#before_build:
-#- cmd: set PATH=%PY_DIR%;%PY_DIR%\Scripts;%PATH%
-#
-#build_script:
-#- python --version
-#- pip install -e .[tests]
-#  
-#after_build:
-#- pytest -v -s gtts/tests/

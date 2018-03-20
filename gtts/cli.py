@@ -39,8 +39,8 @@ log = logging.getLogger('gtts')
 
 
 def sys_encoding():
-    """Return the charset that the user is likely using"""
-    return locale.getpreferredencoding() or sys.getdefaultencoding()
+    """Charset to use for --file <path>|- (stdin)"""
+    return 'utf8'
 
 
 def validate_text(ctx, param, text):
@@ -116,7 +116,7 @@ def set_debug(ctx, param, debug):
     '-f',
     '--file',
     # For py2.7/unicode. If encoding not None Click uses io.open
-    type=click.File(), # TESTING WINDOWS encoding=sys_encoding()),
+    type=click.File(encoding=sys_encoding()),
     help="Input is contents of FILENAME instead of TEXT (use '-' for stdin).")
 @click.option(
     '-o',
@@ -189,7 +189,7 @@ def tts_cli(text, file, output, slow, lang, nocheck):
             log.debug(str(e), exc_info=True)
             raise click.FileError(
                 file.name,
-                "FILE must be encoded using system encoding (%s)." %
+                "FILE must be encoded using '%s'." %
                 sys_encoding())
         except Exception as e:
             log.debug(str(e), exc_info=True)

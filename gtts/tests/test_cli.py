@@ -23,11 +23,7 @@ class TestParams(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.runner = CliRunner()
-        (_, self.empty_file_path) = tempfile.mkstemp(suffix='.txt')
-
-    @classmethod
-    def tearDownClass(self):
-        os.remove(self.empty_file_path)
+        (self.f, self.empty_file_path) = tempfile.mkstemp(suffix='.txt')
 
     def invoke(self, args, input=None):
         return self.runner.invoke(tts_cli, args, input)
@@ -237,12 +233,10 @@ How much will it cost the website doesn't have the theme i was going for."""
 class TestOutputs(unittest.TestCase):
     """Test all ouput methods"""
 
+    @classmethod
     def setUp(self):
         self.runner = CliRunner()
-        (_, self.save_file_path) = tempfile.mkstemp(suffix='.mp3')
-
-    def TearDown(self):
-        os.remove(self.save_file_path)
+        (self.f, self.save_file_path) = tempfile.mkstemp(suffix='.mp3')
 
     def invoke(self, args, input=None):
         return self.runner.invoke(tts_cli, args, input)

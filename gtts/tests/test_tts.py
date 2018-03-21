@@ -112,9 +112,6 @@ class TestWrite(unittest.TestCase):
         # Check if file created is > 2k
         self.assertTrue(os.stat(save_file_path).st_size > 2000)
 
-        # Cleanup
-        os.remove(save_file_path)
-
 
 class TestgTTSError(unittest.TestCase):
     """Test gTTsError internal exception handling"""

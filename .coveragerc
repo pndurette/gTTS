@@ -1,0 +1,8 @@
+[run]
+omit = gtts/tests/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    log.debug
+    log.warning

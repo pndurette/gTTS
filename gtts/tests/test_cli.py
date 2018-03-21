@@ -23,7 +23,7 @@ class TestParams(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.runner = CliRunner()
-        (self.f, self.empty_file_path) = tempfile.mkstemp(suffix='.txt')
+        (_, self.empty_file_path) = tempfile.mkstemp(suffix='.txt')
 
     def invoke(self, args, input=None):
         return self.runner.invoke(tts_cli, args, input)
@@ -236,7 +236,7 @@ class TestOutputs(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.runner = CliRunner()
-        (self.f, self.save_file_path) = tempfile.mkstemp(suffix='.mp3')
+        (_, self.save_file_path) = tempfile.mkstemp(suffix='.mp3')
 
     def invoke(self, args, input=None):
         return self.runner.invoke(tts_cli, args, input)

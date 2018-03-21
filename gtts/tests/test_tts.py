@@ -2,6 +2,7 @@
 import os
 import tempfile
 import unittest
+from mock import Mock
 
 from gtts import gTTS, gTTSError, Languages
 
@@ -88,6 +89,78 @@ class TestInit(unittest.TestCase):
         text = "                                                                                                          ..,\n"
         with self.assertRaises(AssertionError):
             tts = gTTS(text=text)
+
+
+class TestWrite(unittest.TestCase):
+    """Test write_to_fp()/save() cases not covered elsewhere in this file"""
+
+    def test_bad_fp_type(self):
+        """Raise TypeError if fp is not a file-like object (no .write())"""
+        # Create gTTS and save
+        tts = gTTS(text='test')
+        with self.assertRaises(TypeError):
+            tts.write_to_fp(5)
+
+    def test_save(self):
+        """Save .mp3 file successfully"""
+        (_, save_file_path) = tempfile.mkstemp(suffix='.mp3')
+
+        # Create gTTS and save
+        tts = gTTS(text='test')
+        tts.save(save_file_path)
+
+        # Check if file created is > 2k
+        self.assertTrue(os.stat(save_file_path).st_size > 2000)
+
+        # Cleanup
+        os.remove(save_file_path)
+
+
+class TestgTTSError(unittest.TestCase):
+    """Test gTTsError internal exception handling"""
+
+    def test_msg(self):
+        """Set exception message successfully"""
+        error1 = gTTSError('test')
+        self.assertEqual('test', error1.msg)
+
+        error2 = gTTSError()
+        self.assertIsNone(error2.msg)
+
+    def test_infer_msg(self):
+        """Infer message sucessfully based on context"""
+
+        # 403
+        tts403 = Mock()
+        response403 = Mock(status_code=403, reason='aaa')
+        error403 = gTTSError(tts=tts403, response=response403)
+        self.assertEqual(
+            error403.msg,
+            "403 (aaa) from TTS API. Probable cause: Bad token or upstream API changes")
+
+        # 404 (and not lang_check)
+        tts404 = Mock(lang='xx', lang_check=False)
+        response404 = Mock(status_code=404, reason='bbb')
+        error404 = gTTSError(tts=tts404, response=response404)
+        self.assertEqual(
+            error404.msg,
+            "404 (bbb) from TTS API. Probable cause: Unsupported language 'xx'")
+
+        # >= 500
+        tts500 = Mock()
+        response500 = Mock(status_code=500, reason='ccc')
+        error500 = gTTSError(tts=tts500, response=response500)
+        self.assertEqual(
+            error500.msg,
+            "500 (ccc) from TTS API. Probable cause: Uptream API error. Try again later.")
+
+        # Unknown (ex. 100)
+        tts100 = Mock()
+        response100 = Mock(status_code=100, reason='ddd')
+        error100 = gTTSError(tts=tts100, response=response100)
+        self.assertEqual(
+            error100.msg,
+            "100 (ddd) from TTS API. Probable cause: Unknown")
 
 
 class TestWebRequest(unittest.TestCase):

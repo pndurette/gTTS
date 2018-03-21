@@ -24,7 +24,7 @@ setup(
         'requests',
         'gtts_token'
     ],
-    extras_require={'tests':['pytest', 'testfixtures', 'six']},
+    extras_require={'tests':['pytest', 'testfixtures', 'mock', 'six']},
     test_suite='gtts.tests',
     python_requires=">=2.7",
     classifiers=[

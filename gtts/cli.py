@@ -95,7 +95,7 @@ def print_languages(ctx, param, value):
         langs = Languages().get()
         langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
         click.echo('  ' + '\n  '.join(langs_str_list))
-    except LanguagesFetchError as e:
+    except LanguagesFetchError as e:  # pragma: no cover
         log.debug(str(e), exc_info=True)
         raise click.ClickException("Couldn't fetch language list.")
     ctx.exit()
@@ -167,33 +167,22 @@ def tts_cli(text, file, output, slow, lang, nocheck):
 
     # stdin for <text>
     if text == '-':
-        try:
-            text = click.get_text_stream('stdin').read()
-        except Exception as e:
-            log.debug(str(e), exc_info=True)
-            raise click.ClickException("Input error: %s" % str(e))
+        text = click.get_text_stream('stdin').read()
 
     # stdout (when no <output>)
     if not output:
-        try:
-            output = click.get_binary_stream('stdout')
-        except Exception as e:
-            log.debug(str(e), exc_info=True)
-            raise click.ClickException("Output error: %s" % str(e))
+        output = click.get_binary_stream('stdout')
 
     # <file> input (stdin on '-' is handled by click.File)
     if file:
         try:
             text = file.read()
-        except UnicodeDecodeError as e:
+        except UnicodeDecodeError as e:  # pragma: no cover
             log.debug(str(e), exc_info=True)
             raise click.FileError(
                 file.name,
                 "FILE must be encoded using '%s'." %
                 sys_encoding())
-        except Exception as e:
-            log.debug(str(e), exc_info=True)
-            raise click.FileError(file.name, str(e))
 
     # TTS
     try:
@@ -206,7 +195,4 @@ def tts_cli(text, file, output, slow, lang, nocheck):
     except (ValueError, AssertionError) as e:
         raise click.UsageError(str(e))
     except gTTSError as e:
-        raise click.ClickException(str(e))
-    except Exception as e:
-        log.debug(str(e), exc_info=True)
         raise click.ClickException(str(e))

@@ -104,6 +104,15 @@ class gTTS:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         for idx, part in enumerate(self.text_parts):
+            try:
+                # Calculate token
+                part_tk = self.token.calculate_token(part)
+            except requests.exceptions.RequestException as e:  # pragma: no cover
+                self.log.debug(str(e), exc_info=True)
+                raise gTTSError(
+                    "Connection error during token calculation: %s" %
+                    str(e))
+
             payload = {'ie': 'UTF-8',
                        'q': part,
                        'tl': self.lang,
@@ -112,7 +121,7 @@ class gTTS:
                        'idx': idx,
                        'client': 'tw-ob',
                        'textlen': self._len(part),
-                       'tk': self.token.calculate_token(part)}
+                       'tk': part_tk}
 
             self.log.debug("payload-%i: %s", idx, payload)
 
@@ -129,8 +138,12 @@ class gTTS:
                 self.log.debug("status-%i: %s", idx, r.status_code)
 
                 r.raise_for_status()
-            except requests.exceptions.RequestException as e:
+            except requests.exceptions.HTTPError as e:
+                # Request successful, bad response
                 raise gTTSError(tts=self, response=r)
+            except requests.exceptions.RequestException as e:  # pragma: no cover
+                # Request failed
+                raise gTTSError(str(e))
 
             try:
                 # Write

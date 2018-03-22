@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from gtts import gTTS, gTTSError, Languages, LanguagesFetchError, __version__
-import sys
 import click
 import locale
 import logging
@@ -77,10 +76,9 @@ def validate_lang(ctx, param, lang):
             # No need to let gTTS re-validate.
             ctx.params['nocheck'] = True
     except LanguagesFetchError as e:
-        # Only case where the <nocheck> flag is False
-        # Non-fatal
+        # Only case where the <nocheck> flag can be False
+        # Non-fatal. gTTS will try to re-validate.
         log.debug(str(e), exc_info=True)
-        log.warning(str(e))
 
     return lang
 

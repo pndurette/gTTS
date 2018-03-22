@@ -102,7 +102,9 @@ class Languages:
                 l['value']: l.text for l in langs_html if l['value'] in tts_langs}
             return langs
         except Exception as e:
-            raise LanguagesFetchError("Unable to get language list")
+            raise LanguagesFetchError(
+                "Unable to get language list: %s" %
+                str(e))
 
 
 if __name__ == "__main__":

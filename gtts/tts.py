@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 from . import Languages, LanguagesFetchError
+from .string import _len, tokenize
 from gtts_token import gtts_token
 from six.moves import urllib
-import re
 import urllib3
 import requests
 import logging
 
 
 class Speed:
-    """Google TTS API read speeds"""
-
-    # The API supports two speeds.
-    # (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
+    """The Google API supports two speeds.
+    (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
+    """
 
     SLOW = 0.3
     NORMAL = 1
@@ -73,17 +72,15 @@ class gTTS:
             self.speed = Speed.NORMAL
 
         # Split text in parts
-        if self._len(text) <= self.MAX_CHARS:
+        if _len(text) <= self.MAX_CHARS:
+            # The API removes newlines gluing words together...
+            # (normally the tokenizer takes care of this)
+            text = text.replace('\n', ' ')
             text_parts = [text]
         else:
-            text_parts = self._tokenize(text, self.MAX_CHARS)
+            text_parts = tokenize(text, self.MAX_CHARS)
 
-        # Clean
-        def strip(x): return x.replace('\n', ' ').strip()
-        text_parts = [strip(x) for x in text_parts]
-        text_parts = [x for x in text_parts if len(x) > 0]
         self.text_parts = text_parts
-
         self.log.debug("text_parts: %i", len(self.text_parts))
         assert self.text_parts, 'No text to send to TTS API'
 
@@ -120,7 +117,7 @@ class gTTS:
                        'total': len(self.text_parts),
                        'idx': idx,
                        'client': 'tw-ob',
-                       'textlen': self._len(part),
+                       'textlen': _len(part),
                        'tk': part_tk}
 
             self.log.debug("payload-%i: %s", idx, payload)
@@ -152,53 +149,6 @@ class gTTS:
                 self.log.debug("part-%i written to %s", idx, fp)
             except AttributeError as e:
                 raise TypeError("'fp' must be a file-like object: %s" % str(e))
-
-    def _len(self, text):
-        """Get real char len of <text>, via unicode() if Python 2"""
-        try:
-            # Python 2
-            return len(unicode(text))
-        except NameError:
-            # Python 3
-            return len(text)
-
-    def _tokenize(self, text, max_size):
-        """Tokenize <text> on speech-pausing punctuation
-        of maximum <max_size>. Returns list."""
-
-        punc = u"¡!()[]¿?…‥،;:—。，、：？！\n"
-        punc_list = [re.escape(c) for c in punc]
-        pattern = '|'.join(punc_list)
-
-        # Pattern add-ins
-        # Don't cut numbers
-        pattern += '|\.(?!\d)'  # or '.' except if followed by digit
-        pattern += '|\,(?!\d)'  # or ',' except if followed by digit
-
-        parts = re.split(pattern, text)
-
-        min_parts = []
-        for p in parts:
-            min_parts += self._minimize(p, " ", max_size)
-        return min_parts
-
-    def _minimize(self, thestring, delim, max_size):
-        """Recursive function that splits <thestring> in chunks
-        of maximum <max_size> chars delimited by <delim>. Returns list."""
-
-        # Remove <delim> from start of <thestring>
-        if thestring.startswith(delim):
-            thestring = thestring[len(delim):]
-
-        if self._len(thestring) > max_size:
-            try:
-                idx = thestring.rindex(delim, 0, max_size)
-            except ValueError:
-                idx = max_size
-            return [thestring[:idx]] + \
-                self._minimize(thestring[idx:], delim, max_size)
-        else:
-            return [thestring]
 
 
 class gTTSError(Exception):

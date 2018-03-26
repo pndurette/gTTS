@@ -11,6 +11,7 @@ group: travis_latest
 install: pip install .[tests]
 
 script: pytest -v -s gtts/tests/ --cov=gtts
+after_success: coveralls
 
 deploy:
   provider: pypi

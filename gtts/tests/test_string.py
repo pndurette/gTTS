@@ -67,6 +67,10 @@ class TestTokenizer(unittest.TestCase):
 
         self.assertEqual(input_len, output_total_len)
 
+    def test_no_maxsize(self):
+        """Don't minimize tokens when max_size is 0 (False)"""
+        tokens = tokenize(self.text_long_no_punctuation, max_size=0)
+        self.assertEqual(len(tokens), 1)
 
 class TestTokenizerUnicode(unittest.TestCase):
     """Tokenization of Unicode when text is longer than what is allowed (MAX_CHARS)"""

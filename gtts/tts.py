@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import Languages, LanguagesFetchError
-from .string import _len, tokenize
+from .string import _len, _tokenize
 from gtts_token import gtts_token
 from six.moves import urllib
 import urllib3
@@ -78,7 +78,7 @@ class gTTS:
             text = text.replace('\n', ' ')
             text_parts = [text]
         else:
-            text_parts = tokenize(text, self.MAX_CHARS)
+            text_parts = _tokenize(text, self.MAX_CHARS)
 
         self.text_parts = text_parts
         self.log.debug("text_parts: %i", len(self.text_parts))

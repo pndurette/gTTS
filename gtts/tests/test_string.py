@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from gtts.string import _len, tokenize
+from gtts.string import _len, _tokenize
 
 from gtts.tts import gTTS
 MAX_CHARS = gTTS.MAX_CHARS
@@ -34,31 +34,33 @@ class TestTokenizer(unittest.TestCase):
     def setUp(self):
         self.text_punctuated = "Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
         self.text_long_no_punctuation = "Bacon ipsum dolor sit amet flank corned beef shankle bacon beef ribs biltong ribeye short ribs brisket ham turducken beef tongue landjaeger porchetta sirloin brisket turkey landjaeger turducken pancetta meatloaf pastrami venison shank strip steak ham porchetta ground round ham hock hamburger"
+        self.text_tone_marks = "Hello? How are you!"
         self.text_long_decimals = "1.2.3. 00.00. 1,2,3. Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
 
     def test_punctuation_tokenization(self):
         """Tokenization on punctuation"""
-        tokens = tokenize(self.text_punctuated, MAX_CHARS)
+        tokens = _tokenize(self.text_punctuated, MAX_CHARS)
         self.assertEqual(len(tokens), 3)
 
     def test_tone_marks(self):
-        # TODO
-        pass
+        """Tone-modifying punctuation should be kept"""
+        tokens = _tokenize(self.text_tone_marks, MAX_CHARS)
+        self.assertEqual(tokens, ['Hello?', 'How are you!'])
 
     def test_decimals_tokenization(self):
         """Decimal numbers should not be tokenized"""
-        tokens = tokenize(self.text_long_decimals, MAX_CHARS)
+        tokens = _tokenize(self.text_long_decimals, MAX_CHARS)
         self.assertEqual(len(tokens), 6)
 
     def test_minimize_tokenization(self):
         """Tokenization on spaces"""
-        tokens = tokenize(self.text_long_no_punctuation, MAX_CHARS)
+        tokens = _tokenize(self.text_long_no_punctuation, MAX_CHARS)
         self.assertEqual(len(tokens), 3)
 
     def test_minimize_tokenization_len(self):
         """Same number of chars from input to output (minus spaces)"""
         input_len = _len(self.text_long_no_punctuation)
-        tokens = tokenize(self.text_long_no_punctuation, MAX_CHARS)
+        tokens = _tokenize(self.text_long_no_punctuation, MAX_CHARS)
 
         output_total_len = 0
         for t in tokens:
@@ -69,7 +71,7 @@ class TestTokenizer(unittest.TestCase):
 
     def test_no_maxsize(self):
         """Don't minimize tokens when max_size is 0 (False)"""
-        tokens = tokenize(self.text_long_no_punctuation, max_size=0)
+        tokens = _tokenize(self.text_long_no_punctuation, max_size=0)
         self.assertEqual(len(tokens), 1)
 
 class TestTokenizerUnicode(unittest.TestCase):
@@ -89,19 +91,19 @@ class TestTokenizerUnicode(unittest.TestCase):
 
     def test_punctuation_tokenization(self):
         """Tokenization on punctuation (Unicode)"""
-        tokens = tokenize(self.text_punctuated, MAX_CHARS)
+        tokens = _tokenize(self.text_punctuated, MAX_CHARS)
         self.assertEqual(len(tokens), 8)
 
 
     def test_minimize_tokenization(self):
         """Tokenization on no punctuation or spaces (Unicode)"""
-        tokens = tokenize(self.text_long_no_punctuation_no_spaces, MAX_CHARS)
+        tokens = _tokenize(self.text_long_no_punctuation_no_spaces, MAX_CHARS)
         self.assertEqual(len(tokens), 6)
 
     def test_minimize_tokenization_len(self):
         """Same number of Unicode chars from input to output (no punctuation or spaces)"""
         input_len = _len(self.text_long_no_punctuation_no_spaces)
-        tokens = tokenize(self.text_long_no_punctuation_no_spaces, MAX_CHARS)
+        tokens = _tokenize(self.text_long_no_punctuation_no_spaces, MAX_CHARS)
 
         output_total_len = 0
         for t in tokens:

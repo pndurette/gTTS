@@ -25,7 +25,9 @@ setup(
         'gtts_token'
     ],
     extras_require={'tests':['pytest', 'pytest-cov', 'coveralls',
-                            'testfixtures', 'mock', 'six']},
+                            'testfixtures', 'mock', 'six'],
+                    'docs': ['sphinx', 'sphinx-autobuild', 'sphinx_rtd_theme',
+                            'sphinx-click']},
     test_suite='gtts.tests',
     python_requires=">=2.7",
     classifiers=[

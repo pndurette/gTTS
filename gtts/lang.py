@@ -20,9 +20,8 @@ class Languages:
     URL_BASE = 'http://translate.google.com'
     JS_FILE = 'desktop_module_main.js'
 
-    """Extra undocumented language codes observed
-    to provide different dialects or accents
-    """
+    # Extra undocumented language codes observed
+    # to provide different dialects or accents
     EXTRA_LANGS = {
         # Chinese
         'zh-cn': 'Chinese (Mandarin/China)',
@@ -61,6 +60,7 @@ class Languages:
         self.log.addHandler(logging.NullHandler())
 
     def get(self):
+        """Get lang dict."""
         self.langs = self._fetch_langs()
         self.langs.update(self.EXTRA_LANGS)
 
@@ -105,7 +105,3 @@ class Languages:
             raise LanguagesFetchError(
                 "Unable to get language list: %s" %
                 str(e))
-
-
-if __name__ == "__main__":
-    pass

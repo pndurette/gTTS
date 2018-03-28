@@ -18,7 +18,17 @@ class Speed:
 
 
 class gTTS:
-    """gTTS (Google Text to Speech): an interface to Google's Text to Speech API"""
+    """gTTS -- Google Text-to-Speech
+
+    An interface to Google Translate's Text-to-Speech API
+
+    Args:
+        text (str): The text to be read.
+        lang (str, optional): The language (IETF language tag) to read the text in. Defaults to 'en'
+        slow (bool, optional): Reads text more slowly. Defaults to False.
+        lang_check (bool, optional): Strictly enforce a documented ``lang``. Defaults to False.
+
+    """
 
     MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
     GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"

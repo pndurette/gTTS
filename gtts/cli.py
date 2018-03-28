@@ -109,18 +109,20 @@ def set_debug(ctx, param, debug):
 
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('text', required=False, callback=validate_text)
+@click.argument('text', metavar='<text>', required=False, callback=validate_text)
 @click.option(
     '-f',
     '--file',
+    metavar='<file>',
     # For py2.7/unicode. If encoding not None Click uses io.open
     type=click.File(encoding=sys_encoding()),
-    help="Input is contents of FILENAME instead of TEXT (use '-' for stdin).")
+    help="Read from <file> instead of <text>.")
 @click.option(
     '-o',
     '--output',
+    metavar='<file>',
     type=click.File(mode='wb'),
-    help="Write to FILENAME instead of stdout.")
+    help="Write to <file> instead of stdout.")
 @click.option(
     '-s',
     '--slow',
@@ -130,7 +132,7 @@ def set_debug(ctx, param, debug):
 @click.option(
     '-l',
     '--lang',
-    metavar='TAG',
+    metavar='<lang>',
     default='en',
     show_default=True,
     callback=validate_lang,
@@ -159,8 +161,8 @@ def set_debug(ctx, param, debug):
     help="Show debug information.")
 @click.version_option(version=__version__)
 def tts_cli(text, file, output, slow, lang, nocheck):
-    """Reads TEXT to MP3 format using Google Translate's Text-to-Speech API.
-    (use '-' as TEXT or as -f/--file FILENAME for stdin)
+    """ Read <text> to mp3 format using Google Translate's Text-to-Speech API 
+    (set <text> or --file <file> to - for standard input)
     """
 
     # stdin for <text>
@@ -179,7 +181,7 @@ def tts_cli(text, file, output, slow, lang, nocheck):
             log.debug(str(e), exc_info=True)
             raise click.FileError(
                 file.name,
-                "FILE must be encoded using '%s'." %
+                "<file> must be encoded using '%s'." %
                 sys_encoding())
 
     # TTS

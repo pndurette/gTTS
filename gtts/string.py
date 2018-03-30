@@ -13,11 +13,18 @@ TokenizerRule = namedtuple(
 
 
 PRE_PROCESSOR_RULES = [
-    # Add space after either of <chars> to ensure their proper tokenization.
+    # Because the tokenizer will split after a tone-modidfying
+    # punctuation mark, make sure there's whitespace after.
     PreProcessorRule(
         chars=u'?!？！',
         pattern_func=lambda x: u"(?<={})".format(x),
-        repl=' ')
+        repl=' '),
+
+    # Re-form words cut by end-of-line hyphens (remove "<hyphen><newline>").
+    PreProcessorRule(
+        chars=u'-',
+        pattern_func=lambda x: u"{}\n".format(x),
+        repl='')
 ]
 
 TOKENIZER_RULES = [

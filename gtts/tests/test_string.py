@@ -6,6 +6,7 @@ from gtts.tts import gTTS
 MAX_CHARS = gTTS.MAX_CHARS
 del gTTS
 
+
 class TestLen(unittest.TestCase):
     """Python2/3 _len()"""
 
@@ -34,6 +35,9 @@ class TestTokenizer(unittest.TestCase):
     def setUp(self):
         self.text_punctuated = "Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
         self.text_long_no_punctuation = "Bacon ipsum dolor sit amet flank corned beef shankle bacon beef ribs biltong ribeye short ribs brisket ham turducken beef tongue landjaeger porchetta sirloin brisket turkey landjaeger turducken pancetta meatloaf pastrami venison shank strip steak ham porchetta ground round ham hock hamburger"
+        self.text_end_of_line_hyphens = """Testing hy-
+phens to make sure it is well sup-
+ported."""
         self.text_tone_marks = "Hello? How are you!"
         self.text_long_decimals = "1.2.3. 00.00. 1,2,3. Hello, are you there? Bacon ipsum dolor sit amet flank corned beef shankle bacon beef belly turducken!"
 
@@ -41,6 +45,11 @@ class TestTokenizer(unittest.TestCase):
         """Tokenization on punctuation"""
         tokens = _tokenize(self.text_punctuated, MAX_CHARS)
         self.assertEqual(len(tokens), 3)
+
+    def test_end_of_line_preprocessor(self):
+        """Re-form words cut by end-of-line hyphens"""
+        tokens = _tokenize(self.text_end_of_line_hyphens, MAX_CHARS)
+        self.assertEqual(len(tokens), 1)
 
     def test_tone_marks(self):
         """Tone-modifying punctuation should be kept"""
@@ -74,6 +83,7 @@ class TestTokenizer(unittest.TestCase):
         tokens = _tokenize(self.text_long_no_punctuation, max_size=0)
         self.assertEqual(len(tokens), 1)
 
+
 class TestTokenizerUnicode(unittest.TestCase):
     """Tokenization of Unicode when text is longer than what is allowed (MAX_CHARS)"""
 
@@ -93,7 +103,6 @@ class TestTokenizerUnicode(unittest.TestCase):
         """Tokenization on punctuation (Unicode)"""
         tokens = _tokenize(self.text_punctuated, MAX_CHARS)
         self.assertEqual(len(tokens), 8)
-
 
     def test_minimize_tokenization(self):
         """Tokenization on no punctuation or spaces (Unicode)"""

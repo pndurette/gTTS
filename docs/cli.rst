@@ -28,11 +28,11 @@ Read 'slow' slowly to :file:`slow.mp3`::
 
    $ gtts-cli 'slow' --slow --output slow.mp3
 
-Read 'hello' to :mod:`stdout`::
+Read 'hello' to :data:`stdout`::
 
    $ gtts-cli 'hello'
 
-Read :mod:`stdin` to :file:`hello.mp3` via ``<text>`` or ``<file>``::
+Read :data:`stdin` to :file:`hello.mp3` via ``<text>`` or ``<file>``::
 
    $ echo -n 'hello' | gtts-cli - --output hello.mp3
    $ echo -n 'hello' | gtts-cli --file - --output hello.mp3
@@ -41,4 +41,4 @@ Read 'no check' to :file:`nocheck.mp3` without language checking::
 
    $ gtts-cli --lang zh --nocheck --ouput nocheck.mp3
 
-.. note:: Using ``--nocheck`` can make the command *slightly* faster. It exists however to force a ``<lang>`` tag that might not be documented but would work, such as for specific regional sub-tags of documented tags (examples for 'en': 'en-gb', 'en-au', ...)
+.. note:: Using ``--nocheck`` can make the command `slightly` faster. It exists however to force a ``<lang>`` tag that might not be documented but would work, such as for specific regional sub-tags of documented tags (examples for 'en': 'en-gb', 'en-au', ...)

@@ -24,9 +24,18 @@ class gTTS:
 
     Args:
         text (str): The text to be read.
-        lang (str, optional): The language (IETF language tag) to read the text in. Defaults to 'en'
-        slow (bool, optional): Reads text more slowly. Defaults to False.
-        lang_check (bool, optional): Strictly enforce a documented ``lang``. Defaults to False.
+        lang (str, optional): The language (IETF language tag) to
+            read the text in. Defaults to 'en'.
+        slow (bool, optional): Reads text more slowly. Defaults to :data:`False`.
+        lang_check (bool, optional): Strictly enforce a documented
+            ``lang``. Defaults to :data:`False`.
+
+    Raises:
+        AssertionError: When ``text`` is :data:`None` or empty.
+        AssertionError: When there's nothing left to speak after pre-processing,
+            tokinization and cleaning.
+        ValueError: When ``lang_check`` is :data:`True` and
+            ``lang`` is not supported.
 
     """
 
@@ -98,13 +107,30 @@ class gTTS:
         self.token = gtts_token.Token()
 
     def save(self, savefile):
-        """Do the Web request and save to <savefile>"""
+        """Do the TTS API request and write result to file
+
+        Args:
+            savefile (str): The file name to save the `mp3` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+
+        """
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
             self.log.debug("Saved to %s" % savefile)
 
     def write_to_fp(self, fp):
-        """Do the Web request and save to a file-like object"""
+        """Do the TTS API request and write result to a file-like object
+
+        Args:
+            fp (file object): Any file-like object to write the `mp3` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+            TypeError: When ``fp`` is not a file-like object.
+
+        """
 
         # When disabling ssl verify in requests (for proxies and firewalls),
         # urllib3 prints an insecure warning on stdout. We disable that.

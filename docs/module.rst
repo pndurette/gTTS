@@ -1,5 +1,5 @@
-Module
-======
+Module (:mod:`gtts`)
+====================
 
 gTTS
 ----

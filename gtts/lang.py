@@ -4,6 +4,8 @@ import logging
 import re
 from bs4 import BeautifulSoup
 
+__all__ = ['Languages', 'LanguagesFetchError']
+
 """Google Translate loads a JavaScript Array of 'languages
 codes' that can be read. We intersect with all the
 languages Google Translate provides.

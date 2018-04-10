@@ -165,5 +165,5 @@ Contributing
    :target: https://travis-ci.org/pndurette/gTTS
 .. |PyPI version| image:: https://badge.fury.io/py/gTTS.svg
    :target: https://badge.fury.io/py/gTTS
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/e5v4ivunono2qhfp?svg=true
-   :target: https://ci.appveyor.com/project/scivision/gtts
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/eiuxodugo78kemff?svg=true
+   :target: https://ci.appveyor.com/project/pndurette/gtts

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
+# TODO: exceptions?
 
 class RegexBuilder():
     """
@@ -72,6 +73,8 @@ class Tokenizer():
     """
     A Tokenizer
     """
+
+    # TODO: raise
 
     def __init__(self, regex_funcs, flags=re.IGNORECASE):
         alts = []

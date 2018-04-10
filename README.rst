@@ -114,6 +114,15 @@ Supported Languages
 -  'en-au' : 'English (Australia)'
 -  'en-uk' : 'English (United Kingdom)'
 -  'en-us' : 'English (United States)'
+-  'en-ca' : 'English (Canada)',
+-  'en-gh' : 'English (Ghana)',
+-  'en-in' : 'English (India)' ,
+-  'en-ie' : 'English (Ireland)' ,
+-  'en-nz' : 'English (New Zealand)',
+-  'en-ng' : 'English (Nigeria)',
+-  'en-ph' : 'English (Philippines)',
+-  'en-za' : 'English (South Africa)',
+-  'en-tz' : 'English (Tanzania)', 
 -  'eo' : 'Esperanto'
 -  'fi' : 'Finnish'
 -  'fr' : 'French'

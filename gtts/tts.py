@@ -11,12 +11,17 @@ import logging
 
 __all__ = ['gTTS', 'gTTSError']
 
+# Logger
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
+
 
 class Speed:
-    """The Google API supports two speeds.
-    (speed <= 0.3: slow; speed > 0.3: normal; default: 1)
-    """
+    """Read Speed
 
+    The Google TTS Translate API supports two speeds:
+        'slow' <= 0.3 < 'normal'
+    """
     SLOW = 0.3
     NORMAL = 1
 
@@ -43,7 +48,7 @@ class gTTS:
 
     """
 
-    MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
+    GOOGLE_TTS_MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
     GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
     GOOGLE_TTS_HEADERS = {
         "Referer": "http://translate.google.com/",
@@ -71,17 +76,11 @@ class gTTS:
             ]).run
     ):
 
-        # Logger
-        self.log = logging.getLogger(__name__)
-        self.log.addHandler(logging.NullHandler())
-        self.debug = self.log.isEnabledFor(logging.DEBUG)
-
         # Debug
-        if self.debug:
-            for k, v in locals().items():
-                if k == 'self':
-                    continue
-                self.log.debug("%s: %s", k, v)
+        for k, v in locals().items():
+            if k == 'self':
+                continue
+            log.debug("%s: %s", k, v)
 
         # Text
         assert text, 'No text to speak'
@@ -93,8 +92,8 @@ class gTTS:
                 if lang.lower() not in Languages().get():
                     raise ValueError("Language not supported: %s" % lang)
             except LanguagesFetchError as e:
-                self.log.debug(str(e), exc_info=True)
-                self.log.warning(str(e))
+                log.debug(str(e), exc_info=True)
+                log.warning(str(e))
 
         self.lang_check = lang_check
         self.lang = lang.lower()
@@ -118,13 +117,21 @@ class gTTS:
 
         # Apply pre-processorss
         for pp in self.pre_processor_funcs:
-            text = pp(text)
+            try:
+                text = pp(text)
+            except TypeError as e:
+                raise gTTSError("Pre-processor '%s': %s" %
+                                (str(pp), str(e)))
 
-        if _len(text) <= self.MAX_CHARS:
+        if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
             return [text]
 
         # Tokenize
-        tokens = self.tokenizer_func(text)
+        try:
+            tokens = self.tokenizer_func(text)
+        except TypeError as e:
+            raise gTTSError("Tokenizer '%s': %s" %
+                            (str(self.tokenizer_func), str(e)))
 
         # Clean
         tokens = _clean_tokens(tokens)
@@ -132,7 +139,7 @@ class gTTS:
         # Minimize
         min_tokens = []
         for t in tokens:
-            min_tokens += _minimize(t, ' ', self.MAX_CHARS)
+            min_tokens += _minimize(t, ' ', self.GOOGLE_TTS_MAX_CHARS)
         return min_tokens
 
     def write_to_fp(self, fp):
@@ -152,7 +159,7 @@ class gTTS:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         text_parts = self._tokenize(self.text)
-        self.log.debug("text_parts: %i", len(text_parts))
+        log.debug("text_parts: %i", len(text_parts))
         assert text_parts, 'No text to send to TTS API'
 
         for idx, part in enumerate(text_parts):
@@ -160,7 +167,7 @@ class gTTS:
                 # Calculate token
                 part_tk = self.token.calculate_token(part)
             except requests.exceptions.RequestException as e:  # pragma: no cover
-                self.log.debug(str(e), exc_info=True)
+                log.debug(str(e), exc_info=True)
                 raise gTTSError(
                     "Connection error during token calculation: %s" %
                     str(e))
@@ -175,7 +182,7 @@ class gTTS:
                        'textlen': _len(part),
                        'tk': part_tk}
 
-            self.log.debug("payload-%i: %s", idx, payload)
+            log.debug("payload-%i: %s", idx, payload)
 
             try:
                 # Request
@@ -185,9 +192,9 @@ class gTTS:
                                  proxies=urllib.request.getproxies(),
                                  verify=False)
 
-                self.log.debug("headers-%i: %s", idx, r.request.headers)
-                self.log.debug("url-%i: %s", idx, r.request.url)
-                self.log.debug("status-%i: %s", idx, r.status_code)
+                log.debug("headers-%i: %s", idx, r.request.headers)
+                log.debug("url-%i: %s", idx, r.request.url)
+                log.debug("status-%i: %s", idx, r.status_code)
 
                 r.raise_for_status()
             except requests.exceptions.HTTPError as e:
@@ -201,7 +208,7 @@ class gTTS:
                 # Write
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
-                self.log.debug("part-%i written to %s", idx, fp)
+                log.debug("part-%i written to %s", idx, fp)
             except AttributeError as e:
                 raise TypeError("'fp' must be a file-like object: %s" % str(e))
 
@@ -217,7 +224,7 @@ class gTTS:
         """
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
-            self.log.debug("Saved to %s" % savefile)
+            log.debug("Saved to %s" % savefile)
 
 
 class gTTSError(Exception):

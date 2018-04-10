@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-from . import Languages, LanguagesFetchError
-from .string import _len, _tokenize
+from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
+from gtts.lang import Languages, LanguagesFetchError
+from gtts.utils import _minimize, _len, _clean_tokens
+
 from gtts_token import gtts_token
 from six.moves import urllib
 import urllib3
 import requests
 import logging
+
+__all__ = ['gTTS', 'gTTSError']
 
 
 class Speed:
@@ -54,7 +58,18 @@ class gTTS:
             text,
             lang='en',
             slow=False,
-            lang_check=False):
+            lang_check=False,
+            pre_processor_funcs=[
+                pre_processors.tone_marks,
+                pre_processors.end_of_line,
+                pre_processors.abbreviations,
+                pre_processors.word_sub
+            ],
+            tokenizer_func=Tokenizer([
+                tokenizer_cases.period_comma,
+                tokenizer_cases.other_punctuation
+            ]).run
+    ):
 
         # Logger
         self.log = logging.getLogger(__name__)
@@ -90,35 +105,35 @@ class gTTS:
         else:
             self.speed = Speed.NORMAL
 
-        # Split text in parts
-        if _len(text) <= self.MAX_CHARS:
-            # The API removes newlines gluing words together...
-            # (normally the tokenizer takes care of this)
-            text = text.replace('\n', ' ')
-            text_parts = [text]
-        else:
-            text_parts = _tokenize(text, self.MAX_CHARS)
-
-        self.text_parts = text_parts
-        self.log.debug("text_parts: %i", len(self.text_parts))
-        assert self.text_parts, 'No text to send to TTS API'
+        # Pre-processors and tokenizer
+        self.pre_processor_funcs = pre_processor_funcs
+        self.tokenizer_func = tokenizer_func
 
         # Google Translate token
         self.token = gtts_token.Token()
 
-    def save(self, savefile):
-        """Do the TTS API request and write result to file
+    def _tokenize(self, text):
+        # Pre-clean
+        text = text.strip()
 
-        Args:
-            savefile (str): The file name to save the `mp3` to.
+        # Apply pre-processorss
+        for pp in self.pre_processor_funcs:
+            text = pp(text)
 
-        Raises:
-            :class:`gTTSError`: When there's an error with the API request.
+        if _len(text) <= self.MAX_CHARS:
+            return [text]
 
-        """
-        with open(savefile, 'wb') as f:
-            self.write_to_fp(f)
-            self.log.debug("Saved to %s" % savefile)
+        # Tokenize
+        tokens = self.tokenizer_func(text)
+
+        # Clean
+        tokens = _clean_tokens(tokens)
+
+        # Minimize
+        min_tokens = []
+        for t in tokens:
+            min_tokens += _minimize(t, ' ', self.MAX_CHARS)
+        return min_tokens
 
     def write_to_fp(self, fp):
         """Do the TTS API request and write result to a file-like object
@@ -136,7 +151,11 @@ class gTTS:
         # urllib3 prints an insecure warning on stdout. We disable that.
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        for idx, part in enumerate(self.text_parts):
+        text_parts = self._tokenize(self.text)
+        self.log.debug("text_parts: %i", len(text_parts))
+        assert text_parts, 'No text to send to TTS API'
+
+        for idx, part in enumerate(text_parts):
             try:
                 # Calculate token
                 part_tk = self.token.calculate_token(part)
@@ -150,7 +169,7 @@ class gTTS:
                        'q': part,
                        'tl': self.lang,
                        'ttsspeed': self.speed,
-                       'total': len(self.text_parts),
+                       'total': len(text_parts),
                        'idx': idx,
                        'client': 'tw-ob',
                        'textlen': _len(part),
@@ -185,6 +204,20 @@ class gTTS:
                 self.log.debug("part-%i written to %s", idx, fp)
             except AttributeError as e:
                 raise TypeError("'fp' must be a file-like object: %s" % str(e))
+
+    def save(self, savefile):
+        """Do the TTS API request and write result to file
+
+        Args:
+            savefile (str): The file name to save the `mp3` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+
+        """
+        with open(savefile, 'wb') as f:
+            self.write_to_fp(f)
+            self.log.debug("Saved to %s" % savefile)
 
 
 class gTTSError(Exception):

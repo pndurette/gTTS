@@ -115,23 +115,17 @@ class gTTS:
         # Pre-clean
         text = text.strip()
 
-        # Apply pre-processorss
+        # Apply pre-processors
         for pp in self.pre_processor_funcs:
-            try:
-                text = pp(text)
-            except TypeError as e:
-                raise gTTSError("Pre-processor '%s': %s" %
-                                (str(pp), str(e)))
+            log.debug("pre-processing: %s" % pp)
+            text = pp(text)
 
         if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
             return [text]
 
         # Tokenize
-        try:
-            tokens = self.tokenizer_func(text)
-        except TypeError as e:
-            raise gTTSError("Tokenizer '%s': %s" %
-                            (str(self.tokenizer_func), str(e)))
+        log.debug("tokenizing: %s" % self.tokenizer_func)
+        tokens = self.tokenizer_func(text)
 
         # Clean
         tokens = _clean_tokens(tokens)

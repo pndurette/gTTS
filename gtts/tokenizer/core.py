@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 
-# TODO: exceptions?
 
 class RegexBuilder():
     """
@@ -74,14 +73,26 @@ class Tokenizer():
     A Tokenizer
     """
 
-    # TODO: raise
-
     def __init__(self, regex_funcs, flags=re.IGNORECASE):
+        self.regex_funcs = regex_funcs
+        self.flags = flags
+
+        try:
+            # Combine
+            self.total_regex = self._combine_regex()
+        except (TypeError, AttributeError) as e:
+            raise TypeError(
+                "Tokenizer() expects a list of functions returning "
+                "regular expression objects (i.e. re.compile). " +
+                str(e))
+
+    def _combine_regex(self):
         alts = []
-        for func in regex_funcs:
+        for func in self.regex_funcs:
             alts.append(func())
+
         pattern = '|'.join(alt.pattern for alt in alts)
-        self.regex = re.compile(pattern, flags)
+        return re.compile(pattern, self.flags)
 
     def run(self, text):
-        return self.regex.split(text)
+        return self.total_regex.split(text)

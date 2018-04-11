@@ -36,3 +36,13 @@ def other_punctuation():
     return RegexBuilder(
         pattern_args=OTHER_PUNC,
         pattern_func=lambda x: u"{}".format(x)).regex
+
+
+def legacy_all_punctuation():
+    """
+    Match all punctuation.
+    Use as only tokenizer case to mimic gTTS 1.x tokenization
+    """
+    return RegexBuilder(
+        pattern_args=symbols.ALL_PUNC,
+        pattern_func=lambda x: u"{}".format(x)).regex

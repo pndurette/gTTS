@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from gtts import gTTS, gTTSError, Languages, LanguagesFetchError, __version__
+from gtts import gTTS, gTTSError, __version__
+from gtts.lang import tts_langs
 import click
 import locale
 import logging
@@ -65,8 +66,7 @@ def validate_lang(ctx, param, lang):
         return lang
 
     try:
-        valid_langs = Languages().get()
-        if lang not in valid_langs:
+        if lang not in tts_langs():
             raise click.UsageError(
                 "'%s' not in list of supported languages.\n"
                 "Use --all to list languages or "
@@ -75,7 +75,7 @@ def validate_lang(ctx, param, lang):
             # The language is valid.
             # No need to let gTTS re-validate.
             ctx.params['nocheck'] = True
-    except LanguagesFetchError as e:
+    except RuntimeError as e:
         # Only case where the <nocheck> flag can be False
         # Non-fatal. gTTS will try to re-validate.
         log.debug(str(e), exc_info=True)
@@ -90,10 +90,10 @@ def print_languages(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
     try:
-        langs = Languages().get()
+        langs = tts_langs()
         langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
         click.echo('  ' + '\n  '.join(langs_str_list))
-    except LanguagesFetchError as e:  # pragma: no cover
+    except RuntimeError as e:  # pragma: no cover
         log.debug(str(e), exc_info=True)
         raise click.ClickException("Couldn't fetch language list.")
     ctx.exit()

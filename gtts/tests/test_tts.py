@@ -4,7 +4,8 @@ import tempfile
 import unittest
 from mock import Mock
 
-from gtts import gTTS, gTTSError, Languages
+from gtts.tts import gTTS, gTTSError
+from gtts.lang import tts_langs, _fetch_langs, _extra_langs
 
 # Testing all languages takes some time.
 # Set TEST_LANGS envvar to choose languages to test.
@@ -45,12 +46,12 @@ def test_langs_dict():
     langs = dict()
     env = os.environ.get('TEST_LANGS', '')
     if env == '' or env == 'all':
-        langs['fetch'] = Languages()._fetch_langs()
-        langs['extra'] = Languages().EXTRA_LANGS
+        langs['fetch'] = _fetch_langs()
+        langs['extra'] = _extra_langs()
     elif env == 'fetch':
-        langs['fetch'] = Languages()._fetch_langs()
+        langs['fetch'] = _fetch_langs()
     elif env == 'extra':
-        langs['extra'] = Languages().EXTRA_LANGS
+        langs['extra'] = _extra_langs()
     else:
         env_langs = env.split(',')
         env_langs = [l for l in env_langs if l]

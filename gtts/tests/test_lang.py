@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
 import unittest
+from mock import patch
 
-from gtts import Languages, LanguagesFetchError
+from gtts.lang import tts_langs, _fetch_langs, _extra_langs
 
 
 class TestLanguages(unittest.TestCase):
     """Test language list downloading"""
 
-    def setUp(self):
-        pass
-
     def test_fetch_langs(self):
         """Fetch languages successfully"""
-        languages = Languages()
-
         # Downloaded Languages
         # Safe to assume 'en' (english) will always be there
-        scraped_langs = languages._fetch_langs()
+        scraped_langs = _fetch_langs()
         self.assertTrue('en' in scraped_langs)
 
         # Scraping garbage
@@ -24,19 +20,18 @@ class TestLanguages(unittest.TestCase):
         self.assertFalse('—' in scraped_langs)
 
         # Add-in Languages
-        all_langs = languages.get()
-        extra_langs = Languages.EXTRA_LANGS
+        all_langs = tts_langs()
+        extra_langs = _extra_langs()
         self.assertEqual(
             len(all_langs),
             len(scraped_langs) +
             len(extra_langs))
 
+    @patch("gtts.lang.URL_BASE", "http://abc.def.hij.dghj")
     def test_fetch_langs_exception(self):
-        """Raise LanguagesFetchError on language fetch exception"""
-        languages = Languages()
-        languages.URL_BASE = 'http://abc.def.hij.biz'
-        with self.assertRaises(LanguagesFetchError):
-            languages.get()
+        """Raise RuntimeError on language fetch exception"""
+        with self.assertRaises(RuntimeError):
+            tts_langs()
 
 
 if __name__ == '__main__':

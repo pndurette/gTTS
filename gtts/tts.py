@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
-from gtts.lang import Languages, LanguagesFetchError
 from gtts.utils import _minimize, _len, _clean_tokens
+from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
 from six.moves import urllib
@@ -89,9 +89,10 @@ class gTTS:
         # Language
         if lang_check:
             try:
-                if lang.lower() not in Languages().get():
+                langs = tts_langs()
+                if lang.lower() not in langs:
                     raise ValueError("Language not supported: %s" % lang)
-            except LanguagesFetchError as e:
+            except RuntimeError as e:
                 log.debug(str(e), exc_info=True)
                 log.warning(str(e))
 
@@ -117,14 +118,14 @@ class gTTS:
 
         # Apply pre-processors
         for pp in self.pre_processor_funcs:
-            log.debug("pre-processing: %s" % pp)
+            log.debug("pre-processing: %s", pp)
             text = pp(text)
 
         if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
             return [text]
 
         # Tokenize
-        log.debug("tokenizing: %s" % self.tokenizer_func)
+        log.debug("tokenizing: %s", self.tokenizer_func)
         tokens = self.tokenizer_func(text)
 
         # Clean
@@ -218,7 +219,7 @@ class gTTS:
         """
         with open(savefile, 'wb') as f:
             self.write_to_fp(f)
-            log.debug("Saved to %s" % savefile)
+            log.debug("Saved to %s", savefile)
 
 
 class gTTSError(Exception):

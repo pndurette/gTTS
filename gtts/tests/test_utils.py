@@ -19,8 +19,8 @@ class TestMinimize(unittest.TestCase):
         self.assertEqual(_minimize(_in, self.delim, self.max), _out)
 
     def test_unicode(self):
-        _in = "这是一个三岁的小孩在讲述他从一系列照片里看到的东西。"
-        _out = ["这是一个三岁的小孩在", "讲述他从一系列照片里", "看到的东西。"]
+        _in = u"这是一个三岁的小孩在讲述他从一系列照片里看到的东西。"
+        _out = [u"这是一个三岁的小孩在", u"讲述他从一系列照片里", u"看到的东西。"]
         self.assertEqual(_minimize(_in, self.delim, self.max), _out)
 
     def test_startwith_delim(self):

@@ -71,6 +71,7 @@ class gTTS:
                 pre_processors.word_sub
             ],
             tokenizer_func=Tokenizer([
+                tokenizer_cases.tone_marks,
                 tokenizer_cases.period_comma,
                 tokenizer_cases.other_punctuation
             ]).run

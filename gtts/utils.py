@@ -16,13 +16,15 @@ def _minimize(the_string, delim, max_size):
         delim (string): The delimiter to split on.
         max_size (int): The maximum size of a chunk.
 
+    Returns:
+        list: the minimized string in tokens
+
     Every chunk size will be at minimum `the_string[0:idx]` where `idx`
     is the highest index of `delim` found in `the_string`; and at maximum
     `the_string[0:max_size]` if no `delim` was found in `the_string`.
     In the latter case, the split will occur at `the_string[max_size]`
     which can be any character. The function runs itself again on the rest of
     `the_string` (`the_string[idx:]`) until no chunk is larger than `max_size`.
-    Returns list.
 
     """
 
@@ -49,11 +51,14 @@ def _minimize(the_string, delim, max_size):
 
 
 def _len(text):
-    """Same as `len(text)` but that decodes `text` first in Python 2.x
+    """Same as `len(text)` for a string but that decodes
+    `text` first in Python 2.x
 
     Args:
         text (string): string to get the size of.
 
+    Returns:
+        int: the size of the string.
     """
 
     try:
@@ -70,9 +75,9 @@ def _clean_tokens(tokens):
     Args:
         tokens (list): a list of strings (tokens) to clean.
 
-    Return the list of stripped strings `tokens` without the original elements
-    thast only consisted of whitespace and/or punctuation characters.
-    Returns list.
+    Returns:
+        list: stripped strings `tokens` without the original elements
+            that only consisted of whitespace and/or punctuation characters.
 
     """
 

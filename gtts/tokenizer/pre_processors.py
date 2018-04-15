@@ -27,7 +27,7 @@ def end_of_line(text):
 def abbreviations(text):
     """
     Remove periods after abbrevations that can be read without.
-    TODO Caveat: Could potentially remove the ending period of a sentence.
+    Caveat: Could potentially remove the ending period of a sentence.
     """
     return PreProcessorRegex(
         search_args=symbols.ABBREVIATIONS,

@@ -25,8 +25,8 @@ def tts_langs():
 
     The dictionnary returned combines languages from two origins:
 
-    1. `_fetch_langs()`: Languages fetched (scraped) from Google Translate
-    2. `_extra_langs()`: Languages that are undocumented but know to work.
+    - Languages fetched (scraped) from Google Translate
+    - Languages that are undocumented but know to work.
 
     """
     try:
@@ -108,6 +108,7 @@ def _extra_langs():
         'en-tz': 'English (Tanzania)',
         # French
         'fr-ca': 'French (Canada)',
+        'fr-fr': 'French (France)',
         # Portuguese
         'pt-br': 'Portuguese (Brazil)',
         'pt-pt': 'Portuguese (Portugal)',

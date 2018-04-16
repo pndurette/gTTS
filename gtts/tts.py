@@ -32,8 +32,8 @@ class gTTS:
     An interface to Google Translate's Text-to-Speech API.
 
     Args:
-        text (str): The text to be read.
-        lang (str, optional): The language (IETF language tag) to
+        text (string): The text to be read.
+        lang (string, optional): The language (IETF language tag) to
             read the text in. Defaults to 'en'.
         slow (bool, optional): Reads text more slowly. Defaults to `False`.
         lang_check (bool, optional): Strictly enforce a documented `lang`.

@@ -11,9 +11,8 @@ gTTS
 Languages
 ---------
 
-.. autoclass:: gtts.Languages
-   :members: get
-   :undoc-members:
+.. automodule:: gtts.lang
+   :members:
 
 Logging
 -------
@@ -23,17 +22,23 @@ Logging
 ``gtts.tts``
   Logger used for the :class:`gTTS` class
 
-``gtts.string``
-  Logger used for the :mod:`string` submodule (string and tokenizing utils)
+``gtts.lang``
+  Logger used for the :mod:`lang` module (language fetching)
 
 ``gtts``
-  Logger for all of the above.
+  Upstream logger for all of the above.
+
+Examples
+--------
 
 Advanced
 --------
 
-Pre-processing rules
-~~~~~~~~~~~~~~~~~~~~
+See ``gtts.tokenizer`` module.
 
-Tokenizer rules
-~~~~~~~~~~~~~~~
+Pre-processing
+~~~~~~~~~~~~~~
+
+Tokenizing
+~~~~~~~~~~
+

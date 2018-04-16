@@ -16,6 +16,7 @@ Installation
 
    cli
    module
+   tokenizer
 
 .. toctree::
    :maxdepth: 3

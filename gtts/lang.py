@@ -4,6 +4,8 @@ import requests
 import logging
 import re
 
+__all__ = ['tts_langs']
+
 URL_BASE = 'http://translate.google.com'
 JS_FILE = 'desktop_module_main.js'
 
@@ -13,6 +15,20 @@ log.addHandler(logging.NullHandler())
 
 
 def tts_langs():
+    """Languages Google Text-to-Speech supports.
+
+    Returns:
+        dict: A dictionnary of the type `{ '<lang>': '<name>'}`,
+            where `<lang>` is an IETF language tag such as `en` or `pt-br`,
+            and `<name>` is the full English name of the language, such as
+            `English` or `Portuguese (Brazil)`.
+
+    The dictionnary returned combines languages from two origins:
+
+    1. `_fetch_langs()`: Languages fetched (scraped) from Google Translate
+    2. `_extra_langs()`: Languages that are undocumented but know to work.
+
+    """
     try:
         langs = dict()
         langs.update(_fetch_langs())
@@ -24,11 +40,16 @@ def tts_langs():
 
 
 def _fetch_langs():
-    """Google Translate loads a JavaScript Array of 'languages
-    codes' that can be read. We intersect with all the
-    languages Google Translate provides.
-    """
+    """Fetch (scrape) languages from Google Translate.
 
+    Google Translate loads a JavaScript Array of 'languages codes' that can
+    be spoken. We intersect this list with all the languages Google Translate
+    provides to get the ones that support text-to-speech.
+
+    Returns:
+        dict: A dictionnary of languages from Google Translate
+
+    """
     # Load HTML
     page = requests.get(URL_BASE)
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -59,8 +80,13 @@ def _fetch_langs():
 
 
 def _extra_langs():
-    """Extra undocumented language codes observed
-    to provide different dialects or accents
+    """Define extra languages.
+
+    Returns:
+        dict: A dictionnary of extra languages, variations of the ones fetched
+        by `_fetch_langs`, observed to provide different dialects or accents or
+        just simply accepted by the Google Translate Text-to-Speech API.
+
     """
     return {
         # Chinese

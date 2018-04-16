@@ -22,10 +22,11 @@ class RegexBuilder():
         To create a simple regex that matches on the characters "a", "b",
         or "c", followed by a period::
 
-            rb = RegexBuilder('abc', lambda x: "{}\.".format(x))
+            >>> rb = RegexBuilder('abc', lambda x: "{}\.".format(x))
 
         Looking at `rb.regex` we get the following compiled regex::
 
+            >>> print(rb.regex)
             'a\.|b\.|c\.'
 
         The above is fairly simple, but this class can help in writing more
@@ -36,11 +37,12 @@ class RegexBuilder():
         To match the character following the words "lorem", "ipsum", "meili"
         or "koda"::
 
-            words = ['lorem', 'ipsum', 'meili', 'koda']
-            rb = RegexBuilder(words, lambda x: "(?<={}).".format(x))
+            >>> words = ['lorem', 'ipsum', 'meili', 'koda']
+            >>> rb = RegexBuilder(words, lambda x: "(?<={}).".format(x))
 
         Looking at `rb.regex` we get the following compiled regex::
 
+            >>> print(rb.regex)
             '(?<=lorem).|(?<=ipsum).|(?<=meili).|(?<=koda).'
 
     """
@@ -87,22 +89,25 @@ class PreProcessorRegex():
     Example:
         Add "!" after the words "lorem" or "ipsum", while ignoring case::
 
-            import re
-            words = ['lorem', 'ipsum']
-            pp = PreProcessorRegex(words, lambda x: "({}).".format(x), r'\1!',
+            >>> import re
+            >>> words = ['lorem', 'ipsum']
+            >>> pp = PreProcessorRegex(words, lambda x: "({}).".format(x), r'\1!',
                                    re.IGNORECASE)
 
         In this case, the regex is a group and the replacement uses its
         backreference `\1` (as a raw string). Looking at `pp` we get the
         following list of search/replacement pairs::
 
+            >>> print(pp)
             (re.compile('(lorem)', re.IGNORECASE), repl='\1!'),
             (re.compile('(ipsum)', re.IGNORECASE), repl='\1!')
 
         It can then be run on any string of text::
 
-            pp.run("LOREM ipSuM")
+            >>> pp.run("LOREM ipSuM")
             "LOREM! ipSuM!"
+
+    See `gtts.tokenizer.pre_processors` for more examples.
 
     """
 
@@ -152,19 +157,22 @@ class PreProcessorSub():
     Example:
         Replace all occurences of "Mac" to "PC" and "Firefox" to "Chrome"::
 
-            sub_pairs = [('Mac', 'PC'), ('Firefox', 'Chrome')]
-            pp = PreProcessorSub(sub_pairs)
+            >>> sub_pairs = [('Mac', 'PC'), ('Firefox', 'Chrome')]
+            >>> pp = PreProcessorSub(sub_pairs)
 
         Looking at the `pp`, we get the following list of
         search (regex)/replacement pairs::
 
+            >>> print(pp)
             (re.compile('Mac', re.IGNORECASE), repl='PC'),
             (re.compile('Firefox', re.IGNORECASE), repl='Chrome')
 
         It can then be run on any string of text::
 
-            pp.run("I use firefox on my mac")
+            >>> pp.run("I use firefox on my mac")
             "I use Chrome on my PC"
+
+    See `gtts.tokenizer.pre_processors` for more examples.
 
     """
 
@@ -237,31 +245,34 @@ class Tokenizer():
         A tokenizer with a two simple case (NB: these are bad cases to
         tokenize on, this is simply a usage example)::
 
-            import re, RegexBuilder
-
-            def case1():
-                return re.compile("\,")
-
-            def case2():
-                return RegexBuilder('abc', lambda x: "{}\.".format(x)).regex
-
-            t = Tokenizer([case1, case2])
+            >>> import re, RegexBuilder
+            >>>
+            >>> def case1():
+            ...     return re.compile("\,")
+            >>>
+            >>> def case2():
+            ...     return RegexBuilder('abc', lambda x: "{}\.".format(x)).regex
+            >>>
+            >>> t = Tokenizer([case1, case2])
 
         Looking at `case1().pattern`, we get::
 
+            >>> print(case1().pattern)
             '\\,'
 
         Looking at `case2().pattern`, we get::
 
+            >>> print(case2().pattern)
             'a\\.|b\\.|c\\.'
 
-        Finally, looking at `t`, we get get the combined::
+        Finally, looking at `t`, we get them combined::
 
+            >>> print(t)
             're.compile('\\,|a\\.|b\\.|c\\.', re.IGNORECASE) from: [<function case1 at 0x10bbcdd08>, <function case2 at 0x10b5c5e18>]'
 
         It can then be run on any string of text::
 
-            t.run("Hello, my name is Linda a. Call me Lin, b. I'm your friend")
+            >>> t.run("Hello, my name is Linda a. Call me Lin, b. I'm your friend")
             ['Hello', ' my name is Linda ', ' Call me Lin', ' ', " I'm your friend"]
 
     """

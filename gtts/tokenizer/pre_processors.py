@@ -4,9 +4,11 @@ import re
 
 
 def tone_marks(text):
-    """
-    Because the tokenizer will split after a tone-modidfying
+    """Add a space after tone-modifying punctuation.
+
+    Because the `tone_marks` tokenizer case will split after a tone-modidfying
     punctuation mark, make sure there's whitespace after.
+
     """
     return PreProcessorRegex(
         search_args=symbols.TONE_MARKS,
@@ -15,8 +17,10 @@ def tone_marks(text):
 
 
 def end_of_line(text):
-    """
-    Re-form words cut by end-of-line hyphens (remove "<hyphen><newline>").
+    """Re-form words cut by end-of-line hyphens.
+
+    Remove "<hyphen><newline>".
+
     """
     return PreProcessorRegex(
         search_args=u'-',
@@ -25,9 +29,17 @@ def end_of_line(text):
 
 
 def abbreviations(text):
-    """
-    Remove periods after abbrevations that can be read without.
-    Caveat: Could potentially remove the ending period of a sentence.
+    """Remove periods after a list of known abbrevations that
+    can be spoken the same without a period.
+
+    Note:
+        Could potentially remove the ending period of a sentence.
+
+    Note:
+        Abbreviations that Google Translate can't pronounce without
+        (or even with) a period should be added as a word substitution with a
+        `PreProcessorSub` pre-processor. Ex.: 'Esq.', 'Esquire'.
+
     """
     return PreProcessorRegex(
         search_args=symbols.ABBREVIATIONS,
@@ -36,8 +48,6 @@ def abbreviations(text):
 
 
 def word_sub(text):
-    """
-    Word-for-word substitutions.
-    """
+    """Word-for-word substitutions."""
     return PreProcessorSub(
         sub_pairs=symbols.SUB_PAIRS).run(text)

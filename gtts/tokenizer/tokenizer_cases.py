@@ -3,9 +3,10 @@ from gtts.tokenizer import RegexBuilder, symbols
 
 
 def tone_marks():
-    """
-    Keep tone-modifying punctuation. Match following character.
-    Assumes the `tone_marks()` pre-processor was run.
+    """Keep tone-modifying punctuation by matching following character.
+
+    Assumes the `tone_marks` pre-processor was run for cases where there might
+    not be any space after a tone-modifying punctuation mark.
     """
     return RegexBuilder(
         pattern_args=symbols.TONE_MARKS,
@@ -13,12 +14,16 @@ def tone_marks():
 
 
 def period_comma():
-    """
-    Period and comma case.
+    """Period and comma case.
+
     Match if not preceded by ".<letter>" and only if followed by space.
     Won't cut in the middle/after dotted abbreviations; won't cut numbers.
-    Caveats: Won't match if a dotted abbreviation ends a sentence.
-             Won't match the end of a sentence if not followed by a space.
+
+    Note:
+        Won't match if a dotted abbreviation ends a sentence.
+    Notes:
+        Won't match the end of a sentence if not followed by a space.
+
     """
     return RegexBuilder(
         pattern_args=symbols.PERIOD_COMMA,
@@ -26,8 +31,11 @@ def period_comma():
 
 
 def other_punctuation():
-    """
-    Match other punctuation.
+    """Match other punctuation.
+
+    Match other punctuation to split on; punctuation that naturally
+    inserts a break in speech.
+
     """
     OTHER_PUNC = ''.join((
         set(symbols.ALL_PUNC) -
@@ -39,9 +47,9 @@ def other_punctuation():
 
 
 def legacy_all_punctuation():
-    """
-    Match all punctuation.
-    Use as only tokenizer case to mimic gTTS 1.x tokenization
+    """Match all punctuation.
+
+    Use as only tokenizer case to mimic gTTS 1.x tokenization.
     """
     return RegexBuilder(
         pattern_args=symbols.ALL_PUNC,

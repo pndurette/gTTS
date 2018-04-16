@@ -4,7 +4,10 @@ from string import whitespace as ws
 import re
 
 _ALL_PUNC_OR_SPACE = re.compile(u"^[{}]*$".format(re.escape(punc + ws)))
+"""Regex that matches if an entire line is only comprised
+of whitespace and punctuation
 
+"""
 
 def _minimize(the_string, delim, max_size):
     """Recursively split a string in the largest chunks
@@ -27,7 +30,6 @@ def _minimize(the_string, delim, max_size):
     `the_string` (`the_string[idx:]`) until no chunk is larger than `max_size`.
 
     """
-
     # Remove `delim` from start of `the_string`
     # i.e. prevent a recursive infinite loop on `the_string[0:0]`
     # if `the_string` starts with `delim` and is larger than `max_size`
@@ -60,7 +62,6 @@ def _len(text):
     Returns:
         int: the size of the string.
     """
-
     try:
         # Python 2
         return len(unicode(text))
@@ -80,5 +81,4 @@ def _clean_tokens(tokens):
             that only consisted of whitespace and/or punctuation characters.
 
     """
-
     return [t.strip() for t in tokens if not _ALL_PUNC_OR_SPACE.match(t)]

@@ -27,24 +27,46 @@ class Speed:
 
 
 class gTTS:
-    """gTTS -- Google Text-to-Speech
+    """gTTS -- Google Text-to-Speech.
 
-    An interface to Google Translate's Text-to-Speech API
+    An interface to Google Translate's Text-to-Speech API.
 
     Args:
         text (str): The text to be read.
         lang (str, optional): The language (IETF language tag) to
             read the text in. Defaults to 'en'.
-        slow (bool, optional): Reads text more slowly. Defaults to :data:`False`.
-        lang_check (bool, optional): Strictly enforce a documented
-            ``lang``. Defaults to :data:`False`.
+        slow (bool, optional): Reads text more slowly. Defaults to `False`.
+        lang_check (bool, optional): Strictly enforce a documented `lang`.
+            If set to `True`, a ValueError is raise if `lang` doesn't exist.
+            Default is `False`
+        pre_processor_funcs (list): A list of zero or more functions that are
+            called to transform (pre-process) text before tokenizing. Those
+            functions must take a string and return a string.
+            See `Advanced` (etc) for more info. Defaults to::
+
+                [
+                    pre_processors.tone_marks,
+                    pre_processors.end_of_line,
+                    pre_processors.abbreviations,
+                    pre_processors.word_sub
+                ]
+
+        tokenizer_func (callable): A function that takes in a string and
+            returns a list of string (tokens).
+            See `Advanced` (etc) for more info. Defaults to::
+
+                Tokenizer([
+                    tokenizer_cases.tone_marks,
+                    tokenizer_cases.period_comma,
+                    tokenizer_cases.other_punctuation
+                ]).run
 
     Raises:
-        AssertionError: When ``text`` is :data:`None` or empty.
-        AssertionError: When there's nothing left to speak after pre-processing,
-            tokinization and cleaning.
-        ValueError: When ``lang_check`` is :data:`True` and
-            ``lang`` is not supported.
+        AssertionError: When `text` is `None` or empty; when there's nothing
+            left to speak after pre-precessing, tokenizing and cleaning.
+        ValueError: When `lang_check` is `True` and `lang` is not supported.
+        RuntimeError: When `lang_check` is `True` but there's an error loading
+            the languages dictionnary.
 
     """
 
@@ -139,17 +161,16 @@ class gTTS:
         return min_tokens
 
     def write_to_fp(self, fp):
-        """Do the TTS API request and write result to a file-like object
+        """Do the TTS API request and write bytes to a file-like object.
 
         Args:
             fp (file object): Any file-like object to write the `mp3` to.
 
         Raises:
             :class:`gTTSError`: When there's an error with the API request.
-            TypeError: When ``fp`` is not a file-like object.
+            TypeError: When `fp` is not a file-like object.
 
         """
-
         # When disabling ssl verify in requests (for proxies and firewalls),
         # urllib3 prints an insecure warning on stdout. We disable that.
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -209,10 +230,10 @@ class gTTS:
                 raise TypeError("'fp' must be a file-like object: %s" % str(e))
 
     def save(self, savefile):
-        """Do the TTS API request and write result to file
+        """Do the TTS API request and write result to file.
 
         Args:
-            savefile (str): The file name to save the `mp3` to.
+            savefile (string): The path and file name to save the `mp3` to.
 
         Raises:
             :class:`gTTSError`: When there's an error with the API request.
@@ -239,8 +260,9 @@ class gTTSError(Exception):
 
     def infer_msg(self, tts, rsp):
         """Attempt to guess what went wrong by using known
-        information (e.g. http response) and observed behaviour"""
+        information (e.g. http response) and observed behaviour
 
+        """
         # rsp should be <requests.Response>
         # http://docs.python-requests.org/en/master/api/
         status = rsp.status_code

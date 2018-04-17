@@ -226,8 +226,10 @@ class gTTS:
                 for chunk in r.iter_content(chunk_size=1024):
                     fp.write(chunk)
                 log.debug("part-%i written to %s", idx, fp)
-            except AttributeError as e:
-                raise TypeError("'fp' must be a file-like object: %s" % str(e))
+            except (AttributeError, TypeError) as e:
+                raise TypeError(
+                    "'fp' is not a file-like object or it does not take bytes: %s" %
+                    str(e))
 
     def save(self, savefile):
         """Do the TTS API request and write result to file.

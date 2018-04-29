@@ -5,18 +5,19 @@ import re
 class RegexBuilder():
     """Builds regex using arguments passed into a pattern template.
 
-    Builds a regex object for which the pattern is made from an argument passed
-    into a template. If more than one argument is passed (iterable), each pattern
-    is joined by `|` (regex alternation 'or') to create a single pattern.
+    Builds a regex object for which the pattern is made from an argument
+    passed into a template. If more than one argument is passed (iterable),
+    each pattern is joined by "|" (regex alternation 'or') to create a
+    single pattern.
 
     Args:
         pattern_args (iteratable): String element(s) to be each passed to
-            `pattern_func` to create a regex pattern. Each element is
-            `re.escape`'d before being passed.
-        pattern_func (callable): A 'template' function that should take a string
-            and return a string. It should take an element of `pattern_args` and
-            return a valid regex pattern group string.
-        flags: `re` flag(s) to compile with the regex.
+            ``pattern_func`` to create a regex pattern. Each element is
+            ``re.escape``'d before being passed.
+        pattern_func (callable): A 'template' function that should take a
+            string and return a string. It should take an element of
+            ``pattern_args`` and return a valid regex pattern group string.
+        flags: ``re`` flag(s) to compile with the regex.
 
     Example:
         To create a simple regex that matches on the characters "a", "b",
@@ -24,7 +25,7 @@ class RegexBuilder():
 
             >>> rb = RegexBuilder('abc', lambda x: "{}\.".format(x))
 
-        Looking at `rb.regex` we get the following compiled regex::
+        Looking at ``rb.regex`` we get the following compiled regex::
 
             >>> print(rb.regex)
             'a\.|b\.|c\.'
@@ -40,7 +41,7 @@ class RegexBuilder():
             >>> words = ['lorem', 'ipsum', 'meili', 'koda']
             >>> rb = RegexBuilder(words, lambda x: "(?<={}).".format(x))
 
-        Looking at `rb.regex` we get the following compiled regex::
+        Looking at ``rb.regex`` we get the following compiled regex::
 
             >>> print(rb.regex)
             '(?<=lorem).|(?<=ipsum).|(?<=meili).|(?<=koda).'
@@ -72,30 +73,33 @@ class RegexBuilder():
 class PreProcessorRegex():
     """Regex-based substitution text pre-processor.
 
-    Runs a series of regex substitutions (`re.sub`) from each `regex` of a
-    :ref:`RegexBuilder` with an extra `repl` replacement parameter.
+    Runs a series of regex substitutions (``re.sub``) from each ``regex`` of a
+    :class:`gtts.tokenizer.core.RegexBuilder` with an extra ``repl``
+    replacement parameter.
 
     Args:
         search_args (iteratable): String element(s) to be each passed to
-            `search_func` to create a regex pattern. Each element is
-            `re.escape`'d before being passed.
-        search_func (callable): A 'template' function that should take a string
-            and return a string. It should take an element of `search_args` and
-            return a valid regex search pattern string.
-        repl (string): The common replacement passed to `sub` for each `regex`.
-            Can be a raw string (the case of a regex backreference, for example)
-        flags: `re` flag(s) to compile with each `regex`.
+            ``search_func`` to create a regex pattern. Each element is
+            ``re.escape``'d before being passed.
+        search_func (callable): A 'template' function that should take a
+            string and return a string. It should take an element of
+            ``search_args`` and return a valid regex search pattern string.
+        repl (string): The common replacement passed to the ``sub`` method for
+            each ``regex``. Can be a raw string (the case of a regex
+            backreference, for example)
+        flags: ``re`` flag(s) to compile with each `regex`.
 
     Example:
         Add "!" after the words "lorem" or "ipsum", while ignoring case::
 
             >>> import re
             >>> words = ['lorem', 'ipsum']
-            >>> pp = PreProcessorRegex(words, lambda x: "({}).".format(x), r'\1!',
-                                   re.IGNORECASE)
+            >>> pp = PreProcessorRegex(words,
+            ...                        lambda x: "({})".format(x), r'\\1!',
+            ...                        re.IGNORECASE)
 
         In this case, the regex is a group and the replacement uses its
-        backreference `\1` (as a raw string). Looking at `pp` we get the
+        backreference ``\\1`` (as a raw string). Looking at ``pp`` we get the
         following list of search/replacement pairs::
 
             >>> print(pp)
@@ -107,7 +111,7 @@ class PreProcessorRegex():
             >>> pp.run("LOREM ipSuM")
             "LOREM! ipSuM!"
 
-    See `gtts.tokenizer.pre_processors` for more examples.
+    See :mod:`gtts.tokenizer.pre_processors` for more examples.
 
     """
 
@@ -121,14 +125,14 @@ class PreProcessorRegex():
             self.regexes.append(rb.regex)
 
     def run(self, text):
-        """Run each regex substitution on `text`.
+        """Run each regex substitution on ``text``.
 
         Args:
             text (string): the input text.
 
         Returns:
-            string: the text after all of the substitutions have been applied,
-                one at a time.
+            string: text after all substitutions have been sequentially
+            applied.
 
         """
         for regex in self.regexes:
@@ -146,13 +150,13 @@ class PreProcessorSub():
     """Simple substitution text preprocessor.
 
     Performs string-for-string substitution from list a find/replace pairs.
-    It abstracts :ref:`PreProcessorRegex` with a default simple substitution
-    regex.
+    It abstracts :class:`gtts.tokenizer.core.PreProcessorRegex` with a default
+    simple substitution regex.
 
     Args:
         sub_pairs (list): A list of tuples of the style
-            `(<search str>, <replace str>)`
-        ignore_case (bool): Ignore case during search. Defaults to True.
+            ``(<search str>, <replace str>)``
+        ignore_case (bool): Ignore case during search. Defaults to ``True``.
 
     Example:
         Replace all occurences of "Mac" to "PC" and "Firefox" to "Chrome"::
@@ -160,7 +164,7 @@ class PreProcessorSub():
             >>> sub_pairs = [('Mac', 'PC'), ('Firefox', 'Chrome')]
             >>> pp = PreProcessorSub(sub_pairs)
 
-        Looking at the `pp`, we get the following list of
+        Looking at the ``pp``, we get the following list of
         search (regex)/replacement pairs::
 
             >>> print(pp)
@@ -172,7 +176,7 @@ class PreProcessorSub():
             >>> pp.run("I use firefox on my mac")
             "I use Chrome on my PC"
 
-    See `gtts.tokenizer.pre_processors` for more examples.
+    See :mod:`gtts.tokenizer.pre_processors` for more examples.
 
     """
 
@@ -188,14 +192,14 @@ class PreProcessorSub():
             self.pre_processors.append(pp)
 
     def run(self, text):
-        """Run each substitution on `text`.
+        """Run each substitution on ``text``.
 
         Args:
             text (string): the input text.
 
         Returns:
-            string: The text after all of the substitution have been applied,
-                one at a time.
+            string: text after all substitutions have been sequentially
+            applied.
 
         """
         for pp in self.pre_processors:
@@ -210,31 +214,34 @@ class Tokenizer():
     """An extensible but simple generic rule-based tokenizer.
 
     A generic and simple string tokenizer that takes a list of functions
-    (called 'tokenizer cases') returning `regex` objects and joins them by `|`
-    (regex alternation 'or') to create a single regex to use with the
-    standard `regex.split()` function.
+    (called `tokenizer cases`) returning ``regex`` objects and joins them by
+    "|" (regex alternation 'or') to create a single regex to use with the
+    standard ``regex.split()`` function.
 
-    `regex_funcs` is a list of any function that can return a `regex`
-    (from `re.compile()`) object, such as a :ref:`RegexBuilders` instance
-    (and its `regex' attribute). See the `gtts.tokenizer.tokenizer_cases`
-    module for examples.
+    ``regex_funcs`` is a list of any function that can return a ``regex``
+    (from ``re.compile()``) object, such as a
+    :class:`gtts.tokenizer.core.RegexBuilder` instance (and its ``regex``
+    attribute).
+
+    See the :mod:`gtts.tokenizer.tokenizer_cases` module for examples.
 
     Args:
-        regex_funcs (list): List of compiled `regex` objects. Each functions's
-            pattern will be joined into a single pattern and compiled.
-        flags: `re` flag(s) to compile with the final regex. Defaults to
-            `re.IGNORECASE`
+        regex_funcs (list): List of compiled ``regex`` objects. Each
+            functions's pattern will be joined into a single pattern and
+            compiled.
+        flags: ``re`` flag(s) to compile with the final regex. Defaults to
+            ``re.IGNORECASE``
 
     Note:
-        When the `regex` objects obtained from `regex_funcs` are joined,
-        their individual `re` flags are ignored in favour of `flags`.
+        When the ``regex`` objects obtained from ``regex_funcs`` are joined,
+        their individual ``re`` flags are ignored in favour of ``flags``.
 
     Raises:
-        TypeError: When an element of `regex_funcs` is not a function, or
-            a function that does not return a compiled `regex` object.
+        TypeError: When an element of ``regex_funcs`` is not a function, or
+            a function that does not return a compiled ``regex`` object.
 
-    Note:
-        Joined `regex` patterns can potentially interfere with one another in
+    Warning:
+        Joined ``regex`` patterns can easily interfere with one another in
         unexpected ways. It is recommanded that each tokenizer case operate
         on distinct or non-overlapping chracters/sets of characters
         (For example, a tokenizer case for the period (".") should also
@@ -242,8 +249,8 @@ class Tokenizer():
         a seperate tokenizer case).
 
     Example:
-        A tokenizer with a two simple case (NB: these are bad cases to
-        tokenize on, this is simply a usage example)::
+        A tokenizer with a two simple case (*Note: these are bad cases to
+        tokenize on, this is simply a usage example*)::
 
             >>> import re, RegexBuilder
             >>>
@@ -255,17 +262,17 @@ class Tokenizer():
             >>>
             >>> t = Tokenizer([case1, case2])
 
-        Looking at `case1().pattern`, we get::
+        Looking at ``case1().pattern``, we get::
 
             >>> print(case1().pattern)
             '\\,'
 
-        Looking at `case2().pattern`, we get::
+        Looking at ``case2().pattern``, we get::
 
             >>> print(case2().pattern)
             'a\\.|b\\.|c\\.'
 
-        Finally, looking at `t`, we get them combined::
+        Finally, looking at ``t``, we get them combined::
 
             >>> print(t)
             're.compile('\\,|a\\.|b\\.|c\\.', re.IGNORECASE) from: [<function case1 at 0x10bbcdd08>, <function case2 at 0x10b5c5e18>]'

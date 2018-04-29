@@ -29,8 +29,9 @@ def end_of_line(text):
 
 
 def abbreviations(text):
-    """Remove periods after a list of known abbrevations that
-    can be spoken the same without a period.
+    """Remove periods after an abbreviation from a list of known
+    abbrevations that can be spoken the same without that period. This
+    prevents having to handle tokenization of that period.
 
     Note:
         Could potentially remove the ending period of a sentence.
@@ -38,7 +39,7 @@ def abbreviations(text):
     Note:
         Abbreviations that Google Translate can't pronounce without
         (or even with) a period should be added as a word substitution with a
-        `PreProcessorSub` pre-processor. Ex.: 'Esq.', 'Esquire'.
+        :class:`PreProcessorSub` pre-processor. Ex.: 'Esq.', 'Esquire'.
 
     """
     return PreProcessorRegex(

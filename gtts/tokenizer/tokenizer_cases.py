@@ -21,7 +21,8 @@ def period_comma():
 
     Note:
         Won't match if a dotted abbreviation ends a sentence.
-    Notes:
+
+    Note:
         Won't match the end of a sentence if not followed by a space.
 
     """

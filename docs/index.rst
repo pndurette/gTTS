@@ -1,7 +1,7 @@
 gTTS
 =====
 
-:class:`gTTS` (for `Google text-to-speech`): Python library (and ``gtts-cli`` command-line tool) to interface with Google Translate's text-to-speech API and save spoken text to `mp3` format. It allows unlimited text lengths to be spoken by tokenizing long sentences where the speech would naturally pause.
+:class:`gTTS` (*Google Text-to-Speech*), a Python library and CLI tool to interface with Google Translate's text-to-speech API. Writes spoken ``mp3`` data to a file, a file-like object (bytestring) for further audio manipulation, or ``stdout``. It features flexible pre-processing and tokenizing, as well as automatic retrieval of supported languages.
 
 Installation
 ------------
@@ -19,16 +19,15 @@ Installation
    tokenizer
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Project
 
+   license
    contributing
    changelog
-   license
 
 Misc
 ----
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

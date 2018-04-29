@@ -18,15 +18,17 @@ def tts_langs():
     """Languages Google Text-to-Speech supports.
 
     Returns:
-        dict: A dictionnary of the type `{ '<lang>': '<name>'}`,
-            where `<lang>` is an IETF language tag such as `en` or `pt-br`,
-            and `<name>` is the full English name of the language, such as
-            `English` or `Portuguese (Brazil)`.
+        dict: A dictionnary of the type `{ '<lang>': '<name>'}`
+
+        Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
+        and `<name>` is the full English name of the language, such as
+        `English` or `Portuguese (Brazil)`.
 
     The dictionnary returned combines languages from two origins:
 
-    - Languages fetched (scraped) from Google Translate
-    - Languages that are undocumented but know to work.
+    - Languages fetched automatically from Google Translate
+    - Languages that are undocumented variations that were observed to work and
+      present different dialects or accents.
 
     """
     try:
@@ -83,8 +85,10 @@ def _extra_langs():
     """Define extra languages.
 
     Returns:
-        dict: A dictionnary of extra languages, variations of the ones fetched
-        by `_fetch_langs`, observed to provide different dialects or accents or
+        dict: A dictionnary of extra languages manually defined.
+
+        Variations of the ones fetched by `_fetch_langs`,
+        observed to provide different dialects or accents or
         just simply accepted by the Google Translate Text-to-Speech API.
 
     """

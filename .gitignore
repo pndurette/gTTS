@@ -26,6 +26,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+.pytest_cache/
 htmlcov/
 .tox/
 .coverage
@@ -51,3 +52,6 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Other
+.vscode/
+.DS_Store

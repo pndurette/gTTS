@@ -147,7 +147,7 @@ class gTTS:
             text = pp(text)
 
         if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
-            return [text]
+            return _clean_tokens([text])
 
         # Tokenize
         log.debug("tokenizing: %s", self.tokenizer_func)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import io
 import tempfile
 import unittest
 from mock import Mock
@@ -85,12 +86,13 @@ class TestInit(unittest.TestCase):
         with self.assertRaises(AssertionError):
             tts = gTTS(text=text)
 
-    @unittest.skip("TODO This is not part of __init__ anymore")
     def test_no_text_parts(self):
         """Raises AssertionError on no content to send to API (no text_parts)"""
         text = "                                                                                                          ..,\n"
         with self.assertRaises(AssertionError):
-            tts = gTTS(text=text)
+            with tempfile.SpooledTemporaryFile() as f:
+                tts = gTTS(text=text)
+                tts.write_to_fp(f)
 
 
 class TestWrite(unittest.TestCase):

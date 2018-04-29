@@ -37,14 +37,14 @@ class TestParams(unittest.TestCase):
         """One of <test> (arg) and <file> <opt> should be set"""
         result = self.invoke_debug([])
 
-        self.assertIn("FILENAME required", result.output)
+        self.assertIn("<file> required", result.output)
         self.assertNotEqual(result.exit_code, 0)
 
     def test_text_text_and_file(self):
         """<test> (arg) and <file> <opt> should not be set together"""
         result = self.invoke_debug(['--file', self.empty_file_path, 'test'])
 
-        self.assertIn("FILENAME can't be used together", result.output)
+        self.assertIn("<file> can't be used together", result.output)
         self.assertNotEqual(result.exit_code, 0)
 
     def test_text_empty(self):

@@ -50,11 +50,11 @@ def validate_text(ctx, param, text):
     if not text and 'file' not in ctx.params:
         # No <text> and no <file>
         raise click.BadParameter(
-            "TEXT or -f/--file FILENAME required")
+            "<text> or -f/--file <file> required")
     if text and 'file' in ctx.params:
         # Both <text> and <file>
         raise click.BadParameter(
-            "TEXT and -f/--file FILENAME can't be used together")
+            "<text> and -f/--file <file> can't be used together")
     return text
 
 

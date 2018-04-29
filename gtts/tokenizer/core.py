@@ -66,7 +66,7 @@ class RegexBuilder():
         pattern = '|'.join(alts)
         return re.compile(pattern, self.flags)
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return str(self.regex)
 
 
@@ -139,7 +139,7 @@ class PreProcessorRegex():
             text = regex.sub(self.repl, text)
         return text
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         subs_strs = []
         for r in self.regexes:
             subs_strs.append("({}, repl='{}')".format(r, self.repl))
@@ -206,7 +206,7 @@ class PreProcessorSub():
             text = pp.run(text)
         return text
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return ", ".join([str(pp) for pp in self.pre_processors])
 
 
@@ -317,5 +317,5 @@ class Tokenizer():
         """
         return self.total_regex.split(text)
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return str(self.total_regex) + " from: " + str(self.regex_funcs)

@@ -1,5 +1,7 @@
 [run]
-omit = gtts/tests/*
+omit = 
+    gtts/tests/*
+    gtts/tokenizer/tests/*
 
 [report]
 exclude_lines =

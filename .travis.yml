@@ -1,20 +1,17 @@
 language: python
 fast_finish: true
-
 python:
 - 3.6
 - 3.5
 - 3.4
-- 3.3
 - 2.7
 
 group: travis_latest
 
-install:
-- pip install .
+install: pip install .[tests]
 
-script:
-- python -m unittest discover -v -s gtts/tests/
+script: pytest -v -s gtts/tests/ --cov-report= --cov=gtts
+after_success: coveralls
 
 deploy:
   provider: pypi
@@ -26,4 +23,4 @@ deploy:
     distributions: sdist
     repo: pndurette/gTTS
     branch: master
-    python: '3.4'
+    python: '3.6'

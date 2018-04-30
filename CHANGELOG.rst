@@ -1,0 +1,392 @@
+.. NOTE: You should *NOT* be adding new change log entries to this file, this
+         file is managed by towncrier. You *may* edit previous change logs to
+         fix problems like typo corrections or such.
+
+         To add a new change log entry, please see CONTRIBUTING.rst
+
+Changelog
+=========
+
+.. towncrier release notes start
+
+2.0.0 (2018-04-29)
+------------------
+(`#108 <https://github.com/pndurette/gTTS/issues/108>`_)
+
+Features
+~~~~~~~~
+
+- The ``gtts`` module
+
+  - New logger ("gtts") replaces all occurrences of ``print()``
+  - Languages list is now obtained automatically (``gtts.lang``)
+    (`#91 <https://github.com/pndurette/gTTS/issues/91>`_,
+    `#94 <https://github.com/pndurette/gTTS/issues/94>`_,
+    `#106 <https://github.com/pndurette/gTTS/issues/106>`_)
+  - Added a curated list of language sub-tags that
+    have been observed to provide different dialects or accents
+    (e.g. "en-gb", "fr-ca")
+  - New ``gTTS()`` parameter ``lang_check`` to disable language
+    checking.
+  - ``gTTS()`` now delegates the ``text`` tokenizing to the 
+    API request methods (i.e. ``write_to_fp()``, ``save()``),
+    allowing ``gTTS`` instances to be modified/reused
+  - Rewrote tokenizing and added pre-processing (see below)
+  - New ``gTTS()`` parameters ``pre_processor_funcs`` and
+    ``tokenizer_func`` to configure pre-processing and tokenizing
+    (or use a 3rd party tokenizer)
+  - Error handling:
+
+    - Added new exception ``gTTSError`` raised on API request errors.
+      It attempts to guess what went wrong based on known information
+      and observed behaviour 
+      (`#60 <https://github.com/pndurette/gTTS/issues/60>`_,
+      `#106 <https://github.com/pndurette/gTTS/issues/106>`_)
+    - ``gTTS.write_to_fp()`` and ``gTTS.save()`` also raise ``gTTSError``
+      on `gtts_token` error
+    - ``gTTS.write_to_fp()`` raises ``TypeError`` when ``fp`` is not a
+      file-like object or one that doesn't take bytes
+    - ``gTTS()`` raises ``ValueError`` on unsupported languages
+      (and ``lang_check`` is ``True``)
+    - More fine-grained error handling throughout (e.g.
+      `request failed` vs. `request successful with a bad response`)
+
+- Tokenizer (and new pre-processors):
+
+  - Rewrote and greatly expanded tokenizer (``gtts.tokenizer``)
+  - Smarter token 'cleaning' that will remove tokens that only contain
+    characters that can't be spoken (i.e. punctuation and whitespace)
+  - Decoupled token minimizing from tokenizing, making the latter usable
+    in other contexts
+  - New flexible speech-centric text pre-processing
+  - New flexible full-featured regex-based tokenizer
+    (``gtts.tokenizer.core.Tokenizer``)
+  - New ``RegexBuilder``, ``PreProcessorRegex`` and ``PreProcessorSub`` classes
+    to make writing regex-powered text `pre-processors` and `tokenizer cases`
+    easier
+  - Pre-processors:
+
+    - Re-form words cut by end-of-line hyphens
+    - Remove periods after a (customizable) list of known abbreviations
+      (e.g. "jr", "sr", "dr") that can be spoken the same without a period
+    - Perform speech corrections by doing word-for-word replacements
+      from a (customizable) list of tuples
+
+  - Tokenizing:
+
+    - Keep punctuation that modify the inflection of speech (e.g. "?", "!")
+    - Don't split in the middle of numbers (e.g. "10.5", "20,000,000")
+      (`#101 <https://github.com/pndurette/gTTS/issues/101>`_)
+    - Don't split on "dotted" abbreviations and accronyms (e.g. "U.S.A")
+    - Added Chinese comma ("，"), ellipsis ("…") to punctuation list
+      to tokenize on (`#86 <https://github.com/pndurette/gTTS/issues/86>`_)
+
+- The ``gtts-cli`` command-line tool
+
+  - Rewrote cli as first-class citizen module (``gtts.cli``),
+    powered by `Click <http://click.pocoo.org>`_
+  - Windows support using `setuptool`'s `entry_points`
+  - Better support for Unicode I/O in Python 2
+  - All arguments are now pre-validated
+  - New ``--nocheck`` flag to skip language pre-checking
+  - New ``--all`` flag to list all available languages
+  - Either the ``--file`` option or the ``<text>`` argument can be set to
+    "-" to read from ``stdin``
+  - The ``--debug`` flag uses logging and doesn't pollute ``stdout``
+    anymore
+
+
+Bugfixes
+~~~~~~~~
+
+- ``_minimize()``: Fixed an infinite recursion loop that would occur
+  when a token started with the miminizing delimiter (i.e. a space) 
+  (`#86 <https://github.com/pndurette/gTTS/issues/86>`_)
+- ``_minimize()``: Handle the case where a token of more than 100
+  characters did not contain a space (e.g. in Chinese).
+- Fixed an issue that fused multiline text together if the total number of
+  characters was less than 100
+- Fixed ``gtts-cli`` Unicode errors in Python 2.7 (famous last words)
+  (`#78 <https://github.com/pndurette/gTTS/issues/78>`_, 
+  `#93 <https://github.com/pndurette/gTTS/issues/93>`_, 
+  `#96 <https://github.com/pndurette/gTTS/issues/96>`_)
+
+
+Deprecations and Removals
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Dropped Python 3.3 support
+- Removed ``debug`` parameter of ``gTTS`` (in favour of logger)
+- ``gtts-cli``: Changed long option name of ``-o`` to ``--output``
+  instead of ``--destination``
+- ``gTTS()`` will raise a ``ValueError`` rather than an ``AssertionError``
+  on unsupported language
+
+
+Improved Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Rewrote all documentation files as reStructuredText
+- Comprehensive documentation writen for `Sphinx <http://www.sphinx-doc.org>`_, published to http://gtts.readthedocs.io
+- Changelog built with `towncrier <https://github.com/hawkowl/towncrier>`_ 
+
+Misc
+~~~~
+
+- Major test re-work
+- Language tests can read a ``TEST_LANGS`` enviromment variable so
+  not all language tests are run every time.
+- Added `AppVeyor <https://www.appveyor.com>`_ CI for Windows
+- `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ compliance
+
+
+1.2.2 (2017-08-15)
+------------------
+
+Misc
+~~~~
+
+- Update LICENCE, add to manifest (`#77 <https://github.com/pndurette/gTTS/issues/77>`_)
+
+
+1.2.1 (2017-08-02)
+------------------
+
+Features
+~~~~~~~~
+
+- Add Unicode punctuation to the tokenizer (such as for Chinese and Japanese)
+  (`#75 <https://github.com/pndurette/gTTS/issues/75>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- Fix > 100 characters non-ASCII split, ``unicode()`` for Python 2 (`#71
+  <https://github.com/pndurette/gTTS/issues/71>`_, `#73
+  <https://github.com/pndurette/gTTS/issues/73>`_, `#75
+  <https://github.com/pndurette/gTTS/issues/75>`_)
+
+
+1.2.0 (2017-04-15)
+------------------
+
+Features
+~~~~~~~~
+
+- Option for slower read speed (``slow=True`` for ``gTTS()``, ``--slow`` for
+  ``gtts-cli``) (`#40 <https://github.com/pndurette/gTTS/issues/40>`_, `#41
+  <https://github.com/pndurette/gTTS/issues/41>`_, `#64
+  <https://github.com/pndurette/gTTS/issues/64>`_, `#67
+  <https://github.com/pndurette/gTTS/issues/67>`_)
+- System proxy settings are passed transparently to all http requests (`#45
+  <https://github.com/pndurette/gTTS/issues/45>`_, `#68
+  <https://github.com/pndurette/gTTS/issues/68>`_)
+- Silence SSL warnings from urllib3 (`#69
+  <https://github.com/pndurette/gTTS/issues/69>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- The text to read is now cut in proper chunks in Python 2 unicode. This
+  broke reading for many languages such as Russian.
+- Disabled SSL verify on http requests to accommodate certain firewalls
+  and proxies.
+- Better Python 2/3 support in general (`#9 <https://github.com/pndurette/gTTS/issues/9>`_,
+  `#48 <https://github.com/pndurette/gTTS/issues/48>`_, `#68
+  <https://github.com/pndurette/gTTS/issues/68>`_)
+
+
+Deprecations and Removals
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- 'pt-br' : 'Portuguese (Brazil)' (it was the same as 'pt' and not Brazilian)
+  (`#69 <https://github.com/pndurette/gTTS/issues/69>`_)
+
+
+1.1.8 (2017-01-15)
+------------------
+
+Features
+~~~~~~~~
+
+- Added ``stdin`` support via the '-' ``text`` argument to ``gtts-cli`` (`#56
+  <https://github.com/pndurette/gTTS/issues/56>`_)
+
+
+1.1.7 (2016-12-14)
+------------------
+
+Features
+~~~~~~~~
+
+- Added utf-8 support to ``gtts-cli`` (`#52
+  <https://github.com/pndurette/gTTS/issues/52>`_)
+
+
+1.1.6 (2016-07-20)
+------------------
+
+Features
+~~~~~~~~
+
+- Added 'bn' : 'Bengali' (`#39 <https://github.com/pndurette/gTTS/issues/39>`_,
+  `#44 <https://github.com/pndurette/gTTS/issues/44>`_)
+
+
+Deprecations and Removals
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- 'ht' : 'Haitian Creole' (removed by Google) (`#43
+  <https://github.com/pndurette/gTTS/issues/43>`_)
+
+
+1.1.5 (2016-05-13)
+------------------
+
+Bugfixes
+~~~~~~~~
+
+- Fixed HTTP 403s by updating the client argument to reflect new API usage
+  (`#32 <https://github.com/pndurette/gTTS/issues/32>`_, `#33
+  <https://github.com/pndurette/gTTS/issues/33>`_)
+
+
+1.1.4 (2016-02-22)
+------------------
+
+Features
+~~~~~~~~
+
+- Spun-off token calculation to `gTTS-Token
+  <https://github.com/Boudewijn26/gTTS-token>`_ (`#23
+  <https://github.com/pndurette/gTTS/issues/23>`_, `#29
+  <https://github.com/pndurette/gTTS/issues/29>`_)
+
+
+1.1.3 (2016-01-24)
+------------------
+
+Bugfixes
+~~~~~~~~
+
+- ``gtts-cli`` works with Python 3 (`#20
+  <https://github.com/pndurette/gTTS/issues/20>`_)
+- Better support for non-ASCII characters (`#21
+  <https://github.com/pndurette/gTTS/issues/21>`_, `#22
+  <https://github.com/pndurette/gTTS/issues/22>`_)
+
+
+Misc
+~~~~
+
+- Moved out gTTS token to its own module (`#19 <https://github.com/pndurette/gTTS/issues/19>`_)
+
+
+1.1.2 (2016-01-13)
+------------------
+
+Features
+~~~~~~~~
+
+- Added gTTS token (tk url parameter) calculation (`#14
+  <https://github.com/pndurette/gTTS/issues/14>`_, `#15
+  <https://github.com/pndurette/gTTS/issues/15>`_, `#17
+  <https://github.com/pndurette/gTTS/issues/17>`_)
+
+
+1.0.7 (2015-10-07)
+------------------
+
+Features
+~~~~~~~~
+
+- Added ``stdout`` support to ``gtts-cli``, text now an argument rather than an
+  option (`#10 <https://github.com/pndurette/gTTS/issues/10>`_)
+
+
+1.0.6 (2015-07-30)
+------------------
+
+Features
+~~~~~~~~
+
+- Raise an exception on bad HTTP response (4xx or 5xx) (`#8
+  <https://github.com/pndurette/gTTS/issues/8>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- Added ``client=t`` parameter for the api HTTP request (`#8
+  <https://github.com/pndurette/gTTS/issues/8>`_)
+
+
+1.0.5 (2015-07-15)
+------------------
+
+Features
+~~~~~~~~
+
+- ``write_to_fp()`` to write to a file-like object (`#6
+  <https://github.com/pndurette/gTTS/issues/6>`_)
+
+
+1.0.4 (2015-05-11)
+------------------
+
+Features
+~~~~~~~~
+
+- Added Languages: `zh-yue` : 'Chinese (Cantonese)', `en-uk` : 'English (United
+  Kingdom)', `pt-br` : 'Portuguese (Brazil)', `es-es` : 'Spanish (Spain)',
+  `es-us` : 'Spanish (United StateS)', `zh-cn` : 'Chinese (Mandarin/China)',
+  `zh-tw` : 'Chinese (Mandarin/Taiwan)' (`#4
+  <https://github.com/pndurette/gTTS/issues/4>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- ``gtts-cli`` print version and pretty printed available languages, language
+  codes are now case insensitive (`#4 <https://github.com/pndurette/gTTS/issues/4>`_)
+
+
+1.0.3 (2014-11-21)
+------------------
+
+Features
+~~~~~~~~
+
+- Added Languages: 'en-us' : 'English (United States)', 'en-au' : 'English
+  (Australia)' (`#3 <https://github.com/pndurette/gTTS/issues/3>`_)
+
+
+1.0.2 (2014-05-15)
+------------------
+
+Features
+~~~~~~~~
+
+- Python 3 support
+
+
+1.0.1 (2014-05-15)
+------------------
+
+Misc
+~~~~
+
+- SemVer versioning, CI changes
+
+
+1.0 (2014-05-08)
+----------------
+
+Features
+~~~~~~~~
+
+- Initial release
+
+

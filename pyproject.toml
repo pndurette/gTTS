@@ -1,0 +1,7 @@
+[tool.towncrier]
+package = "gtts"
+filename = "CHANGELOG.rst"
+directory = "news/"
+underlines = ["-", "~", "_"]
+title_format = "{version} ({project_date})"
+issue_format = "`#{issue} <https://github.com/pndurette/gTTS/issues/{issue}>`_"

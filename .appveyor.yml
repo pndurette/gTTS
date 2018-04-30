@@ -1,0 +1,23 @@
+environment:
+    matrix:
+        # Python 3.6
+        - PYTHON: "C:\\Python36-x64"
+        # Python 3.5
+        - PYTHON: "C:\\Python35"
+        - PYTHON: "C:\\Python35-x64"
+        # Python 3.4
+        - PYTHON: "C:\\Python34"
+        - PYTHON: "C:\\Python34-x64"
+        # Python 2.7
+        - PYTHON: "C:\\Python27"
+        - PYTHON: "C:\\Python27-x64"
+
+install:
+    - "%PYTHON%\\python.exe -m pip install -e .[tests]"
+
+build: off
+
+test_script:
+    - "%PYTHON%\\python.exe --version" 
+    - "%PYTHON%\\python.exe -c \"from gtts.cli import sys_encoding; print(sys_encoding())\""
+    - "%PYTHON%\\python.exe -m pytest -v -s gtts/tests/"

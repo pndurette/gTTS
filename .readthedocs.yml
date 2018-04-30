@@ -1,0 +1,9 @@
+# Build PDF as extra
+formats:
+    - pdf
+
+python:
+    version: 3.5
+    pip_install: true
+    extra_requirements:
+        - docs

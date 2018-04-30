@@ -9,7 +9,7 @@ Changelog
 
 .. towncrier release notes start
 
-2.0.0 (2018-04-29)
+2.0.0 (2018-04-30)
 ------------------
 (`#108 <https://github.com/pndurette/gTTS/issues/108>`_)
 

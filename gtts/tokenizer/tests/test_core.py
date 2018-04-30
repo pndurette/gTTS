@@ -16,8 +16,9 @@ class TestRegexBuilder(unittest.TestCase):
 class TestPreProcessorRegex(unittest.TestCase):
     def test_preprocessorregex(self):
         pp = PreProcessorRegex('ab', lambda x: "{}".format(x), 'c')
-        _out = "(re.compile('a'), repl='c'), (re.compile('b'), repl='c')"
-        self.assertEqual(repr(pp), _out)
+        self.assertEqual(len(pp.regexes), 2)
+        self.assertEqual(pp.regexes[0].pattern, 'a')
+        self.assertEqual(pp.regexes[1].pattern, 'b')
 
 
 class TestPreProcessorSub(unittest.TestCase):
@@ -50,12 +51,20 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual(t.run(_in), _out)
 
     def test_bad_params_not_list(self):
+        # original exception: TypeError
         with self.assertRaises(TypeError):
             t = Tokenizer(self.case1)
 
     def test_bad_params_not_callable(self):
+        # original exception: TypeError
         with self.assertRaises(TypeError):
             t = Tokenizer([100])
+
+    def test_bad_params_not_callable_returning_regex(self):
+        # original exception: AttributeError
+        def not_regex(): return 1
+        with self.assertRaises(TypeError):
+            t = Tokenizer([not_regex])
 
 
 if __name__ == '__main__':

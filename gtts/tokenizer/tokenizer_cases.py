@@ -38,20 +38,21 @@ def other_punctuation():
     inserts a break in speech.
 
     """
-    OTHER_PUNC = ''.join((
+    punc = ''.join((
         set(symbols.ALL_PUNC) -
         set(symbols.TONE_MARKS) -
         set(symbols.PERIOD_COMMA)))
     return RegexBuilder(
-        pattern_args=OTHER_PUNC,
+        pattern_args=punc,
         pattern_func=lambda x: u"{}".format(x)).regex
 
 
-def legacy_all_punctuation():
+def legacy_all_punctuation(): # pragma: no cover b/c tested but Coveralls: ¯\_(ツ)_/¯
     """Match all punctuation.
 
     Use as only tokenizer case to mimic gTTS 1.x tokenization.
     """
+    punc = symbols.ALL_PUNC
     return RegexBuilder(
-        pattern_args=symbols.ALL_PUNC,
+        pattern_args=punc,
         pattern_func=lambda x: u"{}".format(x)).regex

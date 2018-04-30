@@ -291,7 +291,7 @@ class Tokenizer():
         try:
             # Combine
             self.total_regex = self._combine_regex()
-        except (TypeError, AttributeError) as e:
+        except (TypeError, AttributeError) as e: # pragma: no cover
             raise TypeError(
                 "Tokenizer() expects a list of functions returning "
                 "regular expression objects (i.e. re.compile). " +

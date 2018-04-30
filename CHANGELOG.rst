@@ -11,6 +11,7 @@ Changelog
 
 2.0.0 (2018-04-29)
 ------------------
+(`#108 <https://github.com/pndurette/gTTS/issues/108>`_)
 
 Features
 ~~~~~~~~
@@ -66,7 +67,7 @@ Features
   - Pre-processors:
 
     - Re-form words cut by end-of-line hyphens
-    - Remove periods after a (customizable) list of known abbrevations
+    - Remove periods after a (customizable) list of known abbreviations
       (e.g. "jr", "sr", "dr") that can be spoken the same without a period
     - Perform speech corrections by doing word-for-word replacements
       from a (customizable) list of tuples
@@ -83,7 +84,7 @@ Features
 - The ``gtts-cli`` command-line tool
 
   - Rewrote cli as first-class citizen module (``gtts.cli``),
-    powered by `click <http://click.pocoo.org>`_
+    powered by `Click <http://click.pocoo.org>`_
   - Windows support using `setuptool`'s `entry_points`
   - Better support for Unicode I/O in Python 2
   - All arguments are now pre-validated

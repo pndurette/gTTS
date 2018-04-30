@@ -10,7 +10,7 @@ group: travis_latest
 
 install: pip install .[tests]
 
-script: pytest -v -s gtts/tests/ --cov=gtts
+script: pytest -v -s gtts/tests/ --cov-report= --cov=gtts
 after_success: coveralls
 
 deploy:
@@ -23,4 +23,4 @@ deploy:
     distributions: sdist
     repo: pndurette/gTTS
     branch: master
-    python: '3.4'
+    python: '3.6'

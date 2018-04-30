@@ -15,7 +15,7 @@ setup(
         ]
     },
     license='MIT',
-    description='Create an mp3 file from spoken text via the Google TTS (Text-to-Speech) API',
+    description="gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate's text-to-speech API",
     long_description=open('README.rst').read(),
     install_requires=[
         'six',
@@ -27,7 +27,7 @@ setup(
     extras_require={'tests':['pytest', 'pytest-cov', 'coveralls',
                             'testfixtures', 'mock', 'six'],
                     'docs': ['sphinx', 'sphinx-autobuild', 'sphinx_rtd_theme',
-                            'sphinx-click']},
+                            'sphinx-click', 'towncrier']},
     test_suite='gtts.tests',
     python_requires=">=2.7",
     classifiers=[
@@ -38,8 +38,8 @@ setup(
           'Operating System :: Unix',
           'Operating System :: POSIX',
           'Operating System :: POSIX :: Linux',
+          'Operating System :: Microsoft :: Windows'
           'Programming Language :: Python :: 2.7',
-          'Programming Language :: Python :: 3.3',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',

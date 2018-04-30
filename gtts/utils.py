@@ -65,7 +65,7 @@ def _len(text):
     try:
         # Python 2
         return len(unicode(text))
-    except NameError:
+    except NameError: # pragma: no cover
         # Python 3
         return len(text)
 

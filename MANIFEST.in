@@ -1,3 +1,4 @@
 include README.rst
-include CHANGELOG.md
+include CHANGELOG.rst
+include CONTRIBUTING.rst
 include LICENSE

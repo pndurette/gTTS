@@ -1,0 +1,1 @@
+Fixed an UnicodeDecodeError when installing gTTS if system locale was not utf-8

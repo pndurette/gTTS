@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from codecs import open
 
 exec(open('gtts/version.py').read())
 
@@ -16,7 +17,7 @@ setup(
     },
     license='MIT',
     description="gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate's text-to-speech API",
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst', 'r', encoding='utf-8').read(),
     install_requires=[
         'six',
         'bs4',

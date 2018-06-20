@@ -9,6 +9,30 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.1 (2018-06-20)
+------------------
+
+Bugfixes
+~~~~~~~~
+
+- Fixed an UnicodeDecodeError when installing gTTS if system locale was not
+  utf-8 (`#120 <https://github.com/pndurette/gTTS/issues/120>`_)
+
+
+Improved Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Added *Pre-processing and tokenizing > Minimizing* section about the API's
+  100 characters limit and how larger tokens are handled (`#119
+  <https://github.com/pndurette/gTTS/issues/119>`_)
+
+
+Misc
+~~~~
+
+- `#122 <https://github.com/pndurette/gTTS/issues/122>`_
+
+
 2.0.0 (2018-04-30)
 ------------------
 (`#108 <https://github.com/pndurette/gTTS/issues/108>`_)

@@ -106,6 +106,16 @@ Using a 3rd-party tokenizer
 
 Even though :class:`gtts.tokenizer.core.Tokenizer` works well in this context, there are way more advanced tokenizers and tokenzing techniques. As long as you can restrict the lenght of output tokens, you can use any tokenizer you'd like, such as the ones in `NLTK <http://www.nltk.org>`_.
 
+Minimizing
+----------
+
+The Google Translate text-to-speech API accepts a maximum of **100 characters**.
+
+If after tokenization any of the tokens is larger than 100 characters, it will be split in two:
+
+* On the last space character that is closest to, but before the 100th character;
+* Between the 100th and 101st characters if there's no space.
+
 gtts.tokenizer module reference (:mod:`gtts.tokenizer`)
 -------------------------------------------------------
 

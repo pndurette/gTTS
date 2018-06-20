@@ -23,8 +23,8 @@ Improved Documentation
 ~~~~~~~~~~~~~~~~~~~~~~
 
 - Added *Pre-processing and tokenizing > Minimizing* section about the API's
-  100 characters limit and how larger tokens are handled (`#119
-  <https://github.com/pndurette/gTTS/issues/119>`_)
+  100 characters limit and how larger tokens are handled (`#121
+  <https://github.com/pndurette/gTTS/issues/121>`_)
 
 
 Misc

@@ -170,7 +170,7 @@ class gTTS:
 
         Raises:
             :class:`gTTSError`: When there's an error with the API request.
-            TypeError: When ``fp`` is a file-like object that takes bytes.
+            TypeError: When ``fp`` is not a file-like object that takes bytes.
 
         """
         # When disabling ssl verify in requests (for proxies and firewalls),

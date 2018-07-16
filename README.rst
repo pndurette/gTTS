@@ -1,3 +1,7 @@
+.. image:: http://pepy.tech/badge/gtts
+   :target: http://pepy.tech/project/gtts
+   :alt: PyPi Downloads
+
 ====
 gTTS
 ====

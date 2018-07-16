@@ -1,6 +1,3 @@
-.. image:: http://pepy.tech/badge/gtts
-   :target: http://pepy.tech/project/gtts
-   :alt: PyPi Downloads
 
 ====
 gTTS
@@ -9,7 +6,7 @@ gTTS
 **gTTS** (*Google Text-to-Speech*), a Python library and CLI tool to interface with Google Translate's text-to-speech API. Writes spoken ``mp3`` data to a file, a file-like object (bytestring) for further audio manipulation, or ``stdout``. 
 http://gtts.readthedocs.org/
 
-|PyPI version| |Python versions| |Build Status| |AppVeyor| |Coveralls| |Commits Since|
+|PyPI version| |Python versions| |Build Status| |AppVeyor| |Coveralls| |Commits Since| |PyPi Downloads|
 
 Features
 --------
@@ -67,6 +64,10 @@ Licence
 
 .. |Commits Since| image:: https://img.shields.io/github/commits-since/pndurette/gTTS/latest.svg
    :target: https://github.com/pndurette/gTTS/commits/
+   
+.. |PyPi Downloads| image:: http://pepy.tech/badge/gtts
+   :target: http://pepy.tech/project/gtts
+   :alt: PyPi Downloads
 
 .. _contributing: CONTRIBUTING.rst
 .. _changelog: CHANGELOG.rst

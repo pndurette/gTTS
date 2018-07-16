@@ -47,7 +47,7 @@ def other_punctuation():
         pattern_func=lambda x: u"{}".format(x)).regex
 
 
-def legacy_all_punctuation(): # pragma: no cover b/c tested but Coveralls: ¯\_(ツ)_/¯
+def legacy_all_punctuation():  # pragma: no cover b/c tested but Coveralls: ¯\_(ツ)_/¯
     """Match all punctuation.
 
     Use as only tokenizer case to mimic gTTS 1.x tokenization.

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import tempfile
 import unittest
-import click
 import six
-import sys
 import os
 from click.testing import CliRunner
 from gtts.cli import tts_cli
 
-# Need to look into gTTS' log output to test proper instanciation
+# Need to look into gTTS' log output to test proper instantiation
 # - Use testfixtures.LogCapture() b/c TestCase.assertLogs() needs py3.4+
 # - Clear 'gtts' logger handlers (set in gtts.cli) to reduce test noise
 import logging

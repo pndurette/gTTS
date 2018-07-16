@@ -53,18 +53,18 @@ class TestTokenizer(unittest.TestCase):
     def test_bad_params_not_list(self):
         # original exception: TypeError
         with self.assertRaises(TypeError):
-            t = Tokenizer(self.case1)
+            Tokenizer(self.case1)
 
     def test_bad_params_not_callable(self):
         # original exception: TypeError
         with self.assertRaises(TypeError):
-            t = Tokenizer([100])
+            Tokenizer([100])
 
     def test_bad_params_not_callable_returning_regex(self):
         # original exception: AttributeError
         def not_regex(): return 1
         with self.assertRaises(TypeError):
-            t = Tokenizer([not_regex])
+            Tokenizer([not_regex])
 
 
 if __name__ == '__main__':

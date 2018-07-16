@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import unittest
-import re
 from gtts.tokenizer.tokenizer_cases import tone_marks, period_comma, other_punctuation, legacy_all_punctuation
 from gtts.tokenizer import Tokenizer, symbols
 

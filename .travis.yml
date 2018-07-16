@@ -6,7 +6,6 @@ python:
 - 3.7
 - 3.6
 - 3.5
-- 3.4
 - 2.7
 
 git:
@@ -15,7 +14,10 @@ git:
 
 install: pip install .[tests]
 
-script: pytest -v -s gtts/tests/ --cov-report= --cov=gtts
+script: 
+  - pytest -v -s gtts/tests/ --cov-report= --cov=gtts
+  - flake8
+
 after_success: coveralls
 
 deploy:

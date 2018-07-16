@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-import io
 import tempfile
 import unittest
 from mock import Mock
 
 from gtts.tts import gTTS, gTTSError
-from gtts.lang import tts_langs, _fetch_langs, _extra_langs
+from gtts.lang import _fetch_langs, _extra_langs
 
 # Testing all languages takes some time.
 # Set TEST_LANGS envvar to choose languages to test.
@@ -78,13 +77,13 @@ class TestInit(unittest.TestCase):
         text = "Lorem ipsum"
         check = True
         with self.assertRaises(ValueError):
-            tts = gTTS(text=text, lang=lang, lang_check=check)
+            gTTS(text=text, lang=lang, lang_check=check)
 
     def test_empty_string(self):
         """Raise AssertionError on empty string"""
         text = ""
         with self.assertRaises(AssertionError):
-            tts = gTTS(text=text)
+            gTTS(text=text)
 
     def test_no_text_parts(self):
         """Raises AssertionError on no content to send to API (no text_parts)"""
@@ -176,7 +175,7 @@ class TestWebRequest(unittest.TestCase):
         check = False
         with self.assertRaises(gTTSError):
             with tempfile.SpooledTemporaryFile() as f:
-                 # Create gTTS
+                # Create gTTS
                 tts = gTTS(text=self.text, lang=lang, lang_check=check)
                 tts.write_to_fp(f)
 

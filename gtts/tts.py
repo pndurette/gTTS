@@ -182,6 +182,10 @@ class gTTS:
         assert text_parts, 'No text to send to TTS API'
 
         for idx, part in enumerate(text_parts):
+            # Make sure part has text
+            if len(part) == 0:
+                continue
+
             try:
                 # Calculate token
                 part_tk = self.token.calculate_token(part)

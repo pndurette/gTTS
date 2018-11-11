@@ -33,11 +33,11 @@ class TestPreProcessorSub(unittest.TestCase):
 class TestTokenizer(unittest.TestCase):
     # tokenizer case 1
     def case1(self):
-        return re.compile("\,")
+        return re.compile(r"\,")
 
     # tokenizer case 2
     def case2(self):
-        return RegexBuilder('abc', lambda x: "{}\.".format(x)).regex
+        return RegexBuilder('abc', lambda x: r"{}\.".format(x)).regex
 
     def test_tokenizer(self):
         t = Tokenizer([self.case1, self.case2])
@@ -62,7 +62,9 @@ class TestTokenizer(unittest.TestCase):
 
     def test_bad_params_not_callable_returning_regex(self):
         # original exception: AttributeError
-        def not_regex(): return 1
+        def not_regex():
+            return 1
+
         with self.assertRaises(TypeError):
             Tokenizer([not_regex])
 

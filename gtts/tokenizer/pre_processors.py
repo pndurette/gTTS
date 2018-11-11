@@ -44,7 +44,7 @@ def abbreviations(text):
     """
     return PreProcessorRegex(
         search_args=symbols.ABBREVIATIONS,
-        search_func=lambda x: u"(?<={})(?=\.).".format(x),
+        search_func=lambda x: r"(?<={})(?=\.).".format(x),
         repl='', flags=re.IGNORECASE).run(text)
 
 

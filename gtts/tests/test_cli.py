@@ -71,7 +71,7 @@ class TestParams(unittest.TestCase):
         six.assertRegex(
             self,
             result.output,
-            "^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$")
+            r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$")
         self.assertEqual(result.exit_code, 0)
 
     # <lang> tests

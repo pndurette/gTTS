@@ -181,7 +181,9 @@ class PreProcessorSub():
     """
 
     def __init__(self, sub_pairs, ignore_case=True):
-        def search_func(x): return u"{}".format(x)
+        def search_func(x):
+            return u"{}".format(x)
+
         flags = re.I if ignore_case else 0
 
         # Create pre-processor list
@@ -295,8 +297,7 @@ class Tokenizer():
         except (TypeError, AttributeError) as e:  # pragma: no cover
             raise TypeError(
                 "Tokenizer() expects a list of functions returning "
-                "regular expression objects (i.e. re.compile). " +
-                str(e))
+                "regular expression objects (i.e. re.compile). " + str(e))
 
     def _combine_regex(self):
         alts = []

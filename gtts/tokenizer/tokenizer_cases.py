@@ -28,7 +28,7 @@ def period_comma():
     """
     return RegexBuilder(
         pattern_args=symbols.PERIOD_COMMA,
-        pattern_func=lambda x: u"(?<!\.[a-z]){} ".format(x)).regex
+        pattern_func=lambda x: r"(?<!\.[a-z]){} ".format(x)).regex
 
 
 def other_punctuation():

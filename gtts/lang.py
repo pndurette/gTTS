@@ -70,7 +70,7 @@ def _fetch_langs():
     # Extra garbage will be dealt with later as we keep languages only.
     # In: "[...]Fv={af:1,ar:1,[...],zh:1,"zh-cn":1,"zh-tw":1}[...]"
     # Out: ['is', '12', [...], 'af', 'ar', [...], 'zh', 'zh-cn', 'zh-tw']
-    pattern = '[{,\"](\w{2}|\w{2}-\w{2,3})(?=:1|\":1)'
+    pattern = r'[{,\"](\w{2}|\w{2}-\w{2,3})(?=:1|\":1)'
     tts_langs = re.findall(pattern, js_contents)
 
     # Build lang. dict. from HTML lang. <select>

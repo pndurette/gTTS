@@ -1,5 +1,0 @@
-six
-bs4
-click
-requests
-gtts_token

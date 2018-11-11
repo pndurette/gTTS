@@ -21,6 +21,13 @@ matrix:
     after_success:
     - pytest -s gtts/tests/ --cov=gtts --cov-config=setup.cfg
     - coveralls
+  - os: osx
+    language: sh
+  - os: windows
+    language: sh
+    before_install:
+    - choco install python3
+    - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
 
 
 install: pip install .[tests]

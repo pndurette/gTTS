@@ -23,6 +23,7 @@ matrix:
     - coveralls
   - os: osx
     language: sh
+    install: pip3 install .[tests]
   - os: windows
     language: sh
     before_install:

@@ -73,7 +73,6 @@ class gTTS:
     """
 
     GOOGLE_TTS_MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
-    GOOGLE_URL_BASE = 'https://translate.google.%s'
     GOOGLE_TTS_URL = "https://translate.google.%s/translate_tts"
     GOOGLE_TTS_HEADERS = {
         "Referer": "http://translate.google.%s/",
@@ -105,7 +104,7 @@ class gTTS:
                 tokenizer_cases.period_comma,
                 tokenizer_cases.other_punctuation
             ]).run,
-            country=None
+            country='default'
     ):
 
         # Debug
@@ -119,7 +118,7 @@ class gTTS:
         self.text = text
 
         # Select domain name by input country
-        self.domain_name = self.COUNTRY_DOMAIN_NAME.get(country, 'default')
+        self.domain_name = self.COUNTRY_DOMAIN_NAME.get(country, 'com')
 
         # Language
         if lang_check:

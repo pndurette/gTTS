@@ -73,13 +73,19 @@ class gTTS:
     """
 
     GOOGLE_TTS_MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
-    GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
+    GOOGLE_URL_BASE = 'https://translate.google.%s'
+    GOOGLE_TTS_URL = "https://translate.google.%s/translate_tts"
     GOOGLE_TTS_HEADERS = {
-        "Referer": "http://translate.google.com/",
+        "Referer": "http://translate.google.%s/",
         "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; WOW64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/47.0.2526.106 Safari/537.36"
+    }
+
+    COUNTRY_DOMAIN_NAME = {
+        'default': 'com',   # default user
+        'China': 'cn',      # for China user
     }
 
     def __init__(
@@ -98,7 +104,8 @@ class gTTS:
                 tokenizer_cases.tone_marks,
                 tokenizer_cases.period_comma,
                 tokenizer_cases.other_punctuation
-            ]).run
+            ]).run,
+            country=None
     ):
 
         # Debug
@@ -111,10 +118,13 @@ class gTTS:
         assert text, 'No text to speak'
         self.text = text
 
+        # Select domain name by input country
+        self.domain_name = self.COUNTRY_DOMAIN_NAME.get(country, 'default')
+
         # Language
         if lang_check:
             try:
-                langs = tts_langs()
+                langs = tts_langs(self.domain_name)
                 if lang.lower() not in langs:
                     raise ValueError("Language not supported: %s" % lang)
             except RuntimeError as e:
@@ -205,9 +215,13 @@ class gTTS:
 
             try:
                 # Request
-                r = requests.get(self.GOOGLE_TTS_URL,
+                headers = {
+                    "Refere": self.GOOGLE_TTS_HEADERS["Referer"] % self.domain_name,
+                    "User-Agent": self.GOOGLE_TTS_HEADERS["User-Agent"]
+                }
+                r = requests.get(self.GOOGLE_TTS_URL % self.domain_name,
                                  params=payload,
-                                 headers=self.GOOGLE_TTS_HEADERS,
+                                 headers=headers,
                                  proxies=urllib.request.getproxies(),
                                  verify=False)
 

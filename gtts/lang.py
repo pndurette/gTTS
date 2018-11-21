@@ -6,7 +6,7 @@ import re
 
 __all__ = ['tts_langs']
 
-URL_BASE = 'http://translate.google.com'
+URL_BASE = 'http://translate.google.%s'
 JS_FILE = 'desktop_module_main.js'
 
 # Logger
@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-def tts_langs():
+def tts_langs(domain_name='com'):
     """Languages Google Text-to-Speech supports.
 
     Returns:
@@ -33,7 +33,7 @@ def tts_langs():
     """
     try:
         langs = dict()
-        langs.update(_fetch_langs())
+        langs.update(_fetch_langs(domain_name))
         langs.update(_extra_langs())
         log.debug("langs: %s", langs)
         return langs
@@ -41,7 +41,7 @@ def tts_langs():
         raise RuntimeError("Unable to get language list: %s" % str(e))
 
 
-def _fetch_langs():
+def _fetch_langs(domain_name='com'):
     """Fetch (scrape) languages from Google Translate.
 
     Google Translate loads a JavaScript Array of 'languages codes' that can
@@ -53,7 +53,7 @@ def _fetch_langs():
 
     """
     # Load HTML
-    page = requests.get(URL_BASE)
+    page = requests.get(URL_BASE % domain_name)
     soup = BeautifulSoup(page.content, 'html.parser')
 
     # JavaScript URL

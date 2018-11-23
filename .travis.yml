@@ -1,17 +1,40 @@
 language: python
-fast_finish: true
+dist: xenial
+group: travis_latest
+
+git:
+  depth: 3
+  quiet: true
+
 python:
+- 3.7
 - 3.6
 - 3.5
-- 3.4
 - 2.7
 
-group: travis_latest
+matrix:
+  include:
+  - os: linux
+    python: 3.7
+    install: pip install -e .[tests]
+    script: flake8
+    after_success:
+    - pytest -s gtts/tests/ --cov=gtts --cov-config=setup.cfg
+    - coveralls
+  - os: osx
+    language: sh
+    install: pip3 install .[tests]
+  - os: windows
+    language: sh
+    before_install:
+    - choco install python3
+    - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+
 
 install: pip install .[tests]
 
-script: pytest -v -s gtts/tests/ --cov-report= --cov=gtts
-after_success: coveralls
+script: pytest -v -s gtts/tests/
+
 
 deploy:
   provider: pypi

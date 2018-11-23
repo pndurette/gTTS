@@ -9,6 +9,7 @@ of whitespace and punctuation
 
 """
 
+
 def _minimize(the_string, delim, max_size):
     """Recursively split a string in the largest chunks
     possible from the highest position of a delimiter all the way
@@ -65,7 +66,7 @@ def _len(text):
     try:
         # Python 2
         return len(unicode(text))
-    except NameError: # pragma: no cover
+    except NameError:  # pragma: no cover
         # Python 3
         return len(text)
 

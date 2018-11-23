@@ -66,7 +66,7 @@ class RegexBuilder():
         pattern = '|'.join(alts)
         return re.compile(pattern, self.flags)
 
-    def __repr__(self): # pragma: no cover
+    def __repr__(self):  # pragma: no cover
         return str(self.regex)
 
 
@@ -139,7 +139,7 @@ class PreProcessorRegex():
             text = regex.sub(self.repl, text)
         return text
 
-    def __repr__(self): # pragma: no cover
+    def __repr__(self):  # pragma: no cover
         subs_strs = []
         for r in self.regexes:
             subs_strs.append("({}, repl='{}')".format(r, self.repl))
@@ -181,7 +181,9 @@ class PreProcessorSub():
     """
 
     def __init__(self, sub_pairs, ignore_case=True):
-        def search_func(x): return u"{}".format(x)
+        def search_func(x):
+            return u"{}".format(x)
+
         flags = re.I if ignore_case else 0
 
         # Create pre-processor list
@@ -206,7 +208,7 @@ class PreProcessorSub():
             text = pp.run(text)
         return text
 
-    def __repr__(self): # pragma: no cover
+    def __repr__(self):  # pragma: no cover
         return ", ".join([str(pp) for pp in self.pre_processors])
 
 
@@ -275,7 +277,8 @@ class Tokenizer():
         Finally, looking at ``t``, we get them combined::
 
             >>> print(t)
-            're.compile('\\,|a\\.|b\\.|c\\.', re.IGNORECASE) from: [<function case1 at 0x10bbcdd08>, <function case2 at 0x10b5c5e18>]'
+            're.compile('\\,|a\\.|b\\.|c\\.', re.IGNORECASE)
+             from: [<function case1 at 0x10bbcdd08>, <function case2 at 0x10b5c5e18>]'
 
         It can then be run on any string of text::
 
@@ -291,11 +294,10 @@ class Tokenizer():
         try:
             # Combine
             self.total_regex = self._combine_regex()
-        except (TypeError, AttributeError) as e: # pragma: no cover
+        except (TypeError, AttributeError) as e:  # pragma: no cover
             raise TypeError(
                 "Tokenizer() expects a list of functions returning "
-                "regular expression objects (i.e. re.compile). " +
-                str(e))
+                "regular expression objects (i.e. re.compile). " + str(e))
 
     def _combine_regex(self):
         alts = []
@@ -317,5 +319,5 @@ class Tokenizer():
         """
         return self.total_regex.split(text)
 
-    def __repr__(self): # pragma: no cover
+    def __repr__(self):  # pragma: no cover
         return str(self.total_regex) + " from: " + str(self.regex_funcs)

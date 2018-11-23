@@ -1,5 +1,14 @@
+image:
+- Visual Studio 2017
+
+clone_depth: 3
+
+build: off
+
 environment:
     matrix:
+        # Python 3.7
+        - PYTHON: "C:\\Python37-x64"
         # Python 3.6
         - PYTHON: "C:\\Python36-x64"
         # Python 3.5
@@ -14,8 +23,6 @@ environment:
 
 install:
     - "%PYTHON%\\python.exe -m pip install -e .[tests]"
-
-build: off
 
 test_script:
     - "%PYTHON%\\python.exe --version" 

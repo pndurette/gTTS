@@ -7,7 +7,7 @@ import re
 __all__ = ['tts_langs']
 
 URL_BASE = 'http://translate.google.com'
-JS_FILE = 'desktop_module_main.js'
+JS_FILE = 'translate_m.js'
 
 # Logger
 log = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ def _fetch_langs():
     js_url = "{}/{}".format(URL_BASE, js_path)
 
     # Load JavaScript
-    js_contents = str(requests.get(js_url).content)
+    js_contents = requests.get(js_url).text
 
     # Approximately extract TTS-enabled language codes
     # RegEx pattern search because minified variables can change.
@@ -73,12 +73,14 @@ def _fetch_langs():
     pattern = r'[{,\"](\w{2}|\w{2}-\w{2,3})(?=:1|\":1)'
     tts_langs = re.findall(pattern, js_contents)
 
-    # Build lang. dict. from HTML lang. <select>
+    # Build lang. dict. from main page (JavaScript object populating lang. menu)
     # Filtering with the TTS-enabled languages
-    # In: [<option value='af'>Afrikaans</option>, [...]]
+    # In: "{code:'auto',name:'Detect language'},{code:'af',name:'Afrikaans'},[...]"
+    # re.findall: [('auto', 'Detect language'), ('af', 'Afrikaans'), [...]]
     # Out: {'af': 'Afrikaans', [...]}
-    langs_html = soup.find('select', {'id': 'gt-sl'}).findAll('option')
-    return {l['value']: l.text for l in langs_html if l['value'] in tts_langs}
+    trans_pattern = r"{code:'(?P<lang>.+?[^'])',name:'(?P<name>.+?[^'])'}"
+    trans_langs = re.findall(trans_pattern, page.text)
+    return {lang: name for lang, name in trans_langs if lang in tts_langs}
 
 
 def _extra_langs():

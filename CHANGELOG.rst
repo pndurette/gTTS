@@ -9,6 +9,21 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.2 (2018-12-09)
+------------------
+
+Features
+~~~~~~~~
+
+- Added Python 3.7 support, modernization of packaging, testing and CI (`#126 <https://github.com/pndurette/gTTS/issues/126>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- Fixed language retrieval/validation broken from new Google Translate page (`#156 <https://github.com/pndurette/gTTS/issues/156>`_)
+
+
 2.0.1 (2018-06-20)
 ------------------
 

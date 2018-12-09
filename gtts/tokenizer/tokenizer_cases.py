@@ -31,6 +31,18 @@ def period_comma():
         pattern_func=lambda x: r"(?<!\.[a-z]){} ".format(x)).regex
 
 
+def time_notation():
+    """Keep time notations
+
+    TBD
+
+    """
+    # return RegexBuilder(
+    #     pattern_args="symbols.PERIOD_COMMA",
+    #     pattern_func=lambda x: r"(?<!\.[a-z]){} ".format(x)).regex
+    return other_punctuation() # Placeholder
+
+
 def other_punctuation():
     """Match other punctuation.
 

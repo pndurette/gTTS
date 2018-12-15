@@ -31,6 +31,18 @@ def period_comma():
         pattern_func=lambda x: r"(?<!\.[a-z]){} ".format(x)).regex
 
 
+def colon():
+    """Colon case.
+
+    Match a colon ":" only if not preceeded by a digit.
+    Mainly to prevent a cut in the middle of time notations e.g. 10:01
+
+    """
+    return RegexBuilder(
+        pattern_args=symbols.COLON,
+        pattern_func=lambda x: r"(?<!\d){}".format(x)).regex
+
+
 def other_punctuation():
     """Match other punctuation.
 
@@ -38,10 +50,11 @@ def other_punctuation():
     inserts a break in speech.
 
     """
-    punc = ''.join((
+    punc = ''.join(
         set(symbols.ALL_PUNC) -
         set(symbols.TONE_MARKS) -
-        set(symbols.PERIOD_COMMA)))
+        set(symbols.PERIOD_COMMA) -
+        set(symbols.COLON))
     return RegexBuilder(
         pattern_args=punc,
         pattern_func=lambda x: u"{}".format(x)).regex

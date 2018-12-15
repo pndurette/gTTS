@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from gtts.tokenizer.tokenizer_cases import tone_marks, period_comma, other_punctuation, legacy_all_punctuation
+from gtts.tokenizer.tokenizer_cases import tone_marks, period_comma, colon, other_punctuation, legacy_all_punctuation
 from gtts.tokenizer import Tokenizer, symbols
 
 
@@ -17,12 +17,19 @@ class TestPreTokenizerCases(unittest.TestCase):
         _out = ['Hello', "it's 24.5 degrees in the U.K. today", '$20,000,000.']
         self.assertEqual(t.run(_in), _out)
 
+    def test_colon(self):
+        t = Tokenizer([colon])
+        _in = "It's now 6:30 which means: morning missing:space"
+        _out = ["It's now 6:30 which means", ' morning missing', 'space']
+        self.assertEqual(t.run(_in), _out)
+
     def test_other_punctuation(self):
         # String of the unique 'other punctuations'
         other_punc_str = ''.join(
             set(symbols.ALL_PUNC) -
             set(symbols.TONE_MARKS) -
-            set(symbols.PERIOD_COMMA))
+            set(symbols.PERIOD_COMMA) -
+            set(symbols.COLON))
 
         t = Tokenizer([other_punctuation])
         self.assertEqual(len(t.run(other_punc_str)) - 1, len(other_punc_str))

@@ -57,6 +57,7 @@ class gTTS:
                 Tokenizer([
                     tokenizer_cases.tone_marks,
                     tokenizer_cases.period_comma,
+                    tokenizer_cases.colon,
                     tokenizer_cases.other_punctuation
                 ]).run
 
@@ -97,6 +98,7 @@ class gTTS:
             tokenizer_func=Tokenizer([
                 tokenizer_cases.tone_marks,
                 tokenizer_cases.period_comma,
+                tokenizer_cases.colon,
                 tokenizer_cases.other_punctuation
             ]).run
     ):

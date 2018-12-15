@@ -14,3 +14,5 @@ ALL_PUNC = u"?!？！.,¡()[]¿…‥،;:—。，、：\n"
 TONE_MARKS = u"?!？！"
 
 PERIOD_COMMA = u".,"
+
+COLON = u":"

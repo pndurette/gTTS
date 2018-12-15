@@ -9,6 +9,21 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.3 (2018-12-15)
+------------------
+
+Features
+~~~~~~~~
+
+- Added new tokenizer case for ':' preventing cut in the middle of a time notation (`#135 <https://github.com/pndurette/gTTS/issues/135>`_)
+
+
+Misc
+~~~~
+
+- `#159 <https://github.com/pndurette/gTTS/issues/159>`_
+
+
 2.0.2 (2018-12-09)
 ------------------
 

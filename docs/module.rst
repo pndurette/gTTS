@@ -30,7 +30,7 @@ Write 'hello' in English to ``hello.mp3``::
 Write 'hello bonjour' in English then French to ``hello_bonjour.mp3``::
 
     >>> from gtts import gTTS
-    >>> tts_en = gTTs('hello', lang='en')
+    >>> tts_en = gTTS('hello', lang='en')
     >>> tts_fr = gTTS('bonjour', lang='fr')
     >>>
     >>> with open('hello_bonjour.mp3', 'wb') as f:

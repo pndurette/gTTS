@@ -49,7 +49,7 @@ There's quite a few libraries that do this. Write 'hello' to a file-like object 
     >>> tts = gTTS('hello', 'en')
     >>> tts.write_to_fp(mp3_fp)
     >>>
-    >>> # Load `audio_fp` as an mp3 file in
+    >>> # Load `mp3_fp` as an mp3 file in
     >>> # the audio library of your choice
 
 Logging

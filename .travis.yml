@@ -16,7 +16,9 @@ matrix:
   include:
   - os: linux
     python: 3.7
-    install: pip install -e .[tests]
+    install: 
+    - pip install -e .[tests]
+    - pip install mypy
     script:
     - flake8
     - mypy . --ignore-missing-imports

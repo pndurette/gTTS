@@ -16,47 +16,40 @@ from gtts.lang import _fetch_langs, _extra_langs
 # See: langs_dict()
 
 
-def test_TTS(tmp_path, langs_dict):
+"""Construct a dict of suites of languages to test.
+{ '<suite name>' : <list or dict of language tags> }
+
+ex.: { 'fetch' : {'en': 'English', 'fr': 'French'},
+       'extra' : {'en': 'English', 'fr': 'French'} }
+ex.: { 'environ' : ['en', 'fr'] }
+"""
+env = os.environ.get('TEST_LANGS')
+if not env or env == 'all':
+    langs = _fetch_langs()
+    langs.update(_extra_langs())
+elif env == 'fetch':
+    langs = _fetch_langs()
+elif env == 'extra':
+    langs = _extra_langs()
+else:
+    env_langs = env.split(',')
+    env_langs = [l for l in env_langs if l]
+    langs = env_langs
+
+@pytest.mark.parametrize('lang', langs.keys(), ids=list(langs.values()))
+def test_TTS(tmp_path, lang):
     """Test all supported languages and file save"""
 
     text = "This is a test"
+    """Create output .mp3 file successfully"""
+    for slow in (False, True):
+        filename = tmp_path / 'test_{}_.mp3'.format(lang)
+        # Create gTTS and save
+        tts = gTTS(text, lang, slow=slow)
+        tts.save(filename)
 
-    for suite, langs in langs_dict.items():
-        for lang in langs:
-            """Create output .mp3 file successfully"""
-            for slow in (False, True):
-                filename = tmp_path / 'test_{}_.mp3'.format(lang)
-                # Create gTTS and save
-                tts = gTTS(text, lang, slow=slow)
-                tts.save(filename)
-
-                # Check if files created is > 2k
-                assert filename.stat().st_size > 2000
-
-
-@pytest.fixture
-def langs_dict():
-    """Construct a dict of suites of languages to test.
-    { '<suite name>' : <list or dict of language tags> }
-
-    ex.: { 'fetch' : {'en': 'English', 'fr': 'French'},
-           'extra' : {'en': 'English', 'fr': 'French'} }
-    ex.: { 'environ' : ['en', 'fr'] }
-    """
-    langs = dict()
-    env = os.environ.get('TEST_LANGS', '')
-    if env == '' or env == 'all':
-        langs['fetch'] = _fetch_langs()
-        langs['extra'] = _extra_langs()
-    elif env == 'fetch':
-        langs['fetch'] = _fetch_langs()
-    elif env == 'extra':
-        langs['extra'] = _extra_langs()
-    else:
-        env_langs = env.split(',')
-        env_langs = [l for l in env_langs if l]
-        langs['environ'] = env_langs
-    return langs
+        # Check if files created is > 2k
+        assert filename.stat().st_size > 2000
 
 
 def test_unsupported_language_check():

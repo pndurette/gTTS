@@ -39,7 +39,7 @@ def test_text_text_and_file(tmp_path):
     filename = tmp_path / 'test_and_file.txt'
     filename.touch()
 
-    result = runner_debug(['--file', filename, 'test'])
+    result = runner_debug(['--file', str(filename), 'test'])
 
     assert "<file> can't be used together" in result.output
     assert result.exit_code != 0
@@ -50,7 +50,7 @@ def test_text_empty(tmp_path):
     filename = tmp_path / 'text_empty.txt'
     filename.touch()
 
-    result = runner_debug(['--file', filename])
+    result = runner_debug(['--file', str(filename)])
 
     assert "No text to speak" in result.output
     assert result.exit_code != 0
@@ -244,7 +244,7 @@ def test_stdout():
 def test_file(tmp_path):
     filename = tmp_path / 'out.mp3'
 
-    result = runner(['test', '--output', filename])
+    result = runner(['test', '--output', str(filename)])
 
     # Check if files created is > 2k
     assert filename.stat().st_size > 2000

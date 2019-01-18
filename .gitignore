@@ -1,3 +1,4 @@
+.eggs/
 .mypy_cache/
 
 # Byte-compiled / optimized / DLL files

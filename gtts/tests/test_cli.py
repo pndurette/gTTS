@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import tempfile
-import unittest
-import six
+import pytest
+import re
 import os
 from click.testing import CliRunner
 from gtts.cli import tts_cli
@@ -15,244 +14,242 @@ logger = logging.getLogger('gtts')
 logger.handlers = []
 
 
-class TestParams(unittest.TestCase):
-    """Test options and arguments"""
-
-    @classmethod
-    def setUpClass(self):
-        self.runner = CliRunner()
-        (_, self.empty_file_path) = tempfile.mkstemp(suffix='.txt')
-
-    def invoke(self, args, input=None):
-        return self.runner.invoke(tts_cli, args, input)
-
-    def invoke_debug(self, args, input=None):
-        all_args = args + ['--debug']
-        return self.invoke(all_args, input)
-
-    # <text> tests
-    def test_text_no_text_or_file(self):
-        """One of <test> (arg) and <file> <opt> should be set"""
-        result = self.invoke_debug([])
-
-        self.assertIn("<file> required", result.output)
-        self.assertNotEqual(result.exit_code, 0)
-
-    def test_text_text_and_file(self):
-        """<test> (arg) and <file> <opt> should not be set together"""
-        result = self.invoke_debug(['--file', self.empty_file_path, 'test'])
-
-        self.assertIn("<file> can't be used together", result.output)
-        self.assertNotEqual(result.exit_code, 0)
-
-    def test_text_empty(self):
-        """Exit on no text to speak (via <file>)"""
-        result = self.invoke_debug(['--file', self.empty_file_path])
-
-        self.assertIn("No text to speak", result.output)
-        self.assertNotEqual(result.exit_code, 0)
-
-    # <file> tests
-    def test_file_not_exists(self):
-        """<file> should exist"""
-        result = self.invoke_debug(['--file', 'notexist.txt', 'test'])
-
-        self.assertIn("No such file or directory", result.output)
-        self.assertNotEqual(result.exit_code, 0)
-
-    # <all> tests
-    def test_all(self):
-        """Option <all> should return a list of languages"""
-        result = self.invoke(['--all'])
-
-        # One or more of "  xy: name" (\n optional to match the last)
-        # Ex. "<start>  xx: xxxxx\n  xx-yy: xxxxx\n  xx: xxxxx<end>"
-        # NB: assertRegex needs Py3.1+, use six
-        six.assertRegex(
-            self,
-            result.output,
-            r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$")
-        self.assertEqual(result.exit_code, 0)
-
-    # <lang> tests
-    def test_lang_not_valid(self):
-        """Invalid <lang> should display an error"""
-        result = self.invoke(['--lang', 'xx', 'test'])
-
-        self.assertIn("xx' not in list of supported languages", result.output)
-        self.assertNotEqual(result.exit_code, 0)
-
-    def test_lang_nocheck(self):
-        """Invalid <lang> (with <nocheck>) should display an error message from gtts"""
-        with LogCapture() as lc:
-            result = self.invoke_debug(
-                ['--lang', 'xx', '--nocheck', 'test'])
-
-            log = str(lc)
-
-        self.assertIn('lang: xx', log)
-        self.assertIn('lang_check: False', log)
-        self.assertIn(
-            "Probable cause: Unsupported language 'xx'",
-            result.output)
-        self.assertNotEqual(result.exit_code, 0)
-
-    # Param set tests
-    def test_params_set(self):
-        """Options should set gTTS instance arguments (read from debug log)"""
-        with LogCapture() as lc:
-            result = self.invoke_debug(
-                ['--lang', 'fr', '--slow', '--nocheck', 'test'])
-
-            log = str(lc)
-
-        self.assertIn('lang: fr', log)
-        self.assertIn('lang_check: False', log)
-        self.assertIn('slow: True', log)
-        self.assertIn('text: test', log)
-        self.assertEqual(result.exit_code, 0)
+"""Test options and arguments"""
 
 
-class TestInputs(unittest.TestCase):
-    """Test all input methods"""
+def runner(args, input=None):
+    return CliRunner().invoke(tts_cli, args, input)
 
-    @classmethod
-    def setUpClass(self):
-        self.runner = CliRunner()
 
-    def setUp(self):
-        pwd = os.path.dirname(__file__)
+def runner_debug(args, input=None):
+    return CliRunner().invoke(tts_cli, args + ['--debug'], input)
 
-        # Text for stdin ('-' for <text> or <file>)
-        self.textstdin = """stdin
+
+# %% <text> tests
+def test_text_no_text_or_file():
+    """One of <test> (arg) and <file> <opt> should be set"""
+    result = runner_debug([])
+
+    assert "<file> required" in result.output
+    assert result.exit_code != 0
+
+
+def test_text_text_and_file(tmp_path):
+    """<test> (arg) and <file> <opt> should not be set together"""
+    filename = tmp_path / 'test_and_file.txt'
+    filename.touch()
+
+    result = runner_debug(['--file', filename, 'test'])
+
+    assert "<file> can't be used together" in result.output
+    assert result.exit_code != 0
+
+
+def test_text_empty(tmp_path):
+    """Exit on no text to speak (via <file>)"""
+    filename = tmp_path / 'text_empty.txt'
+    filename.touch()
+
+    result = runner_debug(['--file', filename])
+
+    assert "No text to speak" in result.output
+    assert result.exit_code != 0
+
+# %% <file> tests
+
+
+def test_file_not_exists():
+    """<file> should exist"""
+    result = runner_debug(['--file', 'notexist.txt', 'test'])
+
+    assert "No such file or directory" in result.output
+    assert result.exit_code != 0
+
+# %% <all> tests
+
+
+def test_all():
+    """Option <all> should return a list of languages"""
+    result = runner(['--all'])
+
+    # One or more of "  xy: name" (\n optional to match the last)
+    # Ex. "<start>  xx: xxxxx\n  xx-yy: xxxxx\n  xx: xxxxx<end>"
+
+    assert re.match(r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$", result.output)
+    assert result.exit_code == 0
+
+# %% <lang> tests
+
+
+def test_lang_not_valid():
+    """Invalid <lang> should display an error"""
+    result = runner(['--lang', 'xx', 'test'])
+
+    assert "xx' not in list of supported languages" in result.output
+    assert result.exit_code != 0
+
+
+def test_lang_nocheck():
+    """Invalid <lang> (with <nocheck>) should display an error message from gtts"""
+    with LogCapture() as lc:
+        result = runner_debug(['--lang', 'xx', '--nocheck', 'test'])
+
+        log = str(lc)
+
+    assert 'lang: xx' in log
+    assert 'lang_check: False' in log
+    assert "Probable cause: Unsupported language 'xx'" in result.output
+    assert result.exit_code != 0
+
+# %% Param set tests
+
+
+def test_params_set():
+    """Options should set gTTS instance arguments (read from debug log)"""
+    with LogCapture() as lc:
+        result = runner_debug(['--lang', 'fr', '--slow', '--nocheck', 'test'])
+
+        log = str(lc)
+
+    assert 'lang: fr' in log
+    assert 'lang_check: False' in log
+    assert 'slow: True' in log
+    assert 'text: test' in log
+    assert result.exit_code == 0
+
+
+# %% Test all input methods
+
+pwd = os.path.dirname(__file__)
+
+# Text for stdin ('-' for <text> or <file>)
+textstdin = """stdin
 test
 123"""
 
-        # Text for stdin ('-' for <text> or <file>) (Unicode)
-        self.textstdin_unicode = u"""你吃饭了吗？
+# Text for stdin ('-' for <text> or <file>) (Unicode)
+textstdin_unicode = u"""你吃饭了吗？
 你最喜欢哪部电影？
 我饿了，我要去做饭了。"""
 
-        # Text for <text> and <file>
-        self.text = """Can you make pink a little more pinkish can you make pink a little more pinkish, nor can you make the font bigger?
+# Text for <text> and <file>
+text = """Can you make pink a little more pinkish can you make pink a little more pinkish, nor can you make the font bigger?
 How much will it cost the website doesn't have the theme i was going for."""
-        self.textfile_ascii = os.path.join(
-            pwd, 'input_files', 'test_cli_test_ascii.txt')
 
-        # Text for <text> and <file> (Unicode)
-        self.text_unicode = u"""这是一个三岁的小孩
+textfile_ascii = os.path.join(pwd, 'input_files', 'test_cli_test_ascii.txt')
+
+# Text for <text> and <file> (Unicode)
+text_unicode = u"""这是一个三岁的小孩
 在讲述她从一系列照片里看到的东西。
 对这个世界， 她也许还有很多要学的东西，
 但在一个重要的任务上， 她已经是专家了：
 去理解她所看到的东西。"""
-        self.textfile_utf8 = os.path.join(
-            pwd, 'input_files', 'test_cli_test_utf8.txt')
 
-    def invoke(self, args, input=None):
-        return self.runner.invoke(tts_cli, args, input)
+textfile_utf8 = os.path.join(pwd, 'input_files', 'test_cli_test_utf8.txt')
 
-    def invoke_debug(self, args, input=None):
-        all_args = args + ['--debug']
-        return self.invoke(all_args, input)
-
-    # Method that mimics's LogCapture's __str__ method to make
-    # the string in the comprehension a unicode literal for P2.7
-    # https://github.com/Simplistix/testfixtures/blob/32c87902cb111b7ede5a6abca9b597db551c88ef/testfixtures/logcapture.py#L149
-    def logcapture_str(self, lc):
-        if not lc.records:
-            return 'No logging captured'
-        return '\n'.join([u"%s %s\n  %s" % r for r in lc.actual()])
-
-    def test_stdin_text(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug(['-'], self.textstdin)
-            log = self.logcapture_str(lc)
-
-        self.assertIn('text: %s' % self.textstdin, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_stdin_text_unicode(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug(['-'], self.textstdin_unicode)
-            log = self.logcapture_str(lc)
-
-        self.assertIn(u'text: %s' % self.textstdin_unicode, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_stdin_file(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug(['--file', '-'], self.textstdin)
-            log = self.logcapture_str(lc)
-
-        self.assertIn('text: %s' % self.textstdin, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_stdin_file_unicode(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug(['--file', '-'], self.textstdin_unicode)
-            log = self.logcapture_str(lc)
-
-        self.assertIn('text: %s' % self.textstdin_unicode, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_text(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug([self.text])
-            log = self.logcapture_str(lc)
-
-        self.assertIn("text: %s" % self.text, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_text_unicode(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug([self.text_unicode])
-            log = self.logcapture_str(lc)
-
-        self.assertIn("text: %s" % self.text_unicode, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_file_ascii(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug(['--file', self.textfile_ascii])
-            log = self.logcapture_str(lc)
-
-        self.assertIn("text: %s" % self.text, log)
-        self.assertEqual(result.exit_code, 0)
-
-    def test_file_utf8(self):
-        with LogCapture() as lc:
-            result = self.invoke_debug(['--file', self.textfile_utf8])
-            log = self.logcapture_str(lc)
-
-        self.assertIn("text: %s" % self.text_unicode, log)
-        self.assertEqual(result.exit_code, 0)
+"""
+Method that mimics's LogCapture's __str__ method to make
+the string in the comprehension a unicode literal for P2.7
+https://github.com/Simplistix/testfixtures/blob/32c87902cb111b7ede5a6abca9b597db551c88ef/testfixtures/logcapture.py#L149
+"""
 
 
-class TestOutputs(unittest.TestCase):
-    """Test all ouput methods"""
+def logcapture_str(lc):
+    if not lc.records:
+        return 'No logging captured'
 
-    @classmethod
-    def setUp(self):
-        self.runner = CliRunner()
-        (_, self.save_file_path) = tempfile.mkstemp(suffix='.mp3')
+    return '\n'.join([u"%s %s\n  %s" % r for r in lc.actual()])
 
-    def invoke(self, args, input=None):
-        return self.runner.invoke(tts_cli, args, input)
 
-    def test_stdout(self):
-        result = self.invoke(['test'])
+def test_stdin_text():
+    with LogCapture() as lc:
+        result = runner_debug(['-'], textstdin)
+        log = logcapture_str(lc)
 
-        # The MP3 encoding (LAME 3.99.5) leaves a signature in the raw output
-        self.assertIn('LAME3.99.5', result.output)
-        self.assertEqual(result.exit_code, 0)
+    assert 'text: %s' % textstdin in log
+    assert result.exit_code == 0
 
-    def test_file(self):
-        result = self.invoke(['test', '--output', self.save_file_path])
 
-        # Check if files created is > 2k
-        self.assertTrue(os.path.getsize(self.save_file_path) > 2000)
-        self.assertEqual(result.exit_code, 0)
+def test_stdin_text_unicode():
+    with LogCapture() as lc:
+        result = runner_debug(['-'], textstdin_unicode)
+        log = logcapture_str(lc)
+
+    assert u'text: %s' % textstdin_unicode in log
+    assert result.exit_code == 0
+
+
+def test_stdin_file():
+    with LogCapture() as lc:
+        result = runner_debug(['--file', '-'], textstdin)
+        log = logcapture_str(lc)
+
+    assert 'text: %s' % textstdin in log
+    assert result.exit_code == 0
+
+
+def test_stdin_file_unicode():
+    with LogCapture() as lc:
+        result = runner_debug(['--file', '-'], textstdin_unicode)
+        log = logcapture_str(lc)
+
+    assert 'text: %s' % textstdin_unicode in log
+    assert result.exit_code == 0
+
+
+def test_text():
+    with LogCapture() as lc:
+        result = runner_debug([text])
+        log = logcapture_str(lc)
+
+    assert "text: %s" % text in log
+    assert result.exit_code == 0
+
+
+def test_text_unicode():
+    with LogCapture() as lc:
+        result = runner_debug([text_unicode])
+        log = logcapture_str(lc)
+
+    assert "text: %s" % text_unicode in log
+    assert result.exit_code == 0
+
+
+def test_file_ascii():
+    with LogCapture() as lc:
+        result = runner_debug(['--file', textfile_ascii])
+        log = logcapture_str(lc)
+
+    assert "text: %s" % text in log
+    assert result.exit_code == 0
+
+
+def test_file_utf8():
+    with LogCapture() as lc:
+        result = runner_debug(['--file', textfile_utf8])
+        log = logcapture_str(lc)
+
+    assert "text: %s" % text_unicode in log
+    assert result.exit_code == 0
+
+
+def test_stdout():
+    result = runner(['test'])
+
+    # The MP3 encoding (LAME 3.99.5) leaves a signature in the raw output
+    assert 'LAME3.99.5' in result.output
+    assert result.exit_code == 0
+
+
+def test_file(tmp_path):
+    filename = tmp_path / 'out.mp3'
+
+    result = runner(['test', '--output', filename])
+
+    # Check if files created is > 2k
+    assert filename.stat().st_size > 2000
+    assert result.exit_code == 0
 
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main(['-x', __file__])

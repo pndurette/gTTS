@@ -245,7 +245,7 @@ class gTTS:
             :class:`gTTSError`: When there's an error with the API request.
 
         """
-        with open(savefile, 'wb') as f:
+        with open(str(savefile), 'wb') as f:
             self.write_to_fp(f)
             log.debug("Saved to %s", savefile)
 

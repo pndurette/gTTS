@@ -2,3 +2,4 @@ include README.md
 include CHANGELOG.rst
 include CONTRIBUTING.rst
 include LICENSE
+include pytest.ini

@@ -3,10 +3,10 @@ from bs4 import BeautifulSoup
 import requests
 import logging
 import re
+from .server import server
 
 __all__ = ['tts_langs']
 
-URL_BASE = 'http://translate.google.com'
 JS_FILE = 'translate_m.js'
 
 # Logger
@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-def tts_langs():
+def tts_langs(country_code=None):
     """Languages Google Text-to-Speech supports.
 
     Returns:
@@ -33,7 +33,7 @@ def tts_langs():
     """
     try:
         langs = dict()
-        langs.update(_fetch_langs())
+        langs.update(_fetch_langs(country_code))
         langs.update(_extra_langs())
         log.debug("langs: %s", langs)
         return langs
@@ -41,7 +41,7 @@ def tts_langs():
         raise RuntimeError("Unable to get language list: %s" % str(e))
 
 
-def _fetch_langs():
+def _fetch_langs(country_code=None):
     """Fetch (scrape) languages from Google Translate.
 
     Google Translate loads a JavaScript Array of 'languages codes' that can
@@ -49,21 +49,33 @@ def _fetch_langs():
     provides to get the ones that support text-to-speech.
 
     Returns:
-        dict: A dictionnary of languages from Google Translate
+        dict: A dictionary of languages from Google Translate
 
     """
+
+    srv = server(country_code)
+
     # Load HTML
-    page = requests.get(URL_BASE)
+    page = requests.get(srv["url_base"])
+    if page.status_code != 200:
+        raise RuntimeError("Could not reach server {} got HTTP status code {}".format(srv['url_base'], page.status_code))
+
     soup = BeautifulSoup(page.content, 'html.parser')
 
     # JavaScript URL
     # The <script src=''> path can change, but not the file.
     # Ex: /zyx/abc/20180211/desktop_module_main.js
-    js_path = soup.find(src=re.compile(JS_FILE))['src']
-    js_url = "{}/{}".format(URL_BASE, js_path)
+    js_soup = soup.find(src=re.compile(JS_FILE))
+    if not js_soup:
+        log.warning('Could not get langs from {}'.format(srv['url_base']))
+        return {}
+
+    js_url = "{}/{}".format(srv["url_base"], js_soup['src'])
 
     # Load JavaScript
-    js_contents = requests.get(js_url).text
+    js = requests.get(js_url)
+    if js.status_code != 200:
+        raise RuntimeError("Could not reach server {} got HTTP status code {}".format(js_url, js.status_code))
 
     # Approximately extract TTS-enabled language codes
     # RegEx pattern search because minified variables can change.
@@ -71,7 +83,7 @@ def _fetch_langs():
     # In: "[...]Fv={af:1,ar:1,[...],zh:1,"zh-cn":1,"zh-tw":1}[...]"
     # Out: ['is', '12', [...], 'af', 'ar', [...], 'zh', 'zh-cn', 'zh-tw']
     pattern = r'[{,\"](\w{2}|\w{2}-\w{2,3})(?=:1|\":1)'
-    tts_langs = re.findall(pattern, js_contents)
+    tts_langs = re.findall(pattern, js.text)
 
     # Build lang. dict. from main page (JavaScript object populating lang. menu)
     # Filtering with the TTS-enabled languages

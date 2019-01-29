@@ -8,6 +8,7 @@ from six.moves import urllib
 import urllib3
 import requests
 import logging
+from .server import server
 
 __all__ = ['gTTS', 'gTTSError']
 
@@ -73,16 +74,6 @@ class gTTS:
 
     """
 
-    GOOGLE_TTS_MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
-    GOOGLE_TTS_URL = "https://translate.google.com/translate_tts"
-    GOOGLE_TTS_HEADERS = {
-        "Referer": "http://translate.google.com/",
-        "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; WOW64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/47.0.2526.106 Safari/537.36"
-    }
-
     def __init__(
             self,
             text,
@@ -100,8 +91,14 @@ class gTTS:
                 tokenizer_cases.period_comma,
                 tokenizer_cases.colon,
                 tokenizer_cases.other_punctuation
-            ]).run
+            ]).run,
+            country_code=None
     ):
+
+        srv = server(country_code)
+        self.GOOGLE_TTS_MAX_CHARS = srv['max_chars']
+        self.GOOGLE_TTS_URL = srv['url']
+        self.GOOGLE_TTS_HEADERS = srv['headers']
 
         # Debug
         for k, v in locals().items():
@@ -116,7 +113,7 @@ class gTTS:
         # Language
         if lang_check:
             try:
-                langs = tts_langs()
+                langs = tts_langs(country_code)
                 if lang.lower() not in langs:
                     raise ValueError("Language not supported: %s" % lang)
             except RuntimeError as e:
@@ -280,7 +277,7 @@ class gTTSError(Exception):
         elif status == 404 and not tts.lang_check:
             cause = "Unsupported language '%s'" % self.tts.lang
         elif status >= 500:
-            cause = "Uptream API error. Try again later."
+            cause = "Upstream API error. Try again later."
 
         return "%i (%s) from TTS API. Probable cause: %s" % (
             status, reason, cause)

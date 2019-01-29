@@ -57,7 +57,7 @@ def validate_text(ctx, param, text):
     return text
 
 
-def validate_lang(ctx, param, lang):
+def validate_lang(ctx, param, lang, country_code=None):
     """Validation callback for the <lang> option.
     Ensures <lang> is a supported language unless the <nocheck> flag is set
     """
@@ -65,7 +65,7 @@ def validate_lang(ctx, param, lang):
         return lang
 
     try:
-        if lang not in tts_langs():
+        if lang not in tts_langs(country_code):
             raise click.UsageError(
                 "'%s' not in list of supported languages.\n"
                 "Use --all to list languages or "
@@ -82,14 +82,14 @@ def validate_lang(ctx, param, lang):
     return lang
 
 
-def print_languages(ctx, param, value):
+def print_languages(ctx, param, value, country_code=None):
     """Callback for <all> flag.
     Prints formatted sorted list of supported languages and exits
     """
     if not value or ctx.resilient_parsing:
         return
     try:
-        langs = tts_langs()
+        langs = tts_langs(country_code)
         langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
         click.echo('  ' + '\n  '.join(langs_str_list))
     except RuntimeError as e:  # pragma: no cover

@@ -25,28 +25,34 @@ ex.: { 'environ' : ['en', 'fr'] }
 """
 env = os.environ.get('TEST_LANGS')
 if not env or env == 'all':
-    langs = _fetch_langs()
-    langs.update(_extra_langs())
+    langs = list(_fetch_langs().keys())
+    srv = [None] * len(langs)
+    langs += list(_extra_langs().keys()) * 2
+    srv += [None] * len(_extra_langs()) + ["CN"] * len(_extra_langs())  # type: ignore
 elif env == 'fetch':
-    langs = _fetch_langs()
+    langs = list(_fetch_langs().keys())
+    srv = [None] * len(langs)
 elif env == 'extra':
-    langs = _extra_langs()
+    langs = list(_extra_langs().keys())
+    srv = [None] * len(langs) + ["CN"] * len(langs)  # type: ignore
 else:
     env_langs = env.split(',')
-    env_langs = [l for l in env_langs if l]
-    langs = env_langs
+    langs = [l for l in env_langs if l]
+    srv = [None] * len(langs)
 
 
-@pytest.mark.parametrize('lang', langs.keys(), ids=list(langs.values()))
-def test_TTS(tmp_path, lang):
+@pytest.mark.parametrize('lang, country_code',
+                         zip(langs, srv))
+def test_TTS(tmp_path, lang, country_code):
     """Test all supported languages and file save"""
 
     text = "This is a test"
+
     """Create output .mp3 file successfully"""
     for slow in (False, True):
         filename = tmp_path / 'test_{}_.mp3'.format(lang)
         # Create gTTS and save
-        tts = gTTS(text, lang, slow=slow)
+        tts = gTTS(text, lang, slow=slow, country_code=country_code)
         tts.save(filename)
 
         # Check if files created is > 2k
@@ -128,7 +134,7 @@ def test_infer_msg():
     tts500 = Mock()
     response500 = Mock(status_code=500, reason='ccc')
     error500 = gTTSError(tts=tts500, response=response500)
-    assert error500.msg == "500 (ccc) from TTS API. Probable cause: Uptream API error. Try again later."
+    assert error500.msg == "500 (ccc) from TTS API. Probable cause: Upstream API error. Try again later."
 
     # Unknown (ex. 100)
     tts100 = Mock()

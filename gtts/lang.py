@@ -6,7 +6,7 @@ import re
 
 __all__ = ['tts_langs']
 
-URL_BASE = 'http://translate.google.com'
+URL_BASE = 'https://translate.google.com'
 JS_FILE = 'translate_m.js'
 
 # Logger

@@ -7,15 +7,15 @@
 
 
 name: CI
-
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Testing Actions
-      run: echo Hello there, ${{ github.sha }}
+    - uses: actions/checkout@v1
+    # - name: Lint
+    #   run: echo Hello there, ${{ github.sha }}
     # - uses: actions/checkout@v1
     # - name: Run a one-line script
     #   run: echo Hello, world!
@@ -23,3 +23,9 @@ jobs:
     #   run: |
     #     echo Add other actions to build,
     #     echo test, and deploy your project.
+
+# name: Deploy
+# on:
+#   pull_request:
+#     branches:
+#     - master

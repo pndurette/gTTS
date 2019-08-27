@@ -34,7 +34,7 @@ jobs:
     - name: Test
       if: matrix.python-version >= 3
       run: |
-        pip install mypy
+        # pip install mypy
         mypy . --ignore-missing-imports
       env:
         TEST_LANGS: 'en'

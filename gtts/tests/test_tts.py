@@ -32,8 +32,7 @@ elif env == 'fetch':
 elif env == 'extra':
     langs = _extra_langs()
 else:
-    env_langs = env.split(',')
-    env_langs = {l: l for l in env_langs if l}
+    env_langs = {l: l for l in env.split(',') if l}
     langs = env_langs
 
 

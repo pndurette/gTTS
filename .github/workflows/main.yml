@@ -30,6 +30,13 @@ jobs:
         pip install -e .[tests]
     - name: Lint
       run: flake8 --count --show-source --statistics
+    - name: Test
+      run: |
+        pip install mypy
+        mypy . --ignore-missing-imports
+      env:
+        TEST_LANGS: 'en'
+        
 
 
 # name: Deploy

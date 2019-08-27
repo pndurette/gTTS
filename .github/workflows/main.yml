@@ -30,12 +30,12 @@ jobs:
         pip install -e .[tests]
     - name: Lint
       run: flake8 --count --show-source --statistics
-    - name: Type Check (Python 3)
-      if: matrix.python-version < 3
+    - name: Type Check (Python 2)
+      if: matrix.python-version == 2.7
       run: |
         pip install mypy
         mypy . --py2 --ignore-missing-imports
-    - name: Type Check (Python 2)
+    - name: Type Check (Python 3)
       if: matrix.python-version >= 3
       run: |
         pip install mypy

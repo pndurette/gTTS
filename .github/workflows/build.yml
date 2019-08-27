@@ -37,8 +37,6 @@ jobs:
       run: pytest -v -s gtts/
       env:
         TEST_LANGS: en
-      
-
 
 
 # name: Deploy

@@ -31,13 +31,16 @@ jobs:
         pip install -e .[tests]
     - name: Lint
       run: flake8 --count --show-source --statistics
-    - name: Test
+    - name: Type Check (Python 3)
+      if: matrix.python-version < 3
+      run: |
+        pip install mypy
+        mypy . --py2 --ignore-missing-imports
+    - name: Type Check (Python 2)
       if: matrix.python-version >= 3
       run: |
-        pip install mypy && mypy . --ignore-missing-imports
-      env:
-        TEST_LANGS: 'en'
-        
+        pip install mypy
+        mypy . --ignore-missing-imports
 
 
 # name: Deploy

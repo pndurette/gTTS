@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Testing Actions
-    - run: echo Hello there, ${{ github.sha }}
+      run: echo Hello there, ${{ github.sha }}
     # - uses: actions/checkout@v1
     # - name: Run a one-line script
     #   run: echo Hello, world!

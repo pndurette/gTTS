@@ -1,0 +1,24 @@
+# Layout
+# On push:
+#  - Lint
+#  - Coverage (test only 'en' on Linux)
+# On PR to master (push, plus:)
+#  - Full test (all OSes)
+
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Testing Actions
+    - run: echo Hello there, ${{ github.sha }}
+    # - uses: actions/checkout@v1
+    # - name: Run a one-line script
+    #   run: echo Hello, world!
+    # - name: Run a multi-line script
+    #   run: |
+    #     echo Add other actions to build,
+    #     echo test, and deploy your project.

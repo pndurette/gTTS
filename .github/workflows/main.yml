@@ -18,10 +18,8 @@ jobs:
         python-version: [2.7, 3.5, 3.6, 3.7]
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Setup Python
-      uses: actions/setup-python@v1
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install
@@ -37,6 +35,8 @@ jobs:
         mypy . --ignore-missing-imports
     - name: Unit Test
       run: pytest -v -s gtts/
+      env:
+        TEST_LANGS: en
       
 
 

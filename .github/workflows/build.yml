@@ -5,7 +5,7 @@
 # On PR to master (push, plus:)
 #  - Full test (all OSes)
 
-&test_steps
+steps: &test_steps
   steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -29,7 +29,6 @@
       env:
         TEST_LANGS: en
 
----
 name: CI
 on: [push]
 
@@ -44,7 +43,8 @@ jobs:
         # os: [ubuntu-latest, macOS-latest, windows-latest]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
-    <<: *test_steps
+    steps:
+      <<: *test_steps
 
 # name: Pull Request
 # on:

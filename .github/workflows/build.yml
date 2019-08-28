@@ -5,7 +5,7 @@
 # On PR to master (push, plus:)
 #  - Full test (all OSes)
 
-TestSteps: &test_steps
+&test_steps
   steps:
     - name: Checkout
       uses: actions/checkout@v1

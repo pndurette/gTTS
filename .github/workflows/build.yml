@@ -15,11 +15,12 @@ jobs:
     strategy:
       max-parallel: 8
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7]
+        # python-version: [2.7, 3.5, 3.6, 3.7]
+        python-version: [3.7]
         # os: [ubuntu-latest, macOS-latest, windows-latest]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
 
-    steps:
+    steps: &test_suite
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup Python
@@ -42,8 +43,22 @@ jobs:
         env:
           TEST_LANGS: en
 
-# name: Pull Request
-# on:
-#   pull_request:
-#     branches:
-#     - master
+name: Pull Request
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 8
+      matrix:
+        # python-version: [2.7, 3.5, 3.6, 3.7]
+        python-version: [2.7]
+        # os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
+
+    steps: *test_suite

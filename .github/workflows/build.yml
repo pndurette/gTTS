@@ -5,28 +5,29 @@
 # On PR to master (push, plus:)
 #  - Full test (all OSes)
 
-TestSuite: &test_suite
-  - name: Checkout
-    uses: actions/checkout@v1
-  - name: Setup Python
-    uses: actions/setup-python@v1
-    with:
-      python-version: ${{ matrix.python-version }}
-  - name: Install
-    run: |
-      python -m pip install --upgrade pip
-      pip install -e .[tests]
-  - name: Lint
-    run: flake8 --count --show-source --statistics
-  - name: Type Check
-    if: matrix.python-version > 3
-    run: |
-      pip install mypy
-      mypy . --ignore-missing-imports
-  - name: Unit Test
-    run: pytest -v -s gtts/
-    env:
-      TEST_LANGS: en
+TestSteps: &test_steps
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[tests]
+    - name: Lint
+      run: flake8 --count --show-source --statistics
+    - name: Type Check
+      if: matrix.python-version > 3
+      run: |
+        pip install mypy
+        mypy . --ignore-missing-imports
+    - name: Unit Test
+      run: pytest -v -s gtts/
+      env:
+        TEST_LANGS: en
 
 name: CI
 on: [push]
@@ -42,8 +43,7 @@ jobs:
         # os: [ubuntu-latest, macOS-latest, windows-latest]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
-    steps:
-    <<: *test_suite
+    <<: *test_steps
 
 # name: Pull Request
 # on:

@@ -29,6 +29,7 @@
       env:
         TEST_LANGS: en
 
+---
 name: CI
 on: [push]
 

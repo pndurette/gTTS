@@ -1,13 +1,11 @@
 name: Fast Test
 on: 
   push:
-    branches:
-      - '*'
-    # paths:
-    #   # Don't run on docs
-    #   - '!docs/*'
-    #   - '!*.md'
-    #   - '!*.rst'
+    paths:
+      # Don't run on docs
+      - '!docs/*'
+      - '!*.md'
+      - '!*.rst'
 
 jobs:
   test:

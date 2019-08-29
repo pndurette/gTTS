@@ -6,8 +6,8 @@ on:
     paths:
       # Don't run on docs
       - '!docs/*'
-      - '*.md'
-      - '*.rst'
+      - '!*.md'
+      - '!*.rst'
 
 jobs:
   fast-test:

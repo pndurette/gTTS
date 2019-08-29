@@ -1,7 +1,8 @@
-name: "Fast Test"
-on: [push]
-    # branches:
-    #   - '*'
+name: Fast Test
+on: 
+  push:
+    branches:
+      - '*'
     # paths:
     #   # Don't run on docs
     #   - '!docs/*'
@@ -9,7 +10,7 @@ on: [push]
     #   - '!*.rst'
 
 jobs:
-  fast-test:
+  test:
 
     runs-on: ubuntu-latest
     strategy:

@@ -1,5 +1,8 @@
-name: quick-test
-on: [push]
+name: "Quick Test"
+on:
+  push:
+    branches:
+      - '*'
 
 jobs:
   test:

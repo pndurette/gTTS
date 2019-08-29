@@ -1,4 +1,4 @@
-name: full-test
+name: "Full Test"
 on:
   pull_request:
     branches:
@@ -35,9 +35,11 @@ jobs:
         run: pytest -v -s gtts/
         env:
           TEST_LANGS: en
-      - name: Unit Test (all languages) 
+      - name: Unit Test (full) 
         # Only test all languages once
         if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
-        run: pytest -v -s gtts/tests/test_tts.py
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg
         env:
           TEST_LANGS: all
+      - name: Coverage
+        run: coveralls

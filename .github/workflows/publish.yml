@@ -1,0 +1,39 @@
+name: Publish
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+
+    # Builds & Publishes to PyPi:
+    # On Py2.7: wheel
+    # On Py3.7: wheel, sdist
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [2.7, 3.7]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Package (wheel)
+        run: |
+          pip install -U setuptools wheel
+          python setup.py bdist_wheel
+      - name: Package (sdist)
+        if: matrix.python-version == 3.7
+        run: |
+          pip install -U setuptools wheel
+          python setup.py sdist
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}

@@ -42,4 +42,6 @@ jobs:
         env:
           TEST_LANGS: all
       - name: Coverage
-        run: coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}

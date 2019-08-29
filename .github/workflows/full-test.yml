@@ -9,6 +9,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       max-parallel: 12
       matrix:
         python-version: [2.7, 3.5, 3.6, 3.7]
@@ -34,8 +35,9 @@ jobs:
         run: pytest -v -s gtts/
         env:
           TEST_LANGS: en
-      - name: Unit Test (all languages)
-        if: matrix.python-version == 3.7
+      - name: Unit Test (all languages) 
+        # Only test all languages once
+        if: matrix.python-version == 3.7 && matrix.os == ubuntu-latest
         run: pytest -v -s gtts/tests/test_tts.py
         env:
           TEST_LANGS: all

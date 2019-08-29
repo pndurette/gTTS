@@ -51,9 +51,10 @@ jobs:
       - name: Unit Test (full & generate coverage)
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg
         env:
-          TEST_LANGS: all
+          TEST_LANGS: en
+          # TEST_LANGS: all
       - name: Coverage Report
-        run: coveralls
+        run: coveralls --verbose
         env:
           # Not doing anything unless 'travis-ci' and others, but required
           # COVERALLS_SERVICE_NAME: 'travis-ci' 

@@ -37,7 +37,7 @@ jobs:
           TEST_LANGS: en
       - name: Unit Test (all languages) 
         # Only test all languages once
-        if: matrix.python-version == 3.7 && matrix.os == ubuntu-latest
+        if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
         run: pytest -v -s gtts/tests/test_tts.py
         env:
           TEST_LANGS: all

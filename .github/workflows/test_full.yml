@@ -37,13 +37,16 @@ jobs:
           TEST_LANGS: en
 
       # Only run the following once (Py3.7, ubuntu-latest)
-      - name: Unit Test (full) 
+      - name: Unit Test (full)
+        # We don't need to test every language each time
         if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg
         env:
           TEST_LANGS: all
       - name: Coverage
+        # Jusdt report to Coveralls once
         if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
+          path-to-lcov: .coverage

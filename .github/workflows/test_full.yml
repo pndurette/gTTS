@@ -1,11 +1,16 @@
-name: "Full Test"
+name: Full Test
 on:
   pull_request:
     branches:
-    - master
+     - master
+    paths:
+      # Don't run on docs
+      - '!docs/*'
+      - '*.md'
+      - '*.rst'
 
 jobs:
-  test:
+  fast-test:
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -22,7 +27,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: |
-          python -m pip install --upgrade pip
+          pip install --upgrade pip
           pip install -e .[tests]
       - name: Lint
         run: flake8 --count --show-source --statistics
@@ -36,17 +41,23 @@ jobs:
         env:
           TEST_LANGS: en
 
-      # Only run the following once (Py3.7, ubuntu-latest)
-      - name: Unit Test (full)
-        # We don't need to test every language each time
-        if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
+  full-test:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -e .[tests]
+      - name: Unit Test (full & generate coverage)
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg
         env:
           TEST_LANGS: all
-      - name: Coverage
-        # Jusdt report to Coveralls once
-        if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.github_token }}
-          path-to-lcov: .coverage
+      - name: Coverage Report
+        run: coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.coveralls_token }}

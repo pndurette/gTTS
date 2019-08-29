@@ -3,11 +3,6 @@ on:
   pull_request:
     branches:
      - master
-    # paths:
-    #   # Don't run on docs
-    #   - '!docs/*'
-    #   - '!*.md'
-    #   - '!*.rst'
 
 jobs:
   fast-test:

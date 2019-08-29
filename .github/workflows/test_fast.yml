@@ -1,11 +1,5 @@
 name: Fast Test
-on: 
-  push:
-    paths:
-      # Don't run on docs
-      - '!docs/*'
-      - '!*.md'
-      - '!*.rst'
+on: [push]
 
 jobs:
   test:

@@ -1,9 +1,5 @@
 name: Fast Test
-on:
-  push:
-    branches:
-      - '!refs/pull/*'
-
+on: [push]
 
 jobs:
   test:

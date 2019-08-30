@@ -49,13 +49,17 @@ jobs:
           pip install --upgrade pip
           pip install -e .[tests]
       - name: Unit Test (full & generate coverage)
-        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
         env:
           TEST_LANGS: en
           # TEST_LANGS: all
+      # - name: Coverage Report
+      #   run: coveralls --verbose
+      #   env:
+      #     # Not doing anything unless 'travis-ci' and others, but required
+      #     # COVERALLS_SERVICE_NAME: 'travis-ci' 
+      #     COVERALLS_REPO_TOKEN: ${{ secrets.coveralls_token }}
       - name: Coverage Report
-        run: coveralls --verbose
-        env:
-          # Not doing anything unless 'travis-ci' and others, but required
-          # COVERALLS_SERVICE_NAME: 'travis-ci' 
-          COVERALLS_REPO_TOKEN: ${{ secrets.coveralls_token }}
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{ secrets.codecov_token }}

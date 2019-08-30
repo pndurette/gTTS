@@ -1,5 +1,8 @@
 name: Fast Test
-on: [push]
+on:
+  push:
+    branches:
+      - '*'
 
 jobs:
   test:

@@ -1,0 +1,59 @@
+name: "Full Test"
+on:
+  pull_request:
+    branches:
+     - master
+
+jobs:
+  fast-test:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        python-version: [2.7, 3.5, 3.6, 3.7]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -e .[tests]
+      - name: Lint
+        run: flake8 --count --show-source --statistics
+      - name: Type Check
+        if: matrix.python-version > 3
+        run: |
+          pip install mypy
+          mypy . --ignore-missing-imports
+      - name: Unit Test (en)
+        run: pytest -v -s gtts/
+        env:
+          TEST_LANGS: en
+
+  full-test:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -e .[tests]
+      - name: Unit Test (full & generate coverage)
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
+        env:
+          TEST_LANGS: en
+          # TEST_LANGS: all
+      - name: Coverage Report
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{ secrets.codecov_token }}

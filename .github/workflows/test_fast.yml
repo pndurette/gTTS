@@ -2,7 +2,7 @@ name: Fast Test
 on:
   push:
     branches:
-      - '*'
+      - '!refs/pull/*'
 
 jobs:
   test:

@@ -9,6 +9,27 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.4 (2019-08-29)
+------------------
+
+Features
+~~~~~~~~
+
+- gTTS is now built as a wheel package (Python 2 & 3) (`#181 <https://github.com/pndurette/gTTS/issues/181>`_)
+
+
+Improved Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Fixed bad example in docs (`#163 <https://github.com/pndurette/gTTS/issues/163>`_, `#166 <https://github.com/pndurette/gTTS/issues/166>`_)
+
+
+Misc
+~~~~
+
+- `#164 <https://github.com/pndurette/gTTS/issues/164>`_, `#171 <https://github.com/pndurette/gTTS/issues/171>`_, `#173 <https://github.com/pndurette/gTTS/issues/173>`_, `#185 <https://github.com/pndurette/gTTS/issues/185>`_
+
+
 2.0.3 (2018-12-15)
 ------------------
 

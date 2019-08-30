@@ -51,8 +51,7 @@ jobs:
       - name: Unit Test (full & generate coverage)
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
         env:
-          TEST_LANGS: en
-          # TEST_LANGS: all
+          TEST_LANGS: all
       - name: Coverage Report
         uses: codecov/codecov-action@v1.0.2
         with:

@@ -24,6 +24,10 @@ Read 'bonjour' in French to ``bonjour.mp3``::
 
    $ gtts-cli 'bonjour' --lang fr --output bonjour.mp3
 
+.. note:: Alternatively, you can enclose your text with quotation marks to avoid errors associated with phrases that may need the use of an apostrophe::
+
+   $ gtts-cli "c'est la vie" --lang fr --output test.mp3
+
 Read 'slow' slowly to ``slow.mp3``::
 
    $ gtts-cli 'slow' --slow --output slow.mp3

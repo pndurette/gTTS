@@ -5,6 +5,7 @@ from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
 from six.moves import urllib
+from six import string_types
 import urllib3
 import requests
 import logging
@@ -164,6 +165,53 @@ class gTTS:
             min_tokens += _minimize(t, ' ', self.GOOGLE_TTS_MAX_CHARS)
         return min_tokens
 
+    def get_urls(self):
+        """Assemble the TTS API request urls
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+
+        Return: list of request urls to download
+
+        """
+        text_parts = self._tokenize(self.text)
+        log.debug("text_parts: %i", len(text_parts))
+        assert text_parts, 'No text to send to TTS API'
+
+        urls = []
+
+        for idx, part in enumerate(text_parts):
+            try:
+                # Calculate token
+                part_tk = self.token.calculate_token(part)
+            except requests.exceptions.RequestException as e:  # pragma: no cover
+                log.debug(str(e), exc_info=True)
+                raise gTTSError(
+                    "Connection error during token calculation: %s" %
+                    str(e))
+
+            if isinstance(part, string_types):
+                p = part.encode('utf-8')
+            else:
+                p = part
+
+            query = (
+                ('ie', 'UTF-8'),
+                ('q', p),
+                ('tl', self.lang),
+                ('ttsspeed', self.speed),
+                ('total', len(text_parts)),
+                ('idx', idx),
+                ('client', 'tw-ob'),
+                ('textlen', _len(part)),
+                ('tk', part_tk)
+            )
+
+            url = self.GOOGLE_TTS_URL + '?' + urllib.parse.urlencode(query)
+            urls.append(url)
+
+        return urls
+
     def write_to_fp(self, fp):
         """Do the TTS API request and write bytes to a file-like object.
 
@@ -179,36 +227,12 @@ class gTTS:
         # urllib3 prints an insecure warning on stdout. We disable that.
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        text_parts = self._tokenize(self.text)
-        log.debug("text_parts: %i", len(text_parts))
-        assert text_parts, 'No text to send to TTS API'
+        urls = self.get_urls()
 
-        for idx, part in enumerate(text_parts):
-            try:
-                # Calculate token
-                part_tk = self.token.calculate_token(part)
-            except requests.exceptions.RequestException as e:  # pragma: no cover
-                log.debug(str(e), exc_info=True)
-                raise gTTSError(
-                    "Connection error during token calculation: %s" %
-                    str(e))
-
-            payload = {'ie': 'UTF-8',
-                       'q': part,
-                       'tl': self.lang,
-                       'ttsspeed': self.speed,
-                       'total': len(text_parts),
-                       'idx': idx,
-                       'client': 'tw-ob',
-                       'textlen': _len(part),
-                       'tk': part_tk}
-
-            log.debug("payload-%i: %s", idx, payload)
-
+        for idx, url in enumerate(urls):
             try:
                 # Request
-                r = requests.get(self.GOOGLE_TTS_URL,
-                                 params=payload,
+                r = requests.get(url,
                                  headers=self.GOOGLE_TTS_HEADERS,
                                  proxies=urllib.request.getproxies(),
                                  verify=False)

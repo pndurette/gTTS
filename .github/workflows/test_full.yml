@@ -22,6 +22,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: |
+          python -m ensurepip --default-pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -e .[tests]
       - name: Lint
         run: flake8 --count --show-source --statistics
@@ -45,6 +47,8 @@ jobs:
           python-version: 3.7
       - name: Install
         run: |
+          python -m ensurepip --default-pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install -e .[tests]
       - name: Unit Test (full & generate coverage)
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml

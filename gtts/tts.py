@@ -223,7 +223,7 @@ class gTTS:
                 log.debug("status-%i: %s", idx, r.status_code)
 
                 r.raise_for_status()
-            except requests.exceptions.HTTPError as e: # pragma: no cover
+            except requests.exceptions.HTTPError as e:  # pragma: no cover
                 # Request successful, bad response
                 log.debug(str(e))
                 raise gTTSError(tts=self, response=r)

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import pytest
-from mock import patch
-
 from gtts.lang import tts_langs, _fetch_langs, _extra_langs
 
 

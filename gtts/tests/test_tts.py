@@ -45,7 +45,7 @@ def test_TTS(tmp_path, lang):
     for slow in (False, True):
         filename = tmp_path / 'test_{}_.mp3'.format(lang)
         # Create gTTS and save
-        tts = gTTS(text, lang, slow=slow)
+        tts = gTTS(text=text, lang=lang, slow=slow)
         tts.save(filename)
 
         # Check if files created is > 2k
@@ -77,7 +77,7 @@ def test_no_text_parts(tmp_path):
         tts.save(filename)
 
 
-# %%Test write_to_fp()/save() cases not covered elsewhere in this file
+# Test write_to_fp()/save() cases not covered elsewhere in this file
 
 def test_bad_fp_type():
     """Raise TypeError if fp is not a file-like object (no .write())"""
@@ -110,6 +110,15 @@ def test_msg():
 
 def test_infer_msg():
     """Infer message sucessfully based on context"""
+
+    # Without response:
+
+    # Bad TLD
+    ttsTLD = Mock(tld='invalid')
+    errorTLD = gTTSError(tts=ttsTLD)
+    assert errorTLD.msg == "Failed to connect. Probable cause: Host 'https://translate.google.invalid/' is not reachable"
+
+    # With response:
 
     # 403
     tts403 = Mock()

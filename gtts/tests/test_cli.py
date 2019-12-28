@@ -79,11 +79,11 @@ def test_all():
 
 def test_all_tld():
     """Option <all> should return a list of languages"""
-    result = runner(['--tld', 'fr', '--all'])
+    result = runner(['--tld', 'it', '--all'])
 
-    # Top-level domain set to 'fr', language outputs should be French
+    # Top-level domain set to 'it', language outputs should be Italian
 
-    assert "en: Anglais" in result.output
+    assert "en: Inglese" in result.output
     assert result.exit_code == 0
 
 

@@ -83,3 +83,10 @@ def _clean_tokens(tokens):
 
     """
     return [t.strip() for t in tokens if not _ALL_PUNC_OR_SPACE.match(t)]
+
+
+def _translate_url(tld="com", path=""):
+    """#TODO
+    """
+    _GOOGLE_TTS_URL = "https://translate.google.{}/{}"
+    return _GOOGLE_TTS_URL.format(tld, path)

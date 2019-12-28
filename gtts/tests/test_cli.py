@@ -25,7 +25,7 @@ def runner_debug(args, input=None):
     return CliRunner().invoke(tts_cli, args + ['--debug'], input)
 
 
-# %% <text> tests
+# <text> tests
 def test_text_no_text_or_file():
     """One of <test> (arg) and <file> <opt> should be set"""
     result = runner_debug([])
@@ -55,9 +55,8 @@ def test_text_empty(tmp_path):
     assert "No text to speak" in result.output
     assert result.exit_code != 0
 
-# %% <file> tests
 
-
+# <file> tests
 def test_file_not_exists():
     """<file> should exist"""
     result = runner_debug(['--file', 'notexist.txt', 'test'])
@@ -65,9 +64,8 @@ def test_file_not_exists():
     assert "No such file or directory" in result.output
     assert result.exit_code != 0
 
-# %% <all> tests
 
-
+# <all> tests
 def test_all():
     """Option <all> should return a list of languages"""
     result = runner(['--all'])
@@ -78,9 +76,18 @@ def test_all():
     assert re.match(r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$", result.output)
     assert result.exit_code == 0
 
-# %% <lang> tests
+
+def test_all_tld():
+    """Option <all> should return a list of languages"""
+    result = runner(['--tld', 'fr', '--all'])
+
+    # Top-level domain set to 'fr', language outputs should be French
+
+    assert "en: Anglais" in result.output
+    assert result.exit_code == 0
 
 
+# <lang> tests
 def test_lang_not_valid():
     """Invalid <lang> should display an error"""
     result = runner(['--lang', 'xx', 'test'])
@@ -101,25 +108,23 @@ def test_lang_nocheck():
     assert "Probable cause: Unsupported language 'xx'" in result.output
     assert result.exit_code != 0
 
-# %% Param set tests
-
-
+# Param set tests
 def test_params_set():
     """Options should set gTTS instance arguments (read from debug log)"""
     with LogCapture() as lc:
-        result = runner_debug(['--lang', 'fr', '--slow', '--nocheck', 'test'])
+        result = runner_debug(['--lang', 'fr', '--tld', 'es', '--slow', '--nocheck', 'test'])
 
         log = str(lc)
 
     assert 'lang: fr' in log
+    assert 'tld: es' in log
     assert 'lang_check: False' in log
     assert 'slow: True' in log
     assert 'text: test' in log
     assert result.exit_code == 0
 
 
-# %% Test all input methods
-
+# Test all input methods
 pwd = os.path.dirname(__file__)
 
 # Text for stdin ('-' for <text> or <file>)

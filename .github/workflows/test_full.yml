@@ -22,9 +22,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: |
-          python -m ensurepip --default-pip
-          python -m pip install --upgrade pip setuptools wheel
-          pip install -e .[tests]
+          pip install flake
       - name: Lint
         run: flake8 --count --show-source --statistics
       - name: Type Check

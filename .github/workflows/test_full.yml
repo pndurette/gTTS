@@ -24,7 +24,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: |
-          pip install -e .[tests]]
+          pip install -e .[tests]
       - name: Lint
         run: flake8 --count --show-source --statistics
       - name: Type Check

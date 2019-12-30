@@ -41,7 +41,7 @@ jobs:
 
       - name: Unit Tests (TTS langs)
         # Only do the TTS tests for all existing languages once
-        if: matrix.os == ubuntu-latest && matrix.python-version == 3.8
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8
         run: pytest -v gtts/tests/test_tts.py
         env:
           TEST_LANGS: all

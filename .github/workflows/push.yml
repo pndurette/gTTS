@@ -33,9 +33,9 @@ jobs:
           mypy . --ignore-missing-imports
 
       - name: Unit Tests & Generate Coverage Report
-        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
         env:
           TEST_LANGS: en
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
 
       - name: Upload Coverage Report
         uses: codecov/codecov-action@v1.0.5

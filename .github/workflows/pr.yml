@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       max-parallel: 15
       matrix:
-        # Explicit test for all supported pythons
+        # Explicitly test for all supported pythons
         python-version: ['2.x', 3.5, 3.6, 3.7, 3.8]
         os: [ubuntu-latest, macOS-latest, windows-latest]
         exclude: 
@@ -59,11 +59,11 @@ jobs:
           pip install -e .[tests]
 
       - name: Coverage
-        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
         env:
           TEST_LANGS: en
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
 
       - name: Unit Tests (TTS langs)
-        run: pytest -v gtts/tests/test_tts.py
         env:
           TEST_LANGS: all
+        run: pytest -v gtts/tests/test_tts.py

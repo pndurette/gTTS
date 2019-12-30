@@ -1,0 +1,47 @@
+name: PR to Master
+on:
+  pull_request:
+    branches:
+     - master
+
+jobs:
+  test:
+    name: Test (PR)
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      max-parallel: 15
+      matrix:
+        python-version: ['2.x', '3.x']
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        exclude: 
+        # Exclude what is already tested in the Push workflow
+        - os: ubuntu-latest
+          python-version: 2.7
+        - os: ubuntu-latest
+          python-version: 3.8
+          
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[tests]
+
+      - name: Unit Tests & Coverage
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
+        env:
+          TEST_LANGS: en
+
+      - name: Unit Tests (TTS langs)
+        # Only do the TTS tests for all existing languages once
+        if: matrix.os == ubuntu-latest && matrix.python-version == 3.8
+        run: pytest -v gtts/tests/test_tts.py
+        env:
+          TEST_LANGS: all

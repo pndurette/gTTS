@@ -5,40 +5,35 @@ on:
       - 'v*'
 
 jobs:
-  wheel:
+  package:
+    name: Package
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.7]
+        python-version: ['2.x', '3.x']
 
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Package
-        run: |
-          pip install --upgrade setuptools wheel
-          python setup.py bdist_wheel
-      - name: Publish
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
-  
-  sdist:
 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-      - name: Package
+      - name: Install Tools
+        run: pip install --upgrade setuptools wheel
+
+      - name: Package (wheel)
+        # Package wheel for all
         run: |
-          pip install --upgrade setuptools
+          python setup.py bdist_wheel
+
+      - name: Package (sdist)
+        # Only need to package sdist once
+        if: matrix.python-version == 3.8
+        run: |
           python setup.py sdist
+
       - name: Publish
         uses: pypa/gh-action-pypi-publish@master
         with:

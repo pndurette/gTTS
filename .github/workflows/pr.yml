@@ -18,10 +18,11 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         exclude: 
         # Exclude what is already tested in the Push workflow
+        # (i.e. latest python 2, latest python 3)
         - os: ubuntu-latest
           python-version: '2.x'
         - os: ubuntu-latest
-          python-version: 3.8
+          python-version: '3.x'
           
     steps:
       - uses: actions/checkout@v1
@@ -35,14 +36,34 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .[tests]
 
-      - name: Unit Tests & Coverage
+      - name: Unit Tests
+        run: pytest -v -s gtts/
+        env:
+          TEST_LANGS: en
+
+  test_other:
+    name: Test (non ver. specific)
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[tests]
+
+      - name: Coverage
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
         env:
           TEST_LANGS: en
 
       - name: Unit Tests (TTS langs)
-        # Only do the TTS tests for all existing languages once
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.x'
         run: pytest -v gtts/tests/test_tts.py
         env:
           TEST_LANGS: all

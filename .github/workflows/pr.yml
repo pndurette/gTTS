@@ -1,58 +1,69 @@
-name: "Full Test"
+name: PR to Master
 on:
   pull_request:
     branches:
      - master
 
 jobs:
-  fast-test:
+  test:
+    name: Test
 
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      max-parallel: 12
+      max-parallel: 15
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7]
+        # Explicitly test for all supported pythons
+        python-version: ['2.x', 3.5, 3.6, 3.7, 3.8]
         os: [ubuntu-latest, macOS-latest, windows-latest]
-
+        exclude: 
+        # Exclude what is already tested in the Push workflow
+        # (i.e. latest python 2, latest python 3)
+        - os: ubuntu-latest
+          python-version: '2.x'
+        - os: ubuntu-latest
+          python-version: '3.x'
+          
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -e .[tests]
-      - name: Lint
-        run: flake8 --count --show-source --statistics
-      - name: Type Check
-        if: matrix.python-version > 3
-        run: |
-          pip install mypy
-          mypy . --ignore-missing-imports
-      - name: Unit Test (en)
+
+      - name: Unit Tests
         run: pytest -v -s gtts/
         env:
           TEST_LANGS: en
 
-  full-test:
+  test_other:
+    name: Test (non ver. specific)
 
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: '3.x'
+
       - name: Install
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -e .[tests]
-      - name: Unit Test (full & generate coverage)
+
+      - name: Coverage
+        env:
+          TEST_LANGS: en
         run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
+
+      - name: Unit Tests (TTS langs)
         env:
           TEST_LANGS: all
-      - name: Coverage Report
-        uses: codecov/codecov-action@v1.0.2
-        with:
-          token: ${{ secrets.codecov_token }}
+        run: pytest -v gtts/tests/test_tts.py

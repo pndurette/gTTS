@@ -60,12 +60,14 @@ def validate_text(ctx, param, text):
 def validate_lang(ctx, param, lang):
     """Validation callback for the <lang> option.
     Ensures <lang> is a supported language unless the <nocheck> flag is set
+    Uses <tld> to fetch languages from other domains
     """
     if ctx.params['nocheck']:
         return lang
 
     try:
-        if lang not in tts_langs():
+        tld = ctx.params['tld']
+        if lang not in tts_langs(tld):
             raise click.UsageError(
                 "'%s' not in list of supported languages.\n"
                 "Use --all to list languages or "
@@ -88,8 +90,16 @@ def print_languages(ctx, param, value):
     """
     if not value or ctx.resilient_parsing:
         return
+
     try:
-        langs = tts_langs()
+        tld = ctx.params['tld']
+    except KeyError:
+        # Either --tld was used after --all or not at all
+        # Default to the 'com' tld
+        tld = 'com'
+
+    try:
+        langs = tts_langs(tld)
         langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
         click.echo('  ' + '\n  '.join(langs_str_list))
     except RuntimeError as e:  # pragma: no cover
@@ -137,6 +147,14 @@ def set_debug(ctx, param, debug):
     callback=validate_lang,
     help="IETF language tag. Language to speak in. List documented tags with --all.")
 @click.option(
+    '-t',
+    '--tld',
+    metavar='<tld>',
+    default='com',
+    show_default=True,
+    is_eager=True,  # Prioritize <tld> to ensure it gets set before <lang>
+    help="Top-level domain for the Google host, i.e https://translate.google.<tld>")
+@click.option(
     '--nocheck',
     default=False,
     is_flag=True,
@@ -149,7 +167,8 @@ def set_debug(ctx, param, debug):
     is_eager=True,
     expose_value=False,
     callback=print_languages,
-    help="Print all documented available IETF language tags and exit.")
+    help="Print all documented available IETF language tags and exit. "
+         "Use --tld beforehand to use an alternate domain")
 @click.option(
     '--debug',
     default=False,
@@ -159,7 +178,7 @@ def set_debug(ctx, param, debug):
     callback=set_debug,
     help="Show debug information.")
 @click.version_option(version=__version__)
-def tts_cli(text, file, output, slow, lang, nocheck):
+def tts_cli(text, file, output, slow, tld, lang, nocheck):
     """ Read <text> to mp3 format using Google Translate's Text-to-Speech API
     (set <text> or --file <file> to - for standard input)
     """
@@ -189,6 +208,7 @@ def tts_cli(text, file, output, slow, lang, nocheck):
             text=text,
             lang=lang,
             slow=slow,
+            tld=tld,
             lang_check=not nocheck)
         tts.write_to_fp(output)
     except (ValueError, AssertionError) as e:

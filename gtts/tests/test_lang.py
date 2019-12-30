@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import pytest
-from mock import patch
-
 from gtts.lang import tts_langs, _fetch_langs, _extra_langs
 
 
@@ -25,11 +23,10 @@ def test_fetch_langs():
     assert len(all_langs) == len(scraped_langs) + len(extra_langs)
 
 
-@patch("gtts.lang.URL_BASE", "http://abc.def.hij.dghj")
 def test_fetch_langs_exception():
     """Raise RuntimeError on language fetch exception"""
     with pytest.raises(RuntimeError):
-        tts_langs()
+        tts_langs(tld="invalid")
 
 
 if __name__ == '__main__':

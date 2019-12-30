@@ -23,12 +23,13 @@ def _minimize(the_string, delim, max_size):
     Returns:
         list: the minimized string in tokens
 
-    Every chunk size will be at minimum `the_string[0:idx]` where `idx`
-    is the highest index of `delim` found in `the_string`; and at maximum
-    `the_string[0:max_size]` if no `delim` was found in `the_string`.
-    In the latter case, the split will occur at `the_string[max_size]`
+    Every chunk size will be at minimum ``the_string[0:idx]`` where ``idx``
+    is the highest index of ``delim`` found in ``the_string``; and at maximum
+    ``the_string[0:max_size]`` if no ``delim`` was found in ``the_string``.
+    In the latter case, the split will occur at ``the_string[max_size]``
     which can be any character. The function runs itself again on the rest of
-    `the_string` (`the_string[idx:]`) until no chunk is larger than `max_size`.
+    ``the_string`` (``the_string[idx:]``) until no chunk is larger than
+    ``max_size``.
 
     """
     # Remove `delim` from start of `the_string`
@@ -54,14 +55,14 @@ def _minimize(the_string, delim, max_size):
 
 
 def _len(text):
-    """Same as `len(text)` for a string but that decodes
-    `text` first in Python 2.x
+    """Same as ``len(text)`` for a string but that decodes
+    ``text`` first in Python 2.x
 
     Args:
-        text (string): string to get the size of.
+        text (string): String to get the size of.
 
     Returns:
-        int: the size of the string.
+        int: The size of the string.
     """
     try:
         # Python 2
@@ -75,11 +76,27 @@ def _clean_tokens(tokens):
     """Clean a list of strings
 
     Args:
-        tokens (list): a list of strings (tokens) to clean.
+        tokens (list): A list of strings (tokens) to clean.
 
     Returns:
-        list: stripped strings `tokens` without the original elements
+        list: Stripped strings ``tokens`` without the original elements
             that only consisted of whitespace and/or punctuation characters.
 
     """
     return [t.strip() for t in tokens if not _ALL_PUNC_OR_SPACE.match(t)]
+
+
+def _translate_url(tld="com", path=""):
+    """Generates a Google Translate URL
+
+    Args:
+        tld (string): Top-level domain for the Google Translate host,
+            i.e ``https://translate.google.<tld>``. Default is ``com``.
+        path: (string): A path to append to the Google Translate host,
+            i.e ``https://translate.google.com/<path>``. Default is ``""``.
+
+    Returns:
+        string: A Google Translate URL `https://translate.google.<tld>/path`
+    """
+    _GOOGLE_TTS_URL = "https://translate.google.{}/{}"
+    return _GOOGLE_TTS_URL.format(tld, path)

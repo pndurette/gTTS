@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-from gtts.utils import _minimize, _len, _clean_tokens
+from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
 
 delim = ' '
 Lmax = 10
@@ -50,6 +50,12 @@ def test_strip():
     _in = [" Bacon  ", "& ", "ipsum\r", "."]
     _out = ["Bacon", "&", "ipsum"]
     assert _clean_tokens(_in) == _out
+
+
+def test_translate_url():
+    _in = {"tld": "qwerty", "path": "asdf"}
+    _out = "https://translate.google.qwerty/asdf"
+    assert _translate_url(**_in) == _out
 
 
 if __name__ == '__main__':

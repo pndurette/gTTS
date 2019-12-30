@@ -1,32 +1,43 @@
-name: Fast Test
+name: Push
 on: [push]
 
 jobs:
   test:
+    name: Test
 
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 2
       matrix:
-        python-version: [2.7, 3.7]
+        # Only the 'latest' of each
+        python-version: ['2.x', '3.x']
 
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install
         run: |
           python -m pip install --upgrade pip
           pip install -e .[tests]
+
       - name: Lint
         run: flake8 --count --show-source --statistics
+
       - name: Type Check
-        if: matrix.python-version > 3
+        if: matrix.python-version == '3.x'
         run: |
           pip install mypy
           mypy . --ignore-missing-imports
-      - name: Unit Test (en)
-        run: pytest -v -s gtts/
+
+      - name: Unit Tests & Generate Coverage Report
         env:
           TEST_LANGS: en
+        run: pytest -v -s gtts/  --cov=gtts --cov-config=setup.cfg --cov-report=xml
+
+      - name: Upload Coverage Report
+        uses: codecov/codecov-action@v1.0.5
+        with:
+          token: ${{ secrets.codecov_token }}

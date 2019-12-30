@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         # Only the 'latest' of each
-        python-version: [2.7, 3.8]
+        python-version: ['2.x', '3.x']
 
     steps:
       - uses: actions/checkout@v1
@@ -27,7 +27,7 @@ jobs:
         run: flake8 --count --show-source --statistics
 
       - name: Type Check
-        if: matrix.python-version > 3
+        if: matrix.python-version == '3.x'
         run: |
           pip install mypy
           mypy . --ignore-missing-imports

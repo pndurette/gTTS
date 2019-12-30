@@ -6,19 +6,20 @@ on:
 
 jobs:
   test:
-    name: Test (PR)
+    name: Test
 
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       max-parallel: 15
       matrix:
-        python-version: ['2.x', '3.x']
+        # Explicit test for all supported pythons
+        python-version: ['2.x', 3.5, 3.6, 3.7, 3.8]
         os: [ubuntu-latest, macOS-latest, windows-latest]
         exclude: 
         # Exclude what is already tested in the Push workflow
         - os: ubuntu-latest
-          python-version: 2.7
+          python-version: '2.x'
         - os: ubuntu-latest
           python-version: 3.8
           
@@ -41,7 +42,7 @@ jobs:
 
       - name: Unit Tests (TTS langs)
         # Only do the TTS tests for all existing languages once
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.x'
         run: pytest -v gtts/tests/test_tts.py
         env:
           TEST_LANGS: all

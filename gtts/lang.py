@@ -16,7 +16,9 @@ def tts_langs(tld="com"):
     """Languages Google Text-to-Speech supports.
 
     Args:
-        tld (string): # TODO.
+        tld (string): Top-level domain for the Google Translate host
+            to fetch languages from. i.e `https://translate.google.<tld>`.
+            Default is ``com``.
 
     Returns:
         dict: A dictionnary of the type `{ '<lang>': '<name>'}`
@@ -50,8 +52,11 @@ def _fetch_langs(tld="com"):
     be spoken. We intersect this list with all the languages Google Translate
     provides to get the ones that support text-to-speech.
 
-    Args:
-        tld (string): #TODO.
+    tld (string): Top-level domain for the Google Translate host
+        to fetch languages from. i.e `https://translate.google.<tld>`.
+        The language names obtained will be in a language locale of the TLD
+        (e.g. ``tld=fr`` will retrieve the French names of the languages).
+        Default is ``com``.
 
     Returns:
         dict: A dictionnary of languages from Google Translate

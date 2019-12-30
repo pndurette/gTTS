@@ -153,7 +153,7 @@ def set_debug(ctx, param, debug):
     default='com',
     show_default=True,
     is_eager=True,  # Prioritize <tld> to ensure it gets set before <lang>
-    help="Top-level domain for the Google URL, i.e https://translate.google.<tld>")
+    help="Top-level domain for the Google host, i.e https://translate.google.<tld>")
 @click.option(
     '--nocheck',
     default=False,

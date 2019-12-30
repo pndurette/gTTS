@@ -33,7 +33,10 @@ class gTTS:
 
     Args:
         text (string): The text to be read.
-        tld (string): #TODO.
+        tld (string): Top-level domain for the Google Translate host,
+            i.e `https://translate.google.<tld>`. This is useful where
+            google.com might be blocked in a network but a local Google
+            host is not. Default is ``com``.
         lang (string, optional): The language (IETF language tag) to
             read the text in. Defaults to 'en'.
         slow (bool, optional): Reads text more slowly. Defaults to ``False``.

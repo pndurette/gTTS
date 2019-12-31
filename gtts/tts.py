@@ -5,7 +5,6 @@ from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
 from six.moves import urllib
-from six import string_types
 import urllib3
 import requests
 import logging

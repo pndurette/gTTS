@@ -172,10 +172,14 @@ class gTTS:
         return min_tokens
 
     def _prepare_requests(self):
-        """TBD. # TODO
-        """
+        """Created the TTS API the request(s) without sending them.
 
+        Returns:
+            list: ``requests.PreparedRequests_``. <https://2.python-requests.org/en/master/api/#requests.PreparedRequest>`_``.
+        """
+        # TTS API URL
         translate_url = _translate_url(tld=self.tld, path="translate_tts")
+
         text_parts = self._tokenize(self.text)
         log.debug("text_parts: %i", len(text_parts))
         assert text_parts, 'No text to send to TTS API'
@@ -215,12 +219,19 @@ class gTTS:
         return prepared_requests
 
     def get_urls(self):
-        """TBD. # TODO
+        """Get TTS API request URL(s) that would be sent to the TTS API.
+
+        Returns:
+            list: A list of TTS API request URLs to make.
+
+                This is particularly useful to get the list of URLs generated
+                by ``gTTS`` but not yet fullfilled,
+                for example to be used by an external program.
         """
         return [pr.url for pr in self._prepare_requests()]
 
     def write_to_fp(self, fp):
-        """Do the TTS API request and write bytes to a file-like object.
+        """Do the TTS API request(s) and write bytes to a file-like object.
 
         Args:
             fp (file object): Any file-like object to write the ``mp3`` to.

@@ -100,8 +100,9 @@ def test_save(tmp_path):
 
 
 def test_get_urls():
-    """Get request urls to download audio file"""
-    tts = gTTS(text='test', lang='en-uk')
+    """Get request URLs list"""
+
+    tts = gTTS(text='test', tld='com', lang='en-uk')
     urls = tts.get_urls()
 
     # Check the url

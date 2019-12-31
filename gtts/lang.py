@@ -23,9 +23,9 @@ def tts_langs(tld="com"):
     Returns:
         dict: A dictionnary of the type `{ '<lang>': '<name>'}`
 
-        Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
-        and `<name>` is the full English name of the language, such as
-        `English` or `Portuguese (Brazil)`.
+            Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
+            and `<name>` is the full English name of the language, such as
+            `English` or `Portuguese (Brazil)`.
 
     The dictionnary returned combines languages from two origins:
 
@@ -52,11 +52,12 @@ def _fetch_langs(tld="com"):
     be spoken. We intersect this list with all the languages Google Translate
     provides to get the ones that support text-to-speech.
 
-    tld (string): Top-level domain for the Google Translate host
-        to fetch languages from. i.e `https://translate.google.<tld>`.
-        The language names obtained will be in a language locale of the TLD
-        (e.g. ``tld=fr`` will retrieve the French names of the languages).
-        Default is ``com``.
+    Args:
+        tld (string): Top-level domain for the Google Translate host
+            to fetch languages from. i.e `https://translate.google.<tld>`.
+            The language names obtained will be in a language locale of the TLD
+            (e.g. ``tld=fr`` will retrieve the French names of the languages).
+            Default is ``com``.
 
     Returns:
         dict: A dictionnary of languages from Google Translate
@@ -107,9 +108,9 @@ def _extra_langs():
     Returns:
         dict: A dictionnary of extra languages manually defined.
 
-        Variations of the ones fetched by `_fetch_langs`,
-        observed to provide different dialects or accents or
-        just simply accepted by the Google Translate Text-to-Speech API.
+            Variations of the ones fetched by `_fetch_langs`,
+            observed to provide different dialects or accents or
+            just simply accepted by the Google Translate Text-to-Speech API.
 
     """
     return {

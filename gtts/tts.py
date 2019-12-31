@@ -44,6 +44,10 @@ class gTTS:
             to catch a language error early. If set to ``True``,
             a ``ValueError`` is raised if ``lang`` doesn't exist.
             Default is ``True``.
+
+        .. note:: Setting ``lang_check`` to ``False`` skips Web requests
+            (to validate language) and therefore speeds up instanciation.
+
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
             functions must take a string and return a string. Defaults to::

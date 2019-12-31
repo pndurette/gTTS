@@ -49,7 +49,7 @@ Read 'no check' to ``nocheck.mp3`` without language checking::
 
    $ gtts-cli 'no check' --lang zh --nocheck --ouput nocheck.mp3
 
-.. note:: Using ``--nocheck`` can make the command `slightly` faster. It exists however to force a ``<lang>`` language tag that might not be documented but would work with the API, such as for specific regional sub-tags of documented tags (examples for 'en': 'en-gb', 'en-au', etc.).
+.. note:: Using ``--nocheck`` can speed up execution. It exists mostly however to force a ``<lang>`` language tag that might not be documented but would work with the API, such as for specific regional sub-tags of documented tags (examples for 'en': 'en-gb', 'en-au', etc.).
 
 Playing sound directly
 ----------------------

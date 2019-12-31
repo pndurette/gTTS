@@ -16,17 +16,21 @@ List available languages::
 
    $ gtts-cli --all
 
+List available languages (Italian names)::
+
+   $ gtts-cli --tld it --all
+
 Read 'hello' to ``hello.mp3``::
 
    $ gtts-cli 'hello' --output hello.mp3
 
-Read 'bonjour' in French to ``bonjour.mp3``::
+Read "c'est la vie" in French to ``cestlavie.mp3``::
 
-   $ gtts-cli 'bonjour' --lang fr --output bonjour.mp3
+   $ gtts-cli "c'est la vie" --lang fr --output cestlavie.mp3
 
-.. note:: Alternatively, you can enclose your text with quotation marks to avoid errors associated with phrases that may need the use of an apostrophe::
+Read '你好' to ``你好.mp3`` (in Mandarin, using google.cn)::
 
-   $ gtts-cli "c'est la vie" --lang fr --output test.mp3
+   $ gtts-cli '你好' --tld cn --lang zh-cn --output 你好.mp3
 
 Read 'slow' slowly to ``slow.mp3``::
 

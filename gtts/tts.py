@@ -206,20 +206,20 @@ class gTTS:
 
             # Request
             r = requests.Request(method='GET',
-                                url=translate_url,
-                                params=payload,
-                                headers=self.GOOGLE_TTS_HEADERS)
+                                 url=translate_url,
+                                 params=payload,
+                                 headers=self.GOOGLE_TTS_HEADERS)
 
             # Prepare request
             prepared_requests.append(r.prepare())
-    
+
         return prepared_requests
 
     def get_urls(self):
         """TBD. # TODO
         """
         return [pr.url for pr in self._prepare_requests()]
- 
+
     def write_to_fp(self, fp):
         """Do the TTS API request and write bytes to a file-like object.
 
@@ -241,8 +241,8 @@ class gTTS:
                 with requests.Session() as s:
                     # Send request
                     r = s.send(request=pr,
-                              proxies=urllib.request.getproxies(),
-                              verify=False)
+                               proxies=urllib.request.getproxies(),
+                               verify=False)
 
                 log.debug("headers-%i: %s", idx, r.request.headers)
                 log.debug("url-%i: %s", idx, r.request.url)

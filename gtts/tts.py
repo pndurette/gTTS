@@ -5,6 +5,7 @@ from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
 from six.moves import urllib
+from six import string_types
 import urllib3
 import requests
 import logging
@@ -171,26 +172,16 @@ class gTTS:
             min_tokens += _minimize(t, ' ', self.GOOGLE_TTS_MAX_CHARS)
         return min_tokens
 
-    def write_to_fp(self, fp):
-        """Do the TTS API request and write bytes to a file-like object.
-
-        Args:
-            fp (file object): Any file-like object to write the ``mp3`` to.
-
-        Raises:
-            :class:`gTTSError`: When there's an error with the API request.
-            TypeError: When ``fp`` is not a file-like object that takes bytes.
-
+    def _prepare_requests(self):
+        """TBD. # TODO
         """
-        # When disabling ssl verify in requests (for proxies and firewalls),
-        # urllib3 prints an insecure warning on stdout. We disable that.
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         translate_url = _translate_url(tld=self.tld, path="translate_tts")
         text_parts = self._tokenize(self.text)
         log.debug("text_parts: %i", len(text_parts))
         assert text_parts, 'No text to send to TTS API'
 
+        prepared_requests = []
         for idx, part in enumerate(text_parts):
             try:
                 # Calculate token
@@ -213,13 +204,45 @@ class gTTS:
 
             log.debug("payload-%i: %s", idx, payload)
 
+            # Request
+            r = requests.Request(method='GET',
+                                url=translate_url,
+                                params=payload,
+                                headers=self.GOOGLE_TTS_HEADERS)
+
+            # Prepare request
+            prepared_requests.append(r.prepare())
+    
+        return prepared_requests
+
+    def get_urls(self):
+        """TBD. # TODO
+        """
+        return [pr.url for pr in self._prepare_requests()]
+ 
+    def write_to_fp(self, fp):
+        """Do the TTS API request and write bytes to a file-like object.
+
+        Args:
+            fp (file object): Any file-like object to write the ``mp3`` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+            TypeError: When ``fp`` is not a file-like object that takes bytes.
+
+        """
+        # When disabling ssl verify in requests (for proxies and firewalls),
+        # urllib3 prints an insecure warning on stdout. We disable that.
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+        prepared_requests = self._prepare_requests()
+        for idx, pr in enumerate(prepared_requests):
             try:
-                # Request
-                r = requests.get(url=translate_url,
-                                 params=payload,
-                                 headers=self.GOOGLE_TTS_HEADERS,
-                                 proxies=urllib.request.getproxies(),
-                                 verify=False)
+                with requests.Session() as s:
+                    # Send request
+                    r = s.send(request=pr,
+                              proxies=urllib.request.getproxies(),
+                              verify=False)
 
                 log.debug("headers-%i: %s", idx, r.request.headers)
                 log.debug("url-%i: %s", idx, r.request.url)

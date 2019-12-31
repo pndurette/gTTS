@@ -2,6 +2,7 @@
 import os
 import pytest
 from mock import Mock
+from six.moves import urllib
 
 from gtts.tts import gTTS, gTTSError
 from gtts.lang import _fetch_langs, _extra_langs
@@ -96,6 +97,20 @@ def test_save(tmp_path):
 
     # Check if file created is > 2k
     assert filename.stat().st_size > 2000
+
+
+def test_get_urls():
+    """Get request urls to download audio file"""
+    tts = gTTS(text='test', lang='en-uk')
+    urls = tts.get_urls()
+
+    # Check the url
+    r = urllib.parse.urlparse(urls[0])
+    assert r.scheme == 'https'
+    assert r.netloc == 'translate.google.com'
+    assert r.path == '/translate_tts'
+    assert 'test' in urllib.parse.parse_qs(r.query)['q']
+    assert 'en-uk' in urllib.parse.parse_qs(r.query)['tl']
 
 
 def test_msg():

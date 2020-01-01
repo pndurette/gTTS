@@ -5,7 +5,6 @@ from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
 from six.moves import urllib
-from six import string_types
 import urllib3
 import requests
 import logging
@@ -39,11 +38,13 @@ class gTTS:
             google.com might be blocked in a network but a local Google
             host is not. Default is ``com``.
         lang (string, optional): The language (IETF language tag) to
-            read the text in. Defaults to 'en'.
+            read the text in. Default is ``en``.
         slow (bool, optional): Reads text more slowly. Defaults to ``False``.
         lang_check (bool, optional): Strictly enforce an existing ``lang``,
             to catch a language error early. If set to ``True``,
             a ``ValueError`` is raised if ``lang`` doesn't exist.
+            Setting ``lang_check`` to ``False`` skips Web requests
+            (to validate language) and therefore speeds up instanciation.
             Default is ``True``.
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
@@ -173,10 +174,14 @@ class gTTS:
         return min_tokens
 
     def _prepare_requests(self):
-        """TBD. # TODO
-        """
+        """Created the TTS API the request(s) without sending them.
 
+        Returns:
+            list: ``requests.PreparedRequests_``. <https://2.python-requests.org/en/master/api/#requests.PreparedRequest>`_``.
+        """
+        # TTS API URL
         translate_url = _translate_url(tld=self.tld, path="translate_tts")
+
         text_parts = self._tokenize(self.text)
         log.debug("text_parts: %i", len(text_parts))
         assert text_parts, 'No text to send to TTS API'
@@ -206,22 +211,29 @@ class gTTS:
 
             # Request
             r = requests.Request(method='GET',
-                                url=translate_url,
-                                params=payload,
-                                headers=self.GOOGLE_TTS_HEADERS)
+                                 url=translate_url,
+                                 params=payload,
+                                 headers=self.GOOGLE_TTS_HEADERS)
 
             # Prepare request
             prepared_requests.append(r.prepare())
-    
+
         return prepared_requests
 
     def get_urls(self):
-        """TBD. # TODO
+        """Get TTS API request URL(s) that would be sent to the TTS API.
+
+        Returns:
+            list: A list of TTS API request URLs to make.
+
+                This is particularly useful to get the list of URLs generated
+                by ``gTTS`` but not yet fullfilled,
+                for example to be used by an external program.
         """
         return [pr.url for pr in self._prepare_requests()]
- 
+
     def write_to_fp(self, fp):
-        """Do the TTS API request and write bytes to a file-like object.
+        """Do the TTS API request(s) and write bytes to a file-like object.
 
         Args:
             fp (file object): Any file-like object to write the ``mp3`` to.
@@ -241,8 +253,8 @@ class gTTS:
                 with requests.Session() as s:
                     # Send request
                     r = s.send(request=pr,
-                              proxies=urllib.request.getproxies(),
-                              verify=False)
+                               proxies=urllib.request.getproxies(),
+                               verify=False)
 
                 log.debug("headers-%i: %s", idx, r.request.headers)
                 log.debug("url-%i: %s", idx, r.request.url)

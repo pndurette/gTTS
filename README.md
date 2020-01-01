@@ -10,6 +10,7 @@ Write spoken `mp3` data to a file, a file-like object (bytestring) for further a
 [![codecov](https://codecov.io/gh/pndurette/gTTS/branch/master/graph/badge.svg)](https://codecov.io/gh/pndurette/gTTS)
 [![Commits Since](https://img.shields.io/github/commits-since/pndurette/gTTS/latest.svg)](https://github.com/pndurette/gTTS/commits/)
 [![PyPi Downloads](http://pepy.tech/badge/gtts)](http://pepy.tech/project/gtts)
+[![Buy me a Coffee](https://img.shields.io/badge/buy%20me%20a-coffee-orange)](https://www.buymeacoffee.com/pndurette)
 
 ## Features
 

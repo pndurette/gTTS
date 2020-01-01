@@ -1,1 +1,0 @@
-Changed default word-for-word pre-processor (``('M.', 'Monsieur')``) which would substitute any 'm.' for 'monsieur' (e.g. 'them.' became 'themonsieur')

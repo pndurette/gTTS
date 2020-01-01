@@ -1,1 +1,0 @@
-Decoupled Web requests _preparing_ from _sending_. This allows ``gTTS`` to build TTS API request URLS it _would_ send, which can be obtained with the new ``get_urls()`` method.

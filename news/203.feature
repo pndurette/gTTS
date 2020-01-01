@@ -1,1 +1,0 @@
-Added the ability to customize the Google Translate URL hostname using a different top-level domain (in `gTTS` via the new `tld` parameter and in `gtts-cli` via the new `--tld`/`-t` option)

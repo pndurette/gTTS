@@ -18,7 +18,7 @@ Features
 - The ``gtts`` module
 
   - Added the ability to customize the Google Translate URL hostname.
-    This is useful where ``google.com`` might be blocked within a network but
+    This is useful when ``google.com`` might be blocked within a network but
     a local or different Google host (e.g. ``google.cn``) is not
     (`#143 <https://github.com/pndurette/gTTS/issues/143>`_, `#203 <https://github.com/pndurette/gTTS/issues/203>`_):
 
@@ -27,7 +27,7 @@ Features
       (default: ``com``).
     - Languages are also now fetched using the same customized hostname.
 
-  - The generated TTS API request URLs can now be obtained instead of
+  - Pre-generated TTS API request URLs can now be obtained instead of
     writing an ``mp3`` file to disk (for example to be used in an
     external program):
 

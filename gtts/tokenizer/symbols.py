@@ -6,7 +6,7 @@ ABBREVIATIONS = [
     'prof', 'sr', 'st']
 
 SUB_PAIRS = [
-    ('M.', 'Monsieur')
+    ('Esq.', 'Esquire')
 ]
 
 ALL_PUNC = u"?!？！.,¡()[]¿…‥،;:—。，、：\n"

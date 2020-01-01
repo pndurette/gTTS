@@ -21,8 +21,8 @@ ing"""
         self.assertEqual(abbreviations(_in), _out)
 
     def test_word_sub(self):
-        _in = "M. Bacon"
-        _out = "Monsieur Bacon"
+        _in = "Esq. Bacon"
+        _out = "Esquire Bacon"
         self.assertEqual(word_sub(_in), _out)
 
 

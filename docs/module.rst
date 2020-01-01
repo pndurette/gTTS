@@ -61,15 +61,14 @@ to do further manipulation:::
     >>> # Load `mp3_fp` as an mp3 file in
     >>> # the audio library of your choice
 
-.. note:: See `Issue #26 <https://github.com/pndurette/gTTS/issues/26>`_ for a discussion
-    and examples of direct playback using various methods.
+.. note:: See `Issue #26 <https://github.com/pndurette/gTTS/issues/26>`_ for
+    a discussion and examples of direct playback using various methods.
 
-.. note: Starting with ``gTTS`` ```2.1.0 <changelog>`_``, the
-    ```get_urls() <gtts.tts.gTTS.get_urls>`_`` method can be used to obtain the generated URLs
-    (whithout fullfilling them) which could be used for playback in another program.
-    See example above.
+.. note:: Starting with ``gTTS`` :doc:`2.1.0 <changelog>`, the
+    :class:`gtts.tts.gTTS.get_urls` method can be used to obtain the list of
+    generated URLs requests (whithout fullfilling them) which could be used
+    for playback in another program. See `Examples`_ above.
 
-changelog
 
 Logging
 -------

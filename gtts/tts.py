@@ -38,16 +38,14 @@ class gTTS:
             google.com might be blocked in a network but a local Google
             host is not. Default is ``com``.
         lang (string, optional): The language (IETF language tag) to
-            read the text in. Defaults to 'en'.
+            read the text in. Default is ``en``.
         slow (bool, optional): Reads text more slowly. Defaults to ``False``.
         lang_check (bool, optional): Strictly enforce an existing ``lang``,
             to catch a language error early. If set to ``True``,
             a ``ValueError`` is raised if ``lang`` doesn't exist.
-            Default is ``True``.
-
-        .. note:: Setting ``lang_check`` to ``False`` skips Web requests
+            Setting ``lang_check`` to ``False`` skips Web requests
             (to validate language) and therefore speeds up instanciation.
-
+            Default is ``True``.
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
             functions must take a string and return a string. Defaults to::

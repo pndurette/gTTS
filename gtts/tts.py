@@ -34,9 +34,10 @@ class gTTS:
     Args:
         text (string): The text to be read.
         tld (string): Top-level domain for the Google Translate host,
-            i.e `https://translate.google.<tld>`. This is useful where
-            google.com might be blocked in a network but a local Google
-            host is not. Default is ``com``.
+            i.e `https://translate.google.<tld>`. This is useful
+            where ``google.com`` might be blocked within a network but
+            a local or different Google host (e.g. ``google.cn``) is not.
+            Default is ``com``.
         lang (string, optional): The language (IETF language tag) to
             read the text in. Default is ``en``.
         slow (bool, optional): Reads text more slowly. Defaults to ``False``.

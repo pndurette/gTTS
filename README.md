@@ -42,4 +42,4 @@ See <http://gtts.readthedocs.org/> for documentation and examples.
 
 ### Licence
 
-[The MIT License (MIT)](LICENSE) Copyright © 2014-2019 Pierre Nicolas Durette
+[The MIT License (MIT)](LICENSE) Copyright © 2014-2020 Pierre Nicolas Durette

@@ -55,7 +55,7 @@ to do further manipulation:::
     >>> from io import BytesIO
     >>>
     >>> mp3_fp = BytesIO()
-    >>> tts = gTTS('hello', 'en')
+    >>> tts = gTTS('hello', lang='en')
     >>> tts.write_to_fp(mp3_fp)
     >>>
     >>> # Load `mp3_fp` as an mp3 file in

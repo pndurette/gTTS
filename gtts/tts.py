@@ -111,7 +111,7 @@ class gTTS:
     ):
 
         # Debug
-        for k, v in locals().items():
+        for k, v in dict(locals()).items():
             if k == 'self':
                 continue
             log.debug("%s: %s", k, v)

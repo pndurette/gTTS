@@ -1,0 +1,1 @@
+Debug mode now uses a copy of locals() to prevent RuntimeError

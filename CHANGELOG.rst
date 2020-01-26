@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+2.1.1 (2020-01-25)
+------------------
+
+Bugfixes
+~~~~~~~~
+
+- Debug mode now uses a copy of locals() to prevent RuntimeError (`#213 <https://github.com/pndurette/gTTS/issues/213>`_)
+
+
 2.1.0 (2020-01-01)
 ------------------
 

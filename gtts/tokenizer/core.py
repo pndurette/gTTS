@@ -3,7 +3,7 @@ import re
 
 
 class RegexBuilder():
-    """Builds regex using arguments passed into a pattern template.
+    r"""Builds regex using arguments passed into a pattern template.
 
     Builds a regex object for which the pattern is made from an argument
     passed into a template. If more than one argument is passed (iterable),
@@ -257,10 +257,10 @@ class Tokenizer():
             >>> import re, RegexBuilder
             >>>
             >>> def case1():
-            ...     return re.compile("\,")
+            ...     return re.compile("\\,")
             >>>
             >>> def case2():
-            ...     return RegexBuilder('abc', lambda x: "{}\.".format(x)).regex
+            ...     return RegexBuilder('abc', lambda x: "{}\\.".format(x)).regex
             >>>
             >>> t = Tokenizer([case1, case2])
 

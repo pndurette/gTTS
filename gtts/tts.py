@@ -2,12 +2,14 @@
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
 from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
 from gtts.lang import tts_langs
+from IPython.display import Audio
 
 from gtts_token import gtts_token
 from six.moves import urllib
 import urllib3
 import requests
 import logging
+import io
 
 __all__ = ['gTTS', 'gTTSError']
 
@@ -294,6 +296,13 @@ class gTTS:
         with open(str(savefile), 'wb') as f:
             self.write_to_fp(f)
             log.debug("Saved to %s", savefile)
+
+    def say(self):
+        """Play the resulting file without saving to the disk file system"""
+    with io.BytesIO() as f:
+        self.write_to_fp(f)
+        f.seek(0)
+        return Audio(f.read(), autoplay=True)
 
 
 class gTTSError(Exception):

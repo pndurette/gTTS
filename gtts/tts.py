@@ -297,7 +297,7 @@ class gTTS:
             self.write_to_fp(f)
             log.debug("Saved to %s", savefile)
 
-    def say(self):
+    def play(self):
         """Play the resulting file without saving to the disk file system"""
     with io.BytesIO() as f:
         self.write_to_fp(f)

@@ -34,6 +34,12 @@ Module:
     >>> tts = gTTS('hello')
     >>> tts.save('hello.mp3')
 
+Just play:
+
+    >>> from gtts import gTTS
+    >>> tts = gTTS('hello')
+    >>> tts.play()
+
 See <http://gtts.readthedocs.org/> for documentation and examples.
 
 ### Project

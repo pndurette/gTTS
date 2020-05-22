@@ -299,10 +299,10 @@ class gTTS:
 
     def play(self):
         """Play the resulting file without saving to the disk file system"""
-    with io.BytesIO() as f:
-        self.write_to_fp(f)
-        f.seek(0)
-        return Audio(f.read(), autoplay=True)
+        with io.BytesIO() as f:
+            self.write_to_fp(f)
+            f.seek(0)
+            return Audio(f.read(), autoplay=True)
 
 
 class gTTSError(Exception):

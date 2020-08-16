@@ -189,6 +189,9 @@ class gTTS:
 
         prepared_requests = []
         for idx, part in enumerate(text_parts):
+            if part is None or part=='':
+                # Skip blank tokens
+                continue
             try:
                 # Calculate token
                 part_tk = self.token.calculate_token(part)

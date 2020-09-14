@@ -21,13 +21,13 @@ def tts_langs(tld="com"):
             Default is ``com``.
 
     Returns:
-        dict: A dictionnary of the type `{ '<lang>': '<name>'}`
+        dict: A dictionary of the type `{ '<lang>': '<name>'}`
 
             Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
             and `<name>` is the full English name of the language, such as
             `English` or `Portuguese (Brazil)`.
 
-    The dictionnary returned combines languages from two origins:
+    The dictionary returned combines languages from two origins:
 
     - Languages fetched automatically from Google Translate
     - Languages that are undocumented variations that were observed to work and

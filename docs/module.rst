@@ -13,7 +13,7 @@ gTTS (:class:`gtts.gTTS`)
 Languages (:mod:`gtts.lang`)
 ----------------------------
 
-.. note:: The easiest way to get a list of available language is to print them
+.. note:: The easiest way to get a list of available languages is to print them
     with ``gtts-cli --all``
 
 .. automodule:: gtts.lang
@@ -36,7 +36,7 @@ Write 'hello bonjour' in English then French to ``hello_bonjour.mp3``::
     >>>
     >>> with open('hello_bonjour.mp3', 'wb') as f:
     ...     tts_en.write_to_fp(f)
-    ...     tts_fr.write_to_fp(p)
+    ...     tts_fr.write_to_fp(f)
 
 Instead of writing to disk, get URL for 'hello' in English::
 

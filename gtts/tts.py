@@ -76,7 +76,7 @@ class gTTS:
             left to speak after pre-precessing, tokenizing and cleaning.
         ValueError: When ``lang_check`` is ``True`` and ``lang`` is not supported.
         RuntimeError: When ``lang_check`` is ``True`` but there's an error loading
-            the languages dictionnary.
+            the languages dictionary.
 
     """
 

@@ -101,6 +101,7 @@ def _translate_url(tld="com", path=""):
     _GOOGLE_TTS_URL = "https://translate.google.{}/{}"
     return _GOOGLE_TTS_URL.format(tld, path)
 
+
 def _check_for_invalid_token(min_tokens):
     """ Checks for Null or Blank Token
     Args:
@@ -112,6 +113,4 @@ def _check_for_invalid_token(min_tokens):
     Solving Issue:
         404 Error with Blank Entry
     """
-    
-
     return [token for token in min_tokens if token is not None and token != '']

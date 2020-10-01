@@ -1,6 +1,6 @@
 name: PR to Master
 on:
-  pull_request:
+  push:
     branches:
      - master
 

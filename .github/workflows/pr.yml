@@ -14,20 +14,18 @@ jobs:
       max-parallel: 15
       matrix:
         # Explicitly test for all supported pythons
-        python-version: ['2.x', 3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8, 3.9]
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        exclude: 
+        exclude:
         # Exclude what is already tested in the Push workflow
-        # (i.e. latest python 2, latest python 3)
-        - os: ubuntu-latest
-          python-version: '2.x'
+        # (i.e. latest python 3)
         - os: ubuntu-latest
           python-version: '3.x'
-          
-    steps:
-      - uses: actions/checkout@v1
 
-      - uses: actions/setup-python@v1
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -47,9 +45,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 

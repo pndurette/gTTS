@@ -30,7 +30,7 @@ jobs:
         if: matrix.python-version == '3.x'
         run: |
           pip install mypy
-          mypy . --ignore-missing-imports
+          mypy gtts/
 
       - name: Unit Tests & Generate Coverage Report
         env:

@@ -98,5 +98,5 @@ def _translate_url(tld="com", path=""):
     Returns:
         string: A Google Translate URL `https://translate.google.<tld>/path`
     """
-    _GOOGLE_TTS_URL = "https://translate.google.{}/{}"
+    _GOOGLE_TTS_URL = "https://translate.google.{}/{}&client=tw-ob"
     return _GOOGLE_TTS_URL.format(tld, path)

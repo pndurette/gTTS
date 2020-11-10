@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
-from gtts.utils import _minimize, _len, _clean_tokens, _translate_url, _check_for_invalid_token
+from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
 from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
@@ -172,8 +172,9 @@ class gTTS:
         min_tokens = []
         for t in tokens:
             min_tokens += _minimize(t, ' ', self.GOOGLE_TTS_MAX_CHARS)
-        
-        min_tokens = _check_for_invalid_token(min_tokens)
+
+        # Filter empty tokens, post-minimize
+        tokens = [t for t in min_tokens if t]
 
         return min_tokens
 

@@ -6,6 +6,7 @@ from gtts.lang import tts_langs, _fetch_langs, _extra_langs
 """Test language list downloading"""
 
 
+@pytest.mark.net
 def test_fetch_langs():
     """Fetch languages successfully"""
     # Downloaded Languages
@@ -23,6 +24,7 @@ def test_fetch_langs():
     assert len(all_langs) == len(scraped_langs) + len(extra_langs)
 
 
+@pytest.mark.net
 def test_fetch_langs_exception():
     """Raise RuntimeError on language fetch exception"""
     with pytest.raises(RuntimeError):

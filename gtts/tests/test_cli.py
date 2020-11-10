@@ -66,6 +66,7 @@ def test_file_not_exists():
 
 
 # <all> tests
+@pytest.mark.net
 def test_all():
     """Option <all> should return a list of languages"""
     result = runner(['--all'])
@@ -76,7 +77,7 @@ def test_all():
     assert re.match(r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$", result.output)
     assert result.exit_code == 0
 
-
+@pytest.mark.net
 def test_all_tld():
     """Option <all> should return a list of languages"""
     result = runner(['--tld', 'it', '--all'])
@@ -88,6 +89,7 @@ def test_all_tld():
 
 
 # <lang> tests
+@pytest.mark.net
 def test_lang_not_valid():
     """Invalid <lang> should display an error"""
     result = runner(['--lang', 'xx', 'test'])
@@ -96,6 +98,7 @@ def test_lang_not_valid():
     assert result.exit_code != 0
 
 
+@pytest.mark.net
 def test_lang_nocheck():
     """Invalid <lang> (with <nocheck>) should display an error message from gtts"""
     with LogCapture() as lc:
@@ -109,8 +112,7 @@ def test_lang_nocheck():
     assert result.exit_code != 0
 
 # Param set tests
-
-
+@pytest.mark.net
 def test_params_set():
     """Options should set gTTS instance arguments (read from debug log)"""
     with LogCapture() as lc:
@@ -168,6 +170,7 @@ def logcapture_str(lc):
     return '\n'.join([u"%s %s\n  %s" % r for r in lc.actual()])
 
 
+@pytest.mark.net
 def test_stdin_text():
     with LogCapture() as lc:
         result = runner_debug(['-'], textstdin)
@@ -177,6 +180,7 @@ def test_stdin_text():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_stdin_text_unicode():
     with LogCapture() as lc:
         result = runner_debug(['-'], textstdin_unicode)
@@ -186,6 +190,7 @@ def test_stdin_text_unicode():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_stdin_file():
     with LogCapture() as lc:
         result = runner_debug(['--file', '-'], textstdin)
@@ -195,6 +200,7 @@ def test_stdin_file():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_stdin_file_unicode():
     with LogCapture() as lc:
         result = runner_debug(['--file', '-'], textstdin_unicode)
@@ -204,6 +210,7 @@ def test_stdin_file_unicode():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_text():
     with LogCapture() as lc:
         result = runner_debug([text])
@@ -213,6 +220,7 @@ def test_text():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_text_unicode():
     with LogCapture() as lc:
         result = runner_debug([text_unicode])
@@ -222,6 +230,7 @@ def test_text_unicode():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_file_ascii():
     with LogCapture() as lc:
         result = runner_debug(['--file', textfile_ascii])
@@ -231,6 +240,7 @@ def test_file_ascii():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_file_utf8():
     with LogCapture() as lc:
         result = runner_debug(['--file', textfile_utf8])
@@ -240,14 +250,16 @@ def test_file_utf8():
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_stdout():
     result = runner(['test'])
 
     # The MP3 encoding (LAME 3.99.5) leaves a signature in the raw output
-    #assert 'LAME3.99.5' in result.output
+    assert 'LAME3.99.5' in result.output
     assert result.exit_code == 0
 
 
+@pytest.mark.net
 def test_file(tmp_path):
     filename = tmp_path / 'out.mp3'
 

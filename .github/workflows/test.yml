@@ -17,12 +17,13 @@ jobs:
         python-version: [3.6, 3.7, 3.8, 3.9]
         os: [ubuntu-latest, macOS-latest, windows-latest]
         pytest-mark: ['not net']
-        
+        failok: [false]
+
         include:
           - pytest-mark: 'net'
           - python-version: 3.x
           - os: ubuntu-latest
-          - can-fail: true
+          - failok: true
 
     steps:
       - uses: actions/checkout@v2

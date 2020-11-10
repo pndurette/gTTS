@@ -19,11 +19,11 @@ jobs:
         pytest-mark: ['not net']
         failok: [false]
 
-        # include:
-        #   - pytest-mark: 'net'
-        #   - python-version: 3.x
-        #   - os: ubuntu-latest
-        #   - failok: true
+        include:
+          - pytest-mark: 'net'
+            python-version: 3.x
+            os: ubuntu-latest
+            failok: true
 
     steps:
       - uses: actions/checkout@v2

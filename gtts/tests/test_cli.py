@@ -98,6 +98,7 @@ def test_lang_not_valid():
     assert result.exit_code != 0
 
 
+@pytest.mark.net
 def test_lang_nocheck():
     """Invalid <lang> (with <nocheck>) should display an error message from gtts"""
     with LogCapture() as lc:
@@ -111,7 +112,6 @@ def test_lang_nocheck():
     assert result.exit_code != 0
 
 # Param set tests
-
 def test_params_set():
     """Options should set gTTS instance arguments (read from debug log)"""
     with LogCapture() as lc:

@@ -10,7 +10,7 @@ jobs:
     name: Unit
 
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.failok }}
+    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:

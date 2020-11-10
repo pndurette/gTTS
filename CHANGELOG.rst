@@ -9,6 +9,33 @@ Changelog
 
 .. towncrier release notes start
 
+2.1.2 (2020-11-10)
+------------------
+
+Features
+~~~~~~~~
+
+- Update `gTTS-token` to `1.1.4` (`#238 <https://github.com/pndurette/gTTS/issues/238>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- Fixed an issue where some tokens could be empty after minimization (`#229 <https://github.com/pndurette/gTTS/issues/229>`_, `#239 <https://github.com/pndurette/gTTS/issues/239>`_)
+
+
+Improved Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Grammar, spelling and example fixes (`#227 <https://github.com/pndurette/gTTS/issues/227>`_)
+
+
+Misc
+~~~~
+
+- `#218 <https://github.com/pndurette/gTTS/issues/218>`_, `#230 <https://github.com/pndurette/gTTS/issues/230>`_, `#231 <https://github.com/pndurette/gTTS/issues/231>`_, `#239 <https://github.com/pndurette/gTTS/issues/239>`_
+
+
 2.1.1 (2020-01-25)
 ------------------
 

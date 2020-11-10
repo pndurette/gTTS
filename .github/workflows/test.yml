@@ -10,7 +10,7 @@ jobs:
     name: Unit
 
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
+    continue-on-error: ${{ matrix.failok }}
     strategy:
       fail-fast: false
       matrix:
@@ -19,11 +19,11 @@ jobs:
         pytest-mark: ['not net']
         failok: [false]
 
-        include:
-          - pytest-mark: 'net'
-          - python-version: 3.x
-          - os: ubuntu-latest
-          - failok: true
+        # include:
+        #   - pytest-mark: 'net'
+        #   - python-version: 3.x
+        #   - os: ubuntu-latest
+        #   - failok: true
 
     steps:
       - uses: actions/checkout@v2

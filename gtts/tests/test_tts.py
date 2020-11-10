@@ -37,6 +37,7 @@ else:
     langs = env_langs
 
 
+@pytest.mark.net
 @pytest.mark.parametrize('lang', langs.keys(), ids=list(langs.values()))
 def test_TTS(tmp_path, lang):
     """Test all supported languages and file save"""
@@ -53,6 +54,7 @@ def test_TTS(tmp_path, lang):
         assert filename.stat().st_size > 2000
 
 
+@pytest.mark.net
 def test_unsupported_language_check():
     """Raise ValueError on unsupported language (with language check)"""
     lang = 'xx'
@@ -88,6 +90,7 @@ def test_bad_fp_type():
         tts.write_to_fp(5)
 
 
+@pytest.mark.net
 def test_save(tmp_path):
     """Save .mp3 file successfully"""
     filename = tmp_path / 'save.mp3'
@@ -99,6 +102,7 @@ def test_save(tmp_path):
     assert filename.stat().st_size > 2000
 
 
+@pytest.mark.net
 def test_get_urls():
     """Get request URLs list"""
 
@@ -161,6 +165,7 @@ def test_infer_msg():
     assert error100.msg == "100 (ddd) from TTS API. Probable cause: Unknown"
 
 
+@pytest.mark.net
 def test_WebRequest(tmp_path):
     """Test Web Requests"""
 

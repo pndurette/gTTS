@@ -1,0 +1,52 @@
+name: Testing
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Unit
+
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.can-fail }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        
+        pytest-mark: ['not net']
+        can-fail: [false]
+        
+        include:
+          - pytest-mark: 'net'
+          - python-version: 3.x
+          - os: ubuntu-latest
+          - can-fail: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[tests]
+
+      - name: Unit Tests (${{ matrix.pytest-mark }})
+        run: pytest -v -s gtts/ -m "${{ matrix.pytest-mark }}" --cov=gtts --cov-config=setup.cfg --cov-report=xml
+        env:
+          TEST_LANGS: en
+
+      # - name: Upload Coverage Report
+      #   uses: codecov/codecov-action@v1.0.14
+      #   if: |
+      #     github.ref == 'refs/heads/master' \
+      #     matrix.os == 'ubuntu-latest' && \
+      #     matrix.python-version == '3.9' && \
+      #     matrix.can-fail == 'false'

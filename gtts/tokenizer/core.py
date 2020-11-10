@@ -3,7 +3,7 @@ import re
 
 
 class RegexBuilder():
-    """Builds regex using arguments passed into a pattern template.
+    r"""Builds regex using arguments passed into a pattern template.
 
     Builds a regex object for which the pattern is made from an argument
     passed into a template. If more than one argument is passed (iterable),
@@ -71,7 +71,7 @@ class RegexBuilder():
 
 
 class PreProcessorRegex():
-    """Regex-based substitution text pre-processor.
+    r"""Regex-based substitution text pre-processor.
 
     Runs a series of regex substitutions (``re.sub``) from each ``regex`` of a
     :class:`gtts.tokenizer.core.RegexBuilder` with an extra ``repl``
@@ -147,7 +147,7 @@ class PreProcessorRegex():
 
 
 class PreProcessorSub():
-    """Simple substitution text preprocessor.
+    r"""Simple substitution text preprocessor.
 
     Performs string-for-string substitution from list a find/replace pairs.
     It abstracts :class:`gtts.tokenizer.core.PreProcessorRegex` with a default
@@ -213,7 +213,7 @@ class PreProcessorSub():
 
 
 class Tokenizer():
-    """An extensible but simple generic rule-based tokenizer.
+    r"""An extensible but simple generic rule-based tokenizer.
 
     A generic and simple string tokenizer that takes a list of functions
     (called `tokenizer cases`) returning ``regex`` objects and joins them by

@@ -16,10 +16,15 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
         os: [ubuntu-latest, macOS-latest, windows-latest]
+
+        # All tests that need to access the API endpoint are marked as 'net'
+        # By default run 'no net' pytest marks.
         pytest-mark: ['not net']
         failok: [false]
 
         include:
+          # Run one matrix case pytest job with 'net' marks
+          # But allow it to fail.
           - pytest-mark: 'net'
             python-version: 3.x
             os: ubuntu-latest

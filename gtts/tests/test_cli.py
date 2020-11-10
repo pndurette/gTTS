@@ -112,6 +112,7 @@ def test_lang_nocheck():
     assert result.exit_code != 0
 
 # Param set tests
+@pytest.mark.net
 def test_params_set():
     """Options should set gTTS instance arguments (read from debug log)"""
     with LogCapture() as lc:

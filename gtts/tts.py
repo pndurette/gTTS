@@ -172,8 +172,9 @@ class gTTS:
         min_tokens = []
         for t in tokens:
             min_tokens += _minimize(t, ' ', self.GOOGLE_TTS_MAX_CHARS)
-        
-        min_tokens = _check_for_invalid_token(min_tokens)
+
+        # Filter empty tokens, post-minimize
+        tokens = [t for t in min_tokens if t]
 
         return min_tokens
 

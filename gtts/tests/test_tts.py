@@ -113,7 +113,7 @@ def test_get_urls():
     r = urllib.parse.urlparse(urls[0])
     assert r.scheme == 'https'
     assert r.netloc == 'translate.google.com'
-    assert r.path == '/translate_tts'
+    assert r.path == '/_/TranslateWebserverUi/data/batchexecute'
     assert 'test' in urllib.parse.parse_qs(r.query)['q']
     assert 'en-uk' in urllib.parse.parse_qs(r.query)['tl']
 

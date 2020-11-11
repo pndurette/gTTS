@@ -272,11 +272,15 @@ class gTTS:
             try:
                 # Write
                 for line in r.iter_lines(chunk_size=1024):
-                    audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', line.decode('utf-8'))
-                    if audio_search:
-                        as_bytes = audio_search.group(1).encode('ascii')
-                        decoded = base64.b64decode(as_bytes)
-                        fp.write(decoded)
+                    decoded_line = line.decode('utf-8')
+                    if 'jQ1olc' in decoded_line:
+                        audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
+                        if audio_search:
+                            as_bytes = audio_search.group(1).encode('ascii')
+                            decoded = base64.b64decode(as_bytes)
+                            fp.write(decoded)
+                        else:
+                            raise gTTSError("No audio stream in response")
                 log.debug("part-%i written to %s", idx, fp)
             except (AttributeError, TypeError) as e:
                 raise TypeError(

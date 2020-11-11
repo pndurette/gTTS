@@ -26,8 +26,8 @@ class Speed:
     The Google TTS Translate API supports two speeds:
         'slow' <= 0.3 < 'normal'
     """
-    SLOW = 0.3
-    NORMAL = 1
+    SLOW = True
+    NORMAL = None
 
 
 class gTTS:
@@ -152,9 +152,6 @@ class gTTS:
         self.pre_processor_funcs = pre_processor_funcs
         self.tokenizer_func = tokenizer_func
 
-        # Google Translate token
-        # self.token = gtts_token.Token()
-
     def _tokenize(self, text):
         # Pre-clean
         text = text.strip()
@@ -199,26 +196,13 @@ class gTTS:
 
         prepared_requests = []
         for idx, part in enumerate(text_parts):
-            # try:
-                # Calculate token
-                # part_tk = self.token.calculate_token(part)
-            # except requests.exceptions.RequestException as e:  # pragma: no cover
-                # log.debug(str(e), exc_info=True)
-                # raise gTTSError(
-                    # "Connection error during token calculation: %s" %
-                    # str(e))
+            data = self._package_rpc()
 
-            payload = {'rpcids': self.GOOGLE_TTS_RPC,
-                       'hl': self.lang}
-
-            data = self._package_rpc(part, self.lang)
-
-            log.debug("payload-%i: %s", idx, payload)
+            log.debug("data-%i: %s", idx, data)
 
             # Request
             r = requests.Request(method='POST',
                                  url=translate_url,
-                                 params=payload,
                                  data=data,
                                  headers=self.GOOGLE_TTS_HEADERS)
 
@@ -227,8 +211,8 @@ class gTTS:
 
         return prepared_requests
 
-    def _package_rpc(self, text, lang):
-        parameter = [text, lang, None, "null"]
+    def _package_rpc(self):
+        parameter = [self.text, self.lang, self.speed, "null"]
         escaped_parameter = json.dumps(parameter, separators=(',', ':'))
 
         rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]

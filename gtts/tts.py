@@ -5,9 +5,13 @@ from gtts.lang import tts_langs
 
 from gtts_token import gtts_token
 from six.moves import urllib
+from urllib.parse import quote
 import urllib3
 import requests
 import logging
+import json
+import re
+import base64
 
 __all__ = ['gTTS', 'gTTSError']
 
@@ -86,8 +90,10 @@ class gTTS:
         "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; WOW64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/47.0.2526.106 Safari/537.36"
+            "Chrome/47.0.2526.106 Safari/537.36",
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
     }
+    GOOGLE_TTS_RPC = "jQ1olc"
 
     def __init__(
             self,
@@ -147,7 +153,7 @@ class gTTS:
         self.tokenizer_func = tokenizer_func
 
         # Google Translate token
-        self.token = gtts_token.Token()
+        # self.token = gtts_token.Token()
 
     def _tokenize(self, text):
         # Pre-clean
@@ -185,7 +191,7 @@ class gTTS:
             list: ``requests.PreparedRequests_``. <https://2.python-requests.org/en/master/api/#requests.PreparedRequest>`_``.
         """
         # TTS API URL
-        translate_url = _translate_url(tld=self.tld, path="translate_tts")
+        translate_url = _translate_url(tld=self.tld, path="_/TranslateWebserverUi/data/batchexecute")
 
         text_parts = self._tokenize(self.text)
         log.debug("text_parts: %i", len(text_parts))
@@ -193,37 +199,41 @@ class gTTS:
 
         prepared_requests = []
         for idx, part in enumerate(text_parts):
-            try:
+            # try:
                 # Calculate token
-                part_tk = self.token.calculate_token(part)
-            except requests.exceptions.RequestException as e:  # pragma: no cover
-                log.debug(str(e), exc_info=True)
-                raise gTTSError(
-                    "Connection error during token calculation: %s" %
-                    str(e))
+                # part_tk = self.token.calculate_token(part)
+            # except requests.exceptions.RequestException as e:  # pragma: no cover
+                # log.debug(str(e), exc_info=True)
+                # raise gTTSError(
+                    # "Connection error during token calculation: %s" %
+                    # str(e))
 
-            payload = {'ie': 'UTF-8',
-                       'q': part,
-                       'tl': self.lang,
-                       'ttsspeed': self.speed,
-                       'total': len(text_parts),
-                       'idx': idx,
-                       'client': 'tw-ob',
-                       'textlen': _len(part),
-                       'tk': part_tk}
+            payload = {'rpcids': self.GOOGLE_TTS_RPC,
+                       'hl': self.lang}
+
+            data = self._package_rpc(part, self.lang)
 
             log.debug("payload-%i: %s", idx, payload)
 
             # Request
-            r = requests.Request(method='GET',
+            r = requests.Request(method='POST',
                                  url=translate_url,
                                  params=payload,
+                                 data=data,
                                  headers=self.GOOGLE_TTS_HEADERS)
 
             # Prepare request
             prepared_requests.append(r.prepare())
 
         return prepared_requests
+
+    def _package_rpc(self, text, lang):
+        parameter = [text, lang, None, "null"]
+        escaped_parameter = json.dumps(parameter, separators=(',', ':'))
+
+        rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]
+        espaced_rpc = json.dumps(rpc, separators=(',', ':'))
+        return "f.req={}&".format(quote(espaced_rpc))
 
     def get_urls(self):
         """Get TTS API request URL(s) that would be sent to the TTS API.
@@ -277,8 +287,12 @@ class gTTS:
 
             try:
                 # Write
-                for chunk in r.iter_content(chunk_size=1024):
-                    fp.write(chunk)
+                for line in r.iter_lines(chunk_size=1024):
+                    audio_search = re.search('jQ1olc","\[\\\\"(.*)\\\\"]', line.decode('utf-8'))
+                    if audio_search:
+                        as_bytes = audio_search.group(1).encode('ascii')
+                        decoded = base64.b64decode(as_bytes)
+                        fp.write(decoded)
                 log.debug("part-%i written to %s", idx, fp)
             except (AttributeError, TypeError) as e:
                 raise TypeError(

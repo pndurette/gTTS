@@ -114,8 +114,14 @@ def test_get_urls():
     assert r.scheme == 'https'
     assert r.netloc == 'translate.google.com'
     assert r.path == '/_/TranslateWebserverUi/data/batchexecute'
-    assert 'test' in urllib.parse.parse_qs(r.query)['q']
-    assert 'en-uk' in urllib.parse.parse_qs(r.query)['tl']
+
+@pytest.mark.net
+def test_get_bodies():
+    """get request bodies list"""
+    tts = gTTS(text='test', tld='com', lang='en-uk')
+    body = tts.get_bodies()[0]
+    assert 'test' in body
+    assert 'en-uk' in body
 
 
 def test_msg():

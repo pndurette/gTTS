@@ -231,6 +231,14 @@ class gTTS:
         """
         return [pr.url for pr in self._prepare_requests()]
 
+    def get_bodies(self):
+        """Get TTS API request bodies(s) that would be sent to the TTS API.
+
+        Returns:
+            list: A list of TTS API request bodiess to make.
+        """
+        return [pr.body for pr in self._prepare_requests()]
+
     def write_to_fp(self, fp):
         """Do the TTS API request(s) and write bytes to a file-like object.
 

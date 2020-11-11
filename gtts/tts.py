@@ -272,7 +272,7 @@ class gTTS:
             try:
                 # Write
                 for line in r.iter_lines(chunk_size=1024):
-                    audio_search = re.search('jQ1olc","\[\\\\"(.*)\\\\"]', line.decode('utf-8'))
+                    audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', line.decode('utf-8'))
                     if audio_search:
                         as_bytes = audio_search.group(1).encode('ascii')
                         decoded = base64.b64decode(as_bytes)

@@ -3,7 +3,6 @@ from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
 from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
 from gtts.lang import tts_langs
 
-from gtts_token import gtts_token
 from six.moves import urllib
 from urllib.parse import quote
 import urllib3
@@ -24,7 +23,8 @@ class Speed:
     """Read Speed
 
     The Google TTS Translate API supports two speeds:
-        'slow' <= 0.3 < 'normal'
+        Slow: True
+        Normal: None
     """
     SLOW = True
     NORMAL = None

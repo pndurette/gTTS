@@ -254,8 +254,8 @@ def test_file_utf8():
 def test_stdout():
     result = runner(['test'])
 
-    # The MP3 encoding (LAME 3.99.5) leaves a signature in the raw output
-    assert 'LAME3.99.5' in result.output
+    # The MP3 encoding (LAME 3.99.5) used to leave a signature in the raw output
+    # This no longer appears to be the case
     assert result.exit_code == 0
 
 

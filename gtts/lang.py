@@ -63,26 +63,9 @@ def _fetch_langs(tld="com"):
         dict: A dictionnary of languages from Google Translate
 
     """
-    URL_BASE = _translate_url(tld)
-
-    # The JavaScript file to look for is either:
-    # * translate_m.js or
-    # * translate_m_<lang-code>.js
-    #   e.g. translate_m_fr.js or translate_m_zh-CN.js
-    JS_FILE = r'translate_m(|_\S*)\.js'
-
-    # Load HTML
-    page = requests.get(URL_BASE)
-    soup = BeautifulSoup(page.content, 'html.parser')
-
-    # JavaScript URL
-    # The <script src=''> path can change, but not the file.
-    # Ex: /zyx/abc/20180211/translate_m.js
-    js_path = soup.find(src=re.compile(JS_FILE))['src']
-    js_url = "{}/{}".format(URL_BASE, js_path)
 
     # Load JavaScript
-    js_contents = requests.get(js_url).text
+    js_contents = requests.get('https://ssl.gstatic.com/inputtools/js/ln/17/en.js').text
 
     # Approximately extract TTS-enabled language codes
     # RegEx pattern search because minified variables can change.

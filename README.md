@@ -16,7 +16,6 @@ Write spoken `mp3` data to a file, a file-like object (bytestring) for further a
 
 -   Customizable speech-specific sentence tokenizer that allows for unlimited lengths of text to be read, all while keeping proper intonation, abbreviations, decimals and more;
 -   Customizable text pre-processors which can, for example, provide pronunciation corrections;
--   Automatic retrieval of supported languages.
 
 ### Installation
 

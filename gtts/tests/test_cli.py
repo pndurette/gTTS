@@ -77,16 +77,6 @@ def test_all():
     assert re.match(r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$", result.output)
     assert result.exit_code == 0
 
-@pytest.mark.net
-def test_all_tld():
-    """Option <all> should return a list of languages"""
-    result = runner(['--tld', 'it', '--all'])
-
-    # Top-level domain set to 'it', language outputs should be Italian
-
-    assert "en: Inglese" in result.output
-    assert result.exit_code == 0
-
 
 # <lang> tests
 @pytest.mark.net
@@ -108,7 +98,7 @@ def test_lang_nocheck():
 
     assert 'lang: xx' in log
     assert 'lang_check: False' in log
-    assert "Probable cause: Unsupported language 'xx'" in result.output
+    assert "Unsupported language 'xx'" in result.output
     assert result.exit_code != 0
 
 # Param set tests

@@ -132,7 +132,7 @@ class gTTS:
         # Language
         if lang_check:
             try:
-                langs = tts_langs(self.tld)
+                langs = tts_langs()
                 if lang.lower() not in langs:
                     raise ValueError("Language not supported: %s" % lang)
             except RuntimeError as e:
@@ -288,7 +288,9 @@ class gTTS:
                             decoded = base64.b64decode(as_bytes)
                             fp.write(decoded)
                         else:
-                            raise gTTSError("No audio stream in response")
+                            # Request successful, good response,
+                            # no audio stream in response
+                            raise gTTSError(tts=self, response=r)
                 log.debug("part-%i written to %s", idx, fp)
             except (AttributeError, TypeError) as e:
                 raise TypeError(
@@ -348,8 +350,8 @@ class gTTSError(Exception):
 
             if status == 403:
                 cause = "Bad token or upstream API changes"
-            elif status == 404 and not tts.lang_check:
-                cause = "Unsupported language '%s'" % self.tts.lang
+            elif status == 200 and not tts.lang_check:
+                cause = "No audio stream in response. Unsupported language '%s'" % self.tts.lang
             elif status >= 500:
                 cause = "Uptream API error. Try again later."
 

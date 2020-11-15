@@ -60,14 +60,12 @@ def validate_text(ctx, param, text):
 def validate_lang(ctx, param, lang):
     """Validation callback for the <lang> option.
     Ensures <lang> is a supported language unless the <nocheck> flag is set
-    Uses <tld> to fetch languages from other domains
     """
     if ctx.params['nocheck']:
         return lang
 
     try:
-        tld = ctx.params['tld']
-        if lang not in tts_langs(tld):
+        if lang not in tts_langs():
             raise click.UsageError(
                 "'%s' not in list of supported languages.\n"
                 "Use --all to list languages or "
@@ -92,14 +90,7 @@ def print_languages(ctx, param, value):
         return
 
     try:
-        tld = ctx.params['tld']
-    except KeyError:
-        # Either --tld was used after --all or not at all
-        # Default to the 'com' tld
-        tld = 'com'
-
-    try:
-        langs = tts_langs(tld)
+        langs = tts_langs()
         langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
         click.echo('  ' + '\n  '.join(langs_str_list))
     except RuntimeError as e:  # pragma: no cover
@@ -167,8 +158,7 @@ def set_debug(ctx, param, debug):
     is_eager=True,
     expose_value=False,
     callback=print_languages,
-    help="Print all documented available IETF language tags and exit. "
-         "Use --tld beforehand to use an alternate domain")
+    help="Print all documented available IETF language tags and exit.")
 @click.option(
     '--debug',
     default=False,

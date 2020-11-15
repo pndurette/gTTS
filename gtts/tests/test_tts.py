@@ -9,7 +9,7 @@ from gtts.lang import _main_langs, _extra_langs
 
 # Testing all languages takes some time.
 # Set TEST_LANGS envvar to choose languages to test.
-#  * 'fetch': Languages fetched from the Web
+#  * 'main': Languages extracted from the Web
 #  * 'extra': Languagee set in Languages.EXTRA_LANGS
 #  * 'all': All of the above
 #  * <csv>: Languages tags list to test

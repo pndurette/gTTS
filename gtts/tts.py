@@ -191,12 +191,13 @@ class gTTS:
         translate_url = _translate_url(tld=self.tld, path="_/TranslateWebserverUi/data/batchexecute")
 
         text_parts = self._tokenize(self.text)
+        log.debug("text_parts: %s", str(text_parts))
         log.debug("text_parts: %i", len(text_parts))
         assert text_parts, 'No text to send to TTS API'
 
         prepared_requests = []
         for idx, part in enumerate(text_parts):
-            data = self._package_rpc()
+            data = self._package_rpc(part)
 
             log.debug("data-%i: %s", idx, data)
 
@@ -211,8 +212,8 @@ class gTTS:
 
         return prepared_requests
 
-    def _package_rpc(self):
-        parameter = [self.text, self.lang, self.speed, "null"]
+    def _package_rpc(self, text):
+        parameter = [text, self.lang, self.speed, "null"]
         escaped_parameter = json.dumps(parameter, separators=(',', ':'))
 
         rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]

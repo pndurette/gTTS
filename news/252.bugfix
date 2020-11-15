@@ -1,0 +1,1 @@
+``_package_rpc()`` was erroneously packaging the entire text instead of tokenized part

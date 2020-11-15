@@ -20,10 +20,18 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Tools
+      - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade setuptools wheel twine
+          pip install -e .[tests]
+
+      - name: Unit Tests
+        run: pytest -v -s gtts/
+        env:
+          TEST_LANGS: all
+
+      - name: Install Tools
+        run: pip install --upgrade setuptools wheel twine
 
       - name: Package (wheel)
         run: python setup.py bdist_wheel

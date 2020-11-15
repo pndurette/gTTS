@@ -1,34 +1,23 @@
 # -*- coding: utf-8 -*-
 import pytest
-from gtts.lang import tts_langs, _fetch_langs, _extra_langs
+from gtts.lang import tts_langs, _main_langs, _extra_langs
 
 
 """Test language list downloading"""
 
 
 @pytest.mark.net
-def test_fetch_langs():
+def test_main_langs():
     """Fetch languages successfully"""
     # Downloaded Languages
     # Safe to assume 'en' (english) will always be there
-    scraped_langs = _fetch_langs()
+    scraped_langs = _main_langs()
     assert 'en' in scraped_langs
-
-    # Scraping garbage
-    assert 'Detect language' not in scraped_langs
-    assert '—' not in scraped_langs
 
     # Add-in Languages
     all_langs = tts_langs()
     extra_langs = _extra_langs()
     assert len(all_langs) == len(scraped_langs) + len(extra_langs)
-
-
-@pytest.mark.net
-def test_fetch_langs_exception():
-    """Raise RuntimeError on language fetch exception"""
-    with pytest.raises(RuntimeError):
-        tts_langs(tld="invalid")
 
 
 if __name__ == '__main__':

@@ -5,11 +5,11 @@ from mock import Mock
 from six.moves import urllib
 
 from gtts.tts import gTTS, gTTSError
-from gtts.lang import _fetch_langs, _extra_langs
+from gtts.lang import _main_langs, _extra_langs
 
 # Testing all languages takes some time.
 # Set TEST_LANGS envvar to choose languages to test.
-#  * 'fetch': Languages fetched from the Web
+#  * 'main': Languages extracted from the Web
 #  * 'extra': Languagee set in Languages.EXTRA_LANGS
 #  * 'all': All of the above
 #  * <csv>: Languages tags list to test
@@ -26,10 +26,10 @@ ex.: { 'environ' : ['en', 'fr'] }
 """
 env = os.environ.get('TEST_LANGS')
 if not env or env == 'all':
-    langs = _fetch_langs()
+    langs = _main_langs()
     langs.update(_extra_langs())
-elif env == 'fetch':
-    langs = _fetch_langs()
+elif env == 'main':
+    langs = _main_langs()
 elif env == 'extra':
     langs = _extra_langs()
 else:
@@ -50,8 +50,8 @@ def test_TTS(tmp_path, lang):
         tts = gTTS(text=text, lang=lang, slow=slow)
         tts.save(filename)
 
-        # Check if files created is > 2k
-        assert filename.stat().st_size > 2000
+        # Check if files created is > 1.5
+        assert filename.stat().st_size > 1500
 
 
 @pytest.mark.net
@@ -115,6 +115,7 @@ def test_get_urls():
     assert r.netloc == 'translate.google.com'
     assert r.path == '/_/TranslateWebserverUi/data/batchexecute'
 
+
 @pytest.mark.net
 def test_get_bodies():
     """get request bodies list"""
@@ -152,11 +153,11 @@ def test_infer_msg():
     error403 = gTTSError(tts=tts403, response=response403)
     assert error403.msg == "403 (aaa) from TTS API. Probable cause: Bad token or upstream API changes"
 
-    # 404 (and not lang_check)
-    tts404 = Mock(lang='xx', lang_check=False)
-    response404 = Mock(status_code=404, reason='bbb')
-    error404 = gTTSError(tts=tts404, response=response404)
-    assert error404.msg == "404 (bbb) from TTS API. Probable cause: Unsupported language 'xx'"
+    # 200 (and not lang_check)
+    tts200 = Mock(lang='xx', lang_check=False)
+    response404 = Mock(status_code=200, reason='bbb')
+    error200 = gTTSError(tts=tts200, response=response404)
+    assert error200.msg == "200 (bbb) from TTS API. Probable cause: No audio stream in response. Unsupported language 'xx'"
 
     # >= 500
     tts500 = Mock()

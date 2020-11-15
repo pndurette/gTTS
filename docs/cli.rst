@@ -16,10 +16,6 @@ List available languages::
 
    $ gtts-cli --all
 
-List available languages (Italian names)::
-
-   $ gtts-cli --tld it --all
-
 Read 'hello' to ``hello.mp3``::
 
    $ gtts-cli 'hello' --output hello.mp3

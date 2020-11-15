@@ -47,10 +47,10 @@ jobs:
         env:
           TEST_LANGS: en
 
-      # - name: Upload Coverage Report
-      #   uses: codecov/codecov-action@v1.0.14
-      #   if: |
-      #     github.ref == 'refs/heads/master' \
-      #     matrix.os == 'ubuntu-latest' && \
-      #     matrix.python-version == '3.9' && \
-      #     matrix.can-fail == 'false'
+      - name: Upload Coverage Report
+        uses: codecov/codecov-action@v1.0.14
+        if: |
+          github.ref == 'refs/heads/master' \
+          matrix.os == 'ubuntu-latest' && \
+          matrix.python-version == '3.9' && \
+          matrix.can-fail == 'false'

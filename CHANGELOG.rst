@@ -9,6 +9,27 @@ Changelog
 
 .. towncrier release notes start
 
+2.2.1 (2020-11-15)
+------------------
+
+Bugfixes
+~~~~~~~~
+
+- ``_package_rpc()`` was erroneously packaging the entire text instead of tokenized part (`#252 <https://github.com/pndurette/gTTS/issues/252>`_)
+
+
+Improved Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Removes reference to automatic retrieval of languages (`#250 <https://github.com/pndurette/gTTS/issues/250>`_)
+
+
+Misc
+~~~~
+
+- `#251 <https://github.com/pndurette/gTTS/issues/251>`_
+
+
 2.2.0 (2020-11-14)
 ------------------
 

@@ -4,8 +4,12 @@ from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
 from gtts.lang import tts_langs
 
 from six.moves import urllib
-from urllib.parse import quote
-import urllib3
+try:
+    from urllib.parse import quote
+    import urllib3
+except ImportError:
+    from urllib import quote
+    import urllib2
 import requests
 import logging
 import json
@@ -253,7 +257,12 @@ class gTTS:
         """
         # When disabling ssl verify in requests (for proxies and firewalls),
         # urllib3 prints an insecure warning on stdout. We disable that.
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        try:
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        except:
+            pass
+ 
+
 
         prepared_requests = self._prepare_requests()
         for idx, pr in enumerate(prepared_requests):

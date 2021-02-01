@@ -134,17 +134,23 @@ class gTTS:
         self.tld = tld
 
         # Language
+        extra_lang = re.search(r"([a-zA-Z]{2})\-([a-zA-Z]{2})", lang)
+        if extra_lang:
+            format_lang = extra_lang.group(1).lower() + "-" + extra_lang.group(2).upper()
+        else:
+            format_lang = lang.lower()
+
         if lang_check:
             try:
                 langs = tts_langs()
-                if lang.lower() not in langs:
+                if format_lang not in langs:
                     raise ValueError("Language not supported: %s" % lang)
             except RuntimeError as e:
                 log.debug(str(e), exc_info=True)
                 log.warning(str(e))
 
         self.lang_check = lang_check
-        self.lang = lang.lower()
+        self.lang = format_lang
 
         # Read speed
         if slow:

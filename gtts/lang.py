@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from gtts.langs_main import langs as _main_langs
 from warnings import warn
 import logging
 
@@ -21,86 +22,16 @@ def tts_langs():
 
     The dictionary returned combines languages from two origins:
 
-    - Languages fetched from Google Translate
+    - Languages fetched from Google Translate (pre-generated in :mod:`gtts.langs_main`)
     - Languages that are undocumented variations that were observed to work and
       present different dialects or accents.
 
     """
     langs = dict()
-    langs.update(_main_langs())
+    langs.update(_main_langs)
     langs.update(_extra_langs())
     log.debug("langs: {}".format(langs))
     return langs
-
-
-def _main_langs():
-    """Define the main languages.
-
-    Returns:
-        dict: A dictionnary of the main languages extracted from
-            Google Translate.
-
-    """
-    return {
-        'af': 'Afrikaans',
-        'ar': 'Arabic',
-        'bn': 'Bengali',
-        'bs': 'Bosnian',
-        'ca': 'Catalan',
-        'cs': 'Czech',
-        'cy': 'Welsh',
-        'da': 'Danish',
-        'de': 'German',
-        'el': 'Greek',
-        'en': 'English',
-        'eo': 'Esperanto',
-        'es': 'Spanish',
-        'et': 'Estonian',
-        'fi': 'Finnish',
-        'fr': 'French',
-        'gu': 'Gujarati',
-        'hi': 'Hindi',
-        'hr': 'Croatian',
-        'hu': 'Hungarian',
-        'hy': 'Armenian',
-        'id': 'Indonesian',
-        'is': 'Icelandic',
-        'it': 'Italian',
-        'ja': 'Japanese',
-        'jw': 'Javanese',
-        'km': 'Khmer',
-        'kn': 'Kannada',
-        'ko': 'Korean',
-        'la': 'Latin',
-        'lv': 'Latvian',
-        'mk': 'Macedonian',
-        'ml': 'Malayalam',
-        'mr': 'Marathi',
-        'my': 'Myanmar (Burmese)',
-        'ne': 'Nepali',
-        'nl': 'Dutch',
-        'no': 'Norwegian',
-        'pl': 'Polish',
-        'pt': 'Portuguese',
-        'ro': 'Romanian',
-        'ru': 'Russian',
-        'si': 'Sinhala',
-        'sk': 'Slovak',
-        'sq': 'Albanian',
-        'sr': 'Serbian',
-        'su': 'Sundanese',
-        'sv': 'Swedish',
-        'sw': 'Swahili',
-        'ta': 'Tamil',
-        'te': 'Telugu',
-        'th': 'Thai',
-        'tl': 'Filipino',
-        'tr': 'Turkish',
-        'uk': 'Ukrainian',
-        'ur': 'Urdu',
-        'vi': 'Vietnamese',
-        'zh-CN': 'Chinese'
-    }
 
 
 def _extra_langs():
@@ -116,7 +47,6 @@ def _extra_langs():
     """
     return {
         # Chinese
-        'zh-CN': 'Chinese (Mandarin/China)',
         'zh-TW': 'Chinese (Mandarin/Taiwan)',
     }
 
@@ -159,7 +89,7 @@ def _fallback_deprecated_lang(lang):
             ).format(lang, fallback_lang)
 
             warn(msg, DeprecationWarning)
-            log.warn(msg)
+            log.warning(msg)
 
             return fallback_lang
 

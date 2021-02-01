@@ -5,7 +5,8 @@ from mock import Mock
 from six.moves import urllib
 
 from gtts.tts import gTTS, gTTSError
-from gtts.lang import _main_langs, _extra_langs
+from gtts.langs_main import langs as _main_langs
+from gtts.lang import _extra_langs
 
 # Testing all languages takes some time.
 # Set TEST_LANGS envvar to choose languages to test.
@@ -26,10 +27,10 @@ ex.: { 'environ' : ['en', 'fr'] }
 """
 env = os.environ.get('TEST_LANGS')
 if not env or env == 'all':
-    langs = _main_langs()
+    langs = _main_langs
     langs.update(_extra_langs())
 elif env == 'main':
-    langs = _main_langs()
+    langs = _main_langs
 elif env == 'extra':
     langs = _extra_langs()
 else:
@@ -122,7 +123,8 @@ def test_get_bodies():
     tts = gTTS(text='test', tld='com', lang='en-uk')
     body = tts.get_bodies()[0]
     assert 'test' in body
-    assert 'en-uk' in body
+    # \"en\" url-encoded
+    assert '%5C%22en%5C%22' in body
 
 
 def test_msg():

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
-from gtts.lang import tts_langs, _main_langs, _extra_langs
-
+from gtts.lang import tts_langs, _extra_langs
+from gtts.langs_main import langs as _main_langs
 
 """Test language list downloading"""
 
@@ -11,7 +11,7 @@ def test_main_langs():
     """Fetch languages successfully"""
     # Downloaded Languages
     # Safe to assume 'en' (english) will always be there
-    scraped_langs = _main_langs()
+    scraped_langs = _main_langs
     assert 'en' in scraped_langs
 
     # Add-in Languages

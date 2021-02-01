@@ -115,29 +115,29 @@ def _extra_langs():
     """
     return {
         # Chinese
-        'zh-cn': 'Chinese (Mandarin/China)',
-        'zh-tw': 'Chinese (Mandarin/Taiwan)',
+        'zh-CN': 'Chinese (Mandarin/China)',
+        'zh-TW': 'Chinese (Mandarin/Taiwan)',
         # English
-        'en-us': 'English (US)',
-        'en-ca': 'English (Canada)',
-        'en-uk': 'English (UK)',
-        'en-gb': 'English (UK)',
-        'en-au': 'English (Australia)',
-        'en-gh': 'English (Ghana)',
-        'en-in': 'English (India)',
-        'en-ie': 'English (Ireland)',
-        'en-nz': 'English (New Zealand)',
-        'en-ng': 'English (Nigeria)',
-        'en-ph': 'English (Philippines)',
-        'en-za': 'English (South Africa)',
-        'en-tz': 'English (Tanzania)',
+        'en-US': 'English (US)',
+        'en-CA': 'English (Canada)',
+        'en-UK': 'English (UK)',
+        'en-GB': 'English (UK)',
+        'en-AU': 'English (Australia)',
+        'en-GH': 'English (Ghana)',
+        'en-IN': 'English (India)',
+        'en-IE': 'English (Ireland)',
+        'en-NZ': 'English (New Zealand)',
+        'en-NG': 'English (Nigeria)',
+        'en-PH': 'English (Philippines)',
+        'en-ZA': 'English (South Africa)',
+        'en-TZ': 'English (Tanzania)',
         # French
-        'fr-ca': 'French (Canada)',
-        'fr-fr': 'French (France)',
+        'fr-CA': 'French (Canada)',
+        'fr-FR': 'French (France)',
         # Portuguese
-        'pt-br': 'Portuguese (Brazil)',
-        'pt-pt': 'Portuguese (Portugal)',
+        'pt-BR': 'Portuguese (Brazil)',
+        'pt-PT': 'Portuguese (Portugal)',
         # Spanish
-        'es-es': 'Spanish (Spain)',
-        'es-us': 'Spanish (United States)'
+        'es-ES': 'Spanish (Spain)',
+        'es-US': 'Spanish (United States)'
     }

@@ -14,7 +14,7 @@ def tts_langs():
     Returns:
         dict: A dictionary of the type `{ '<lang>': '<name>'}`
 
-            Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
+            Where `<lang>` is an IETF language tag such as `en` or `pt-BR`,
             and `<name>` is the full English name of the language, such as
             `English` or `Portuguese (Brazil)`.
 
@@ -98,7 +98,7 @@ def _main_langs():
         'uk': 'Ukrainian',
         'ur': 'Urdu',
         'vi': 'Vietnamese',
-        'zh-CN': 'Chinese'
+        'zh': 'Chinese'
     }
 
 

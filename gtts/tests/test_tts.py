@@ -106,7 +106,7 @@ def test_save(tmp_path):
 def test_get_urls():
     """Get request URLs list"""
 
-    tts = gTTS(text='test', tld='com', lang='en-uk')
+    tts = gTTS(text='test', tld='com', lang='en-UK')
     urls = tts.get_urls()
 
     # Check the url
@@ -119,10 +119,10 @@ def test_get_urls():
 @pytest.mark.net
 def test_get_bodies():
     """get request bodies list"""
-    tts = gTTS(text='test', tld='com', lang='en-uk')
+    tts = gTTS(text='test', tld='com', lang='en-UK')
     body = tts.get_bodies()[0]
     assert 'test' in body
-    assert 'en-uk' in body
+    assert 'en-UK' in body
 
 
 def test_msg():

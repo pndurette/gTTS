@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
 import logging
 
 __all__ = ['tts_langs']
@@ -14,9 +15,9 @@ def tts_langs():
     Returns:
         dict: A dictionary of the type `{ '<lang>': '<name>'}`
 
-            Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
+            Where `<lang>` is an IETF language tag such as `en` or `zh-TW`,
             and `<name>` is the full English name of the language, such as
-            `English` or `Portuguese (Brazil)`.
+            `English` or `Chinese (Mandarin/Taiwan)`.
 
     The dictionary returned combines languages from two origins:
 
@@ -115,29 +116,51 @@ def _extra_langs():
     """
     return {
         # Chinese
-        'zh-cn': 'Chinese (Mandarin/China)',
-        'zh-tw': 'Chinese (Mandarin/Taiwan)',
-        # English
-        'en-us': 'English (US)',
-        'en-ca': 'English (Canada)',
-        'en-uk': 'English (UK)',
-        'en-gb': 'English (UK)',
-        'en-au': 'English (Australia)',
-        'en-gh': 'English (Ghana)',
-        'en-in': 'English (India)',
-        'en-ie': 'English (Ireland)',
-        'en-nz': 'English (New Zealand)',
-        'en-ng': 'English (Nigeria)',
-        'en-ph': 'English (Philippines)',
-        'en-za': 'English (South Africa)',
-        'en-tz': 'English (Tanzania)',
-        # French
-        'fr-ca': 'French (Canada)',
-        'fr-fr': 'French (France)',
-        # Portuguese
-        'pt-br': 'Portuguese (Brazil)',
-        'pt-pt': 'Portuguese (Portugal)',
-        # Spanish
-        'es-es': 'Spanish (Spain)',
-        'es-us': 'Spanish (United States)'
+        'zh-CN': 'Chinese (Mandarin/China)',
+        'zh-TW': 'Chinese (Mandarin/Taiwan)',
     }
+
+
+def _fallback_deprecated_lang(lang):
+    """Languages Google Text-to-Speech used to support.
+
+    Language tags that don't work anymore, but that can
+    fallback to a more general language code to maintain
+    compatibility.
+
+    Args:
+        lang (string): The language tag.
+
+    Returns:
+        string: The language tag, as-is if not deprecated,
+            or a fallack if it exits.
+
+    Example:
+        ``en-GB`` returns ``en``.
+        ``en-gb`` returns ``en``.
+
+    """
+
+    deprecated = {
+        'en': ['en-us', 'en-ca', 'en-uk', 'en-gb', 'en-au', 'en-gh', 'en-in',
+               'en-ie', 'en-nz', 'en-ng', 'en-ph', 'en-za', 'en-tz'],
+        'fr': ['fr-ca', 'fr-fr'],
+        'pt': ['pt-br', 'pt-pt'],
+        'es': ['es-es', 'es-us'],
+        'zh-CN': ['zh-cn'],
+        'zh-TW': ['zh-tw'],
+    }
+
+    for fallback_lang, deprecated_langs in deprecated.items():
+        if lang.lower() in deprecated_langs:
+            msg = (
+                "'{}' has been deprecated, falling back to '{}'. "
+                "This fallback will be removed in a future version."
+            ).format(lang, fallback_lang)
+
+            warn(msg, DeprecationWarning)
+            log.warn(msg)
+
+            return fallback_lang
+
+    return lang

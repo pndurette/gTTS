@@ -47,7 +47,7 @@ def test_TTS(tmp_path, lang):
     for slow in (False, True):
         filename = tmp_path / 'test_{}_.mp3'.format(lang)
         # Create gTTS and save
-        tts = gTTS(text=text, lang=lang, slow=slow)
+        tts = gTTS(text=text, lang=lang, slow=slow, lang_check=False)
         tts.save(filename)
 
         # Check if files created is > 1.5

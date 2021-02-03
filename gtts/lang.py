@@ -30,8 +30,6 @@ def tts_langs():
     langs = dict()
     langs.update(_main_langs())
     langs.update(_extra_langs())
-    log.debug(f"{len(_main_langs())=}")
-    log.debug(f"{len(_extra_langs())=}")
     log.debug("langs: {}".format(langs))
     return langs
 

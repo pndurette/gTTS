@@ -12,7 +12,6 @@ jobs:
     name: Unit
 
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.failok }}
     strategy:
       fail-fast: false
       matrix:

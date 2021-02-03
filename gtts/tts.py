@@ -135,9 +135,12 @@ class gTTS:
 
         # Language
         self.lang_check = lang_check
-        self.lang = _fallback_deprecated_lang(lang)
+        self.lang = lang
 
         if self.lang_check:
+            # Fallback lang in case it is deprecated
+            self.lang = _fallback_deprecated_lang(lang)
+
             try:
                 langs = tts_langs()
                 if self.lang not in langs:

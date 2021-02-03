@@ -16,10 +16,18 @@ log.addHandler(logging.NullHandler())
 # Needs cleaning up, very much WIP
 # Usage:
 # * Install gTTS
-# * $ python gen_langs.py <path to gtts>/langs_main.py
+# * $ python gen_langs.py <path to gtts>/langs.py
 
 
 def _get_data_by_key(js_list):
+    """JavaScript function to generate the languages.
+
+    A payload with the languages is passed to a JavaScript function.
+    Instead of parsing that payload (combersome), we 'overload' that
+    function to return what we want.
+
+    """
+
     js_function = r"""
         function AF_initDataCallback(args) {
             return { key: args['key'], data: args['data'] };
@@ -63,12 +71,8 @@ def _fetch_langs(tld="com"):
             "Version/14.0 Safari/605.1.15"
     }
 
-    # headers = {}
-
     page = requests.get(URL_BASE, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
-
-    # # return soup
 
     scripts = soup.find_all(name='script', string=re.compile(r"^AF_initDataCallback"))
     scripts = [s.text for s in scripts]
@@ -94,21 +98,31 @@ def _fetch_langs(tld="com"):
 
     # Create language dict (and filter only TTS-enabled langs)
     # langs = { lang[0], lang[1] for lang in all_langs_raw[0] }
-    #langs = dict(all_langs_raw[0])
-    # print(all_langs_raw[0])
-    # print(dict(all_langs_raw[0]))
 
     langs = {k: v for k, v in all_langs_raw[0] if k in tts_langs}
     return langs
 
 
 if __name__ == "__main__":
+    """Language list generation 'main'
+
+    CLI to generate the language list as a dict in
+    an importable python file/module
+
+    Usage:
+        python ./scripts/gen_langs.py ./gTTS/gtts/langs.py
+
+    """
+
     lang_file_path = sys.argv[1]
     with open(lang_file_path, 'w') as f:
         langs = _fetch_langs()
 
         py_content = f"""# Note: this file is generated
-langs = {json.dumps(langs, indent=4, sort_keys=True)}
+_langs = {json.dumps(langs, indent=4, sort_keys=True)}
+
+def _main_langs():
+    return _langs
 """
 
         f.write(py_content)

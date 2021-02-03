@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from gtts.langs_main import langs as _main_langs
+from gtts.langs import _main_langs
 from warnings import warn
 import logging
 
@@ -22,14 +22,16 @@ def tts_langs():
 
     The dictionary returned combines languages from two origins:
 
-    - Languages fetched from Google Translate (pre-generated in :mod:`gtts.langs_main`)
+    - Languages fetched from Google Translate (pre-generated in :mod:`gtts.langs`)
     - Languages that are undocumented variations that were observed to work and
       present different dialects or accents.
 
     """
     langs = dict()
-    langs.update(_main_langs)
+    langs.update(_main_langs())
     langs.update(_extra_langs())
+    log.debug(f"{len(_main_langs())=}")
+    log.debug(f"{len(_extra_langs())=}")
     log.debug("langs: {}".format(langs))
     return langs
 
@@ -40,7 +42,7 @@ def _extra_langs():
     Returns:
         dict: A dictionnary of extra languages manually defined.
 
-            Variations of the ones fetched by `_main_langs`,
+            Variations of the ones generated in `_main_langs`,
             observed to provide different dialects or accents or
             just simply accepted by the Google Translate Text-to-Speech API.
 
@@ -48,6 +50,7 @@ def _extra_langs():
     return {
         # Chinese
         'zh-TW': 'Chinese (Mandarin/Taiwan)',
+        'zh': 'Chinese (Mandarin)'
     }
 
 
@@ -72,6 +75,7 @@ def _fallback_deprecated_lang(lang):
     """
 
     deprecated = {
+        # '<fallback>': [<list of deprecated langs>]
         'en': ['en-us', 'en-ca', 'en-uk', 'en-gb', 'en-au', 'en-gh', 'en-in',
                'en-ie', 'en-nz', 'en-ng', 'en-ph', 'en-za', 'en-tz'],
         'fr': ['fr-ca', 'fr-fr'],

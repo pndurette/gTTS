@@ -1,5 +1,5 @@
 # Note: this file is generated
-langs = {
+_langs = {
     "af": "Afrikaans",
     "ar": "Arabic",
     "bn": "Bengali",
@@ -59,3 +59,6 @@ langs = {
     "vi": "Vietnamese",
     "zh-CN": "Chinese"
 }
+
+def _main_langs():
+    return _langs

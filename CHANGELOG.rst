@@ -9,6 +9,29 @@ Changelog
 
 .. towncrier release notes start
 
+2.2.2 (2021-02-03)
+------------------
+
+Features
+~~~~~~~~
+
+- Adds a language fallback feature for deprecated languages to maintain compatiblity  (e.g. ``en-us`` becomes ``en``). Fallback can be disabled with ``lang_check=False`` or ``--nocheck`` for the cli (`#267 <https://github.com/pndurette/gTTS/issues/267>`_)
+
+
+Bugfixes
+~~~~~~~~
+
+- Fix Python 2.7 compatiblity (!). Python 2 is long gone, but the cut wasn't clearly communicated for gTTS, so it was restored. Python 2 support will be completely removed in the next major release. (`#255 <https://github.com/pndurette/gTTS/issues/255>`_)
+- Language code case sensitivity is maintained throughout (`#267 <https://github.com/pndurette/gTTS/issues/267>`_)
+
+
+Deprecations and Removals
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- The following list of 'hyphenated' language codes no longer work and have been removed: ``en-us``, ``en-ca``, ``en-uk``, ``en-gb``, ``en-au``, ``en-gh``, ``en-in``, ``en-ie``, ``en-nz``, ``en-ng``, ``en-ph``, ``en-za``, ``en-tz``, ``fr-ca``, ``fr-fr``, ``pt-br``, ``pt-pt``, ``es-es``, ``es-us``, ``zh-cn``, ``zh-tw`` (`#267 <https://github.com/pndurette/gTTS/issues/267>`_)
+- Removed the ``gtts.get_url()`` method (outdated since ``2.1.0``) (`#270 <https://github.com/pndurette/gTTS/issues/270>`_)
+
+
 2.2.1 (2020-11-15)
 ------------------
 

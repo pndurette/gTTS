@@ -38,13 +38,6 @@ Write 'hello bonjour' in English then French to ``hello_bonjour.mp3``::
     ...     tts_en.write_to_fp(f)
     ...     tts_fr.write_to_fp(f)
 
-Instead of writing to disk, get URL for 'hello' in English::
-
-    >>> from gtts import gTTS
-    >>> tts = gTTS('hello', lang='en')
-    >>> tts.get_urls()
-    ['https://translate.google.com/translate_tts?ie=UTF-8&q=hello&tl=en&ttsspeed=1&total=1&idx=0&client=tw-ob&textlen=5&tk=316070.156329']
-
 Playing sound directly
 ----------------------
 
@@ -63,11 +56,6 @@ to do further manipulation:::
 
 .. note:: See `Issue #26 <https://github.com/pndurette/gTTS/issues/26>`_ for
     a discussion and examples of direct playback using various methods.
-
-.. note:: Starting with ``gTTS`` :doc:`2.1.0 <changelog>`, the
-    :class:`gtts.tts.gTTS.get_urls` method can be used to obtain the list of
-    generated URLs requests (whithout fullfilling them) which could be used
-    for playback in another program. See `Examples`_ above.
 
 
 Logging

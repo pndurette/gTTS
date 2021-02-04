@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Bug Report
+    url: https://github.com/pndurette/gTTS/issues/new?template=bug.md
+    about: Create a report to help us improve gTTS!
+  - name: Feature Request
+    url: https://github.com/pndurette/gTTS/issues/new?template=feature.md
+    about: Suggest a new feature for gTTS!

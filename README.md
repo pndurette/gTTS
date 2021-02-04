@@ -35,6 +35,10 @@ Module:
 
 See <http://gtts.readthedocs.org/> for documentation and examples.
 
+### Disclaimer
+
+This project is *not* affiliated with Google or Google Cloud. Breaking upstream changes *can* occur without notice. This project is leveraging the undocumented [Google Translate](https://translate.google.com) speech functionality and is *different* from [Google Cloud Text-to-Speech](https://cloud.google.com/text-to-speech/).
+
 ### Project
 
 -   [Changelog](CHANGELOG.rst)
@@ -42,4 +46,4 @@ See <http://gtts.readthedocs.org/> for documentation and examples.
 
 ### Licence
 
-[The MIT License (MIT)](LICENSE) Copyright © 2014-2020 Pierre Nicolas Durette & Contributors
+[The MIT License (MIT)](LICENSE) Copyright © 2014-2021 Pierre Nicolas Durette & [Contributors](https://github.com/pndurette/gTTS/graphs/contributors)

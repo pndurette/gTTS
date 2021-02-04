@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from gtts.langs import _main_langs
+from warnings import warn
 import logging
 
 __all__ = ['tts_langs']
@@ -14,13 +16,13 @@ def tts_langs():
     Returns:
         dict: A dictionary of the type `{ '<lang>': '<name>'}`
 
-            Where `<lang>` is an IETF language tag such as `en` or `pt-br`,
+            Where `<lang>` is an IETF language tag such as `en` or `zh-TW`,
             and `<name>` is the full English name of the language, such as
-            `English` or `Portuguese (Brazil)`.
+            `English` or `Chinese (Mandarin/Taiwan)`.
 
     The dictionary returned combines languages from two origins:
 
-    - Languages fetched from Google Translate
+    - Languages fetched from Google Translate (pre-generated in :mod:`gtts.langs`)
     - Languages that are undocumented variations that were observed to work and
       present different dialects or accents.
 
@@ -32,112 +34,65 @@ def tts_langs():
     return langs
 
 
-def _main_langs():
-    """Define the main languages.
-
-    Returns:
-        dict: A dictionnary of the main languages extracted from
-            Google Translate.
-
-    """
-    return {
-        'af': 'Afrikaans',
-        'ar': 'Arabic',
-        'bn': 'Bengali',
-        'bs': 'Bosnian',
-        'ca': 'Catalan',
-        'cs': 'Czech',
-        'cy': 'Welsh',
-        'da': 'Danish',
-        'de': 'German',
-        'el': 'Greek',
-        'en': 'English',
-        'eo': 'Esperanto',
-        'es': 'Spanish',
-        'et': 'Estonian',
-        'fi': 'Finnish',
-        'fr': 'French',
-        'gu': 'Gujarati',
-        'hi': 'Hindi',
-        'hr': 'Croatian',
-        'hu': 'Hungarian',
-        'hy': 'Armenian',
-        'id': 'Indonesian',
-        'is': 'Icelandic',
-        'it': 'Italian',
-        'ja': 'Japanese',
-        'jw': 'Javanese',
-        'km': 'Khmer',
-        'kn': 'Kannada',
-        'ko': 'Korean',
-        'la': 'Latin',
-        'lv': 'Latvian',
-        'mk': 'Macedonian',
-        'ml': 'Malayalam',
-        'mr': 'Marathi',
-        'my': 'Myanmar (Burmese)',
-        'ne': 'Nepali',
-        'nl': 'Dutch',
-        'no': 'Norwegian',
-        'pl': 'Polish',
-        'pt': 'Portuguese',
-        'ro': 'Romanian',
-        'ru': 'Russian',
-        'si': 'Sinhala',
-        'sk': 'Slovak',
-        'sq': 'Albanian',
-        'sr': 'Serbian',
-        'su': 'Sundanese',
-        'sv': 'Swedish',
-        'sw': 'Swahili',
-        'ta': 'Tamil',
-        'te': 'Telugu',
-        'th': 'Thai',
-        'tl': 'Filipino',
-        'tr': 'Turkish',
-        'uk': 'Ukrainian',
-        'ur': 'Urdu',
-        'vi': 'Vietnamese',
-        'zh-CN': 'Chinese'
-    }
-
-
 def _extra_langs():
     """Define extra languages.
 
     Returns:
         dict: A dictionnary of extra languages manually defined.
 
-            Variations of the ones fetched by `_main_langs`,
+            Variations of the ones generated in `_main_langs`,
             observed to provide different dialects or accents or
             just simply accepted by the Google Translate Text-to-Speech API.
 
     """
     return {
         # Chinese
-        'zh-cn': 'Chinese (Mandarin/China)',
-        'zh-tw': 'Chinese (Mandarin/Taiwan)',
-        # English
-        'en-us': 'English (US)',
-        'en-ca': 'English (Canada)',
-        'en-uk': 'English (UK)',
-        'en-gb': 'English (UK)',
-        'en-au': 'English (Australia)',
-        'en-gh': 'English (Ghana)',
-        'en-in': 'English (India)',
-        'en-ie': 'English (Ireland)',
-        'en-nz': 'English (New Zealand)',
-        'en-ng': 'English (Nigeria)',
-        'en-ph': 'English (Philippines)',
-        'en-za': 'English (South Africa)',
-        'en-tz': 'English (Tanzania)',
-        # French
-        'fr-ca': 'French (Canada)',
-        'fr-fr': 'French (France)',
-        # Portuguese
-        'pt-br': 'Portuguese (Brazil)',
-        'pt-pt': 'Portuguese (Portugal)',
-        # Spanish
-        'es-es': 'Spanish (Spain)',
-        'es-us': 'Spanish (United States)'
+        'zh-TW': 'Chinese (Mandarin/Taiwan)',
+        'zh': 'Chinese (Mandarin)'
     }
+
+
+def _fallback_deprecated_lang(lang):
+    """Languages Google Text-to-Speech used to support.
+
+    Language tags that don't work anymore, but that can
+    fallback to a more general language code to maintain
+    compatibility.
+
+    Args:
+        lang (string): The language tag.
+
+    Returns:
+        string: The language tag, as-is if not deprecated,
+            or a fallack if it exits.
+
+    Example:
+        ``en-GB`` returns ``en``.
+        ``en-gb`` returns ``en``.
+
+    """
+
+    deprecated = {
+        # '<fallback>': [<list of deprecated langs>]
+        'en': ['en-us', 'en-ca', 'en-uk', 'en-gb', 'en-au', 'en-gh', 'en-in',
+               'en-ie', 'en-nz', 'en-ng', 'en-ph', 'en-za', 'en-tz'],
+        'fr': ['fr-ca', 'fr-fr'],
+        'pt': ['pt-br', 'pt-pt'],
+        'es': ['es-es', 'es-us'],
+        'zh-CN': ['zh-cn'],
+        'zh-TW': ['zh-tw'],
+    }
+
+    for fallback_lang, deprecated_langs in deprecated.items():
+        if lang.lower() in deprecated_langs:
+            msg = (
+                "'{}' has been deprecated, falling back to '{}'. "
+                "This fallback will be removed in a future version."
+            ).format(lang, fallback_lang)
+
+            warn(msg, DeprecationWarning)
+            log.warning(msg)
+
+            return fallback_lang
+
+    return lang

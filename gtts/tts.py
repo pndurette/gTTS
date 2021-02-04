@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
 from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
-from gtts.lang import tts_langs
+from gtts.lang import tts_langs, _fallback_deprecated_lang
 
 from six.moves import urllib
 try:
@@ -134,17 +134,20 @@ class gTTS:
         self.tld = tld
 
         # Language
-        if lang_check:
+        self.lang_check = lang_check
+        self.lang = lang
+
+        if self.lang_check:
+            # Fallback lang in case it is deprecated
+            self.lang = _fallback_deprecated_lang(lang)
+
             try:
                 langs = tts_langs()
-                if lang.lower() not in langs:
-                    raise ValueError("Language not supported: %s" % lang)
+                if self.lang not in langs:
+                   raise ValueError("Language not supported: %s" % lang)
             except RuntimeError as e:
                 log.debug(str(e), exc_info=True)
                 log.warning(str(e))
-
-        self.lang_check = lang_check
-        self.lang = lang.lower()
 
         # Read speed
         if slow:

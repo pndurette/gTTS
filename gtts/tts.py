@@ -227,18 +227,6 @@ class gTTS:
         espaced_rpc = json.dumps(rpc, separators=(',', ':'))
         return "f.req={}&".format(quote(espaced_rpc))
 
-    def get_urls(self):
-        """Get TTS API request URL(s) that would be sent to the TTS API.
-
-        Returns:
-            list: A list of TTS API request URLs to make.
-
-                This is particularly useful to get the list of URLs generated
-                by ``gTTS`` but not yet fullfilled,
-                for example to be used by an external program.
-        """
-        return [pr.url for pr in self._prepare_requests()]
-
     def get_bodies(self):
         """Get TTS API request bodies(s) that would be sent to the TTS API.
 

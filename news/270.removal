@@ -1,0 +1,1 @@
+Removed the ``gtts.get_url()`` method (outdated since ``2.1.0``)

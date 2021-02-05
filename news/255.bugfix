@@ -1,1 +1,0 @@
-Fix Python 2.7 compatiblity (!). Python 2 is long gone, but the cut wasn't clearly communicated for gTTS, so it was restored. Python 2 support will be completely removed in the next major release.

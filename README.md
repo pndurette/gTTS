@@ -41,7 +41,7 @@ This project is *not* affiliated with Google or Google Cloud. Breaking upstream 
 
 ### Project
 
--   [Discussions, questions & community](https://github.com/pndurette/gTTS/discussions)
+-   [Questions & community](https://github.com/pndurette/gTTS/discussions)
 -   [Changelog](CHANGELOG.rst)
 -   [Contributing](CONTRIBUTING.rst)
 

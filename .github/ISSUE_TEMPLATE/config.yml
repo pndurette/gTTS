@@ -6,3 +6,6 @@ contact_links:
   - name: Feature Request
     url: https://github.com/pndurette/gTTS/issues/new?template=feature.md
     about: Suggest a new feature for gTTS!
+  - name: Questions and discussions!
+    url: https://github.com/pndurette/gTTS/discussions
+    about: "Place to ask questions and get help about gTTS!!"

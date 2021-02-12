@@ -26,32 +26,45 @@ For a given language, Google Translate text-to-speech can speak in different
 local 'accents' depending on the Google domain (``google.<tld>``) of the request,
 with some examples shown in the table below.
 
-.. note:: This is an _incomplete_ list. Try different combinaisons of language codes and
+.. note:: This is an **incomplete** list. Try different combinaisons of language codes and
     `known localized Google domains <https://www.google.com/supported_domains>`_. Feel
     free to add new combinaisons to this list via a Pull Request!
 
-+---------------------------+-------------------------------+------------------------------+
-|       Local accent        |         Language code         |       Top-level domain       |
-|                           | ``lang`` (:class:`gtts.gTTS`) | ``tld`` (:class:`gtts.gTTS`) |
-|                           |   ``--lang`` (``gtts-cli``)   |   ``--tld`` (``gtts-cli``)   |
-+===========================+===============================+==============================+
-| English (Australia)       | ``en``                        | ``com.au``                   |
-| English (United Kingdom)  | ``en``                        | ``co.uk``                    |
-| English (United States)   | ``en``                        | ``com`` (default)            |
-| English (Canada)          | ``en``                        | ``ca``                       |
-| English (India)           | ``en``                        | ``co.in``                    |
-| English (Ireland)         | ``en``                        | ``ie``                       |
-| English (South Africa)    | ``en``                        | ``co.za``                    |
-| French (Canada)           | ``fr``                        | ``ca``                       |
-| French (France)           | ``fr``                        | ``fr``                       |
-| Mandarin (China Mainland) | ``zh-CN``                     | any                          |
-| Mandarin (Taiwan)         | ``zh-TW``                     | any                          |
-| Portuguese (Brazil)       | ``pt``                        | ``com.br``                   |
-| Portuguese (Portugal)     | ``pt``                        | ``pt``                       |
-| Spanish (Mexico)          | ``es``                        | ``com.mx``                   |
-| Spanish (Spain)           | ``es``                        | ``es``                       |
-| Spanish (United States)   | ``es``                        | ``com`` (default)            |
-+---------------------------+-------------------------------+------------------------------+
++---------------------------+--------------------------+----------------------------+
+|       Local accent        | Language code (``lang``) | Top-level domain (``tld``) |
++===========================+==========================+============================+
+| English (Australia)       | ``en``                   | ``com.au``                 |
++---------------------------+--------------------------+----------------------------+
+| English (United Kingdom)  | ``en``                   | ``co.uk``                  |
++---------------------------+--------------------------+----------------------------+
+| English (United States)   | ``en``                   | ``com`` (default)          |
++---------------------------+--------------------------+----------------------------+
+| English (Canada)          | ``en``                   | ``ca``                     |
++---------------------------+--------------------------+----------------------------+
+| English (India)           | ``en``                   | ``co.in``                  |
++---------------------------+--------------------------+----------------------------+
+| English (Ireland)         | ``en``                   | ``ie``                     |
++---------------------------+--------------------------+----------------------------+
+| English (South Africa)    | ``en``                   | ``co.za``                  |
++---------------------------+--------------------------+----------------------------+
+| French (Canada)           | ``fr``                   | ``ca``                     |
++---------------------------+--------------------------+----------------------------+
+| French (France)           | ``fr``                   | ``fr``                     |
++---------------------------+--------------------------+----------------------------+
+| Mandarin (China Mainland) | ``zh-CN``                | any                        |
++---------------------------+--------------------------+----------------------------+
+| Mandarin (Taiwan)         | ``zh-TW``                | any                        |
++---------------------------+--------------------------+----------------------------+
+| Portuguese (Brazil)       | ``pt``                   | ``com.br``                 |
++---------------------------+--------------------------+----------------------------+
+| Portuguese (Portugal)     | ``pt``                   | ``pt``                     |
++---------------------------+--------------------------+----------------------------+
+| Spanish (Mexico)          | ``es``                   | ``com.mx``                 |
++---------------------------+--------------------------+----------------------------+
+| Spanish (Spain)           | ``es``                   | ``es``                     |
++---------------------------+--------------------------+----------------------------+
+| Spanish (United States)   | ``es``                   | ``com`` (default)          |
++---------------------------+--------------------------+----------------------------+
 
 Examples
 --------

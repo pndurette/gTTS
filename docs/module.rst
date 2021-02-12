@@ -66,6 +66,7 @@ with some examples shown in the table below.
 | Spanish (United States)   | ``es``                   | ``com`` (default)          |
 +---------------------------+--------------------------+----------------------------+
 
+
 Examples
 --------
 

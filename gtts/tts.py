@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
-from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
+from gtts.utils import _minimize, _clean_tokens, _translate_url
 from gtts.lang import tts_langs, _fallback_deprecated_lang
 
 from six.moves import urllib
@@ -169,7 +169,7 @@ class gTTS:
             log.debug("pre-processing: %s", pp)
             text = pp(text)
 
-        if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
+        if len(text) <= self.GOOGLE_TTS_MAX_CHARS:
             return _clean_tokens([text])
 
         # Tokenize

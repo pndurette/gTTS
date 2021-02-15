@@ -12,7 +12,7 @@ def tone_marks(text):
     """
     return PreProcessorRegex(
         search_args=symbols.TONE_MARKS,
-        search_func=lambda x: u"(?<={})".format(x),
+        search_func=lambda x: f"(?<={x})",
         repl=' ').run(text)
 
 
@@ -24,7 +24,7 @@ def end_of_line(text):
     """
     return PreProcessorRegex(
         search_args=u'-',
-        search_func=lambda x: u"{}\n".format(x),
+        search_func=lambda x: f"{x}\n",
         repl='').run(text)
 
 
@@ -44,7 +44,7 @@ def abbreviations(text):
     """
     return PreProcessorRegex(
         search_args=symbols.ABBREVIATIONS,
-        search_func=lambda x: r"(?<={})(?=\.).".format(x),
+        search_func=lambda x: rf"(?<={x})(?=\.).",
         repl='', flags=re.IGNORECASE).run(text)
 
 

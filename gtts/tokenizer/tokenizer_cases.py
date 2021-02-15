@@ -10,7 +10,7 @@ def tone_marks():
     """
     return RegexBuilder(
         pattern_args=symbols.TONE_MARKS,
-        pattern_func=lambda x: u"(?<={}).".format(x)).regex
+        pattern_func=lambda x: f"(?<={x}).").regex
 
 
 def period_comma():
@@ -28,7 +28,7 @@ def period_comma():
     """
     return RegexBuilder(
         pattern_args=symbols.PERIOD_COMMA,
-        pattern_func=lambda x: r"(?<!\.[a-z]){} ".format(x)).regex
+        pattern_func=lambda x: rf"(?<!\.[a-z]){x} ").regex
 
 
 def colon():
@@ -40,7 +40,7 @@ def colon():
     """
     return RegexBuilder(
         pattern_args=symbols.COLON,
-        pattern_func=lambda x: r"(?<!\d){}".format(x)).regex
+        pattern_func=lambda x: rf"(?<!\d){x}").regex
 
 
 def other_punctuation():
@@ -57,7 +57,7 @@ def other_punctuation():
         set(symbols.COLON))
     return RegexBuilder(
         pattern_args=punc,
-        pattern_func=lambda x: u"{}".format(x)).regex
+        pattern_func=lambda x: str(x)).regex
 
 
 def legacy_all_punctuation():  # pragma: no cover b/c tested but Coveralls: ¯\_(ツ)_/¯
@@ -68,4 +68,4 @@ def legacy_all_punctuation():  # pragma: no cover b/c tested but Coveralls: ¯\_
     punc = symbols.ALL_PUNC
     return RegexBuilder(
         pattern_args=punc,
-        pattern_func=lambda x: u"{}".format(x)).regex
+        pattern_func=lambda x: str(x)).regex

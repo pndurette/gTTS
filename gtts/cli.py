@@ -91,7 +91,7 @@ def print_languages(ctx, param, value):
 
     try:
         langs = tts_langs()
-        langs_str_list = sorted("{}: {}".format(k, langs[k]) for k in langs)
+        langs_str_list = sorted(f"{k}: {langs[k]}" for k in langs)
         click.echo('  ' + '\n  '.join(langs_str_list))
     except RuntimeError as e:  # pragma: no cover
         log.debug(str(e), exc_info=True)

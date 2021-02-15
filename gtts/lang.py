@@ -30,7 +30,7 @@ def tts_langs():
     langs = dict()
     langs.update(_main_langs())
     langs.update(_extra_langs())
-    log.debug("langs: {}".format(langs))
+    log.debug(f"langs: {langs}")
     return langs
 
 
@@ -86,9 +86,10 @@ def _fallback_deprecated_lang(lang):
     for fallback_lang, deprecated_langs in deprecated.items():
         if lang.lower() in deprecated_langs:
             msg = (
-                "'{}' has been deprecated, falling back to '{}'. "
-                "This fallback will be removed in a future version."
-            ).format(lang, fallback_lang)
+                f"'{lang}' has been deprecated, falling back to "
+                f"'{fallback_lang}'. This fallback will be removed "
+                "in a future version."
+            )
 
             warn(msg, DeprecationWarning)
             log.warning(msg)

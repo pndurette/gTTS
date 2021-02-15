@@ -3,7 +3,7 @@ from gtts.tokenizer.symbols import ALL_PUNC as punc
 from string import whitespace as ws
 import re
 
-_ALL_PUNC_OR_SPACE = re.compile(u"^[{}]*$".format(re.escape(punc + ws)))
+_ALL_PUNC_OR_SPACE = re.compile("^[{}]*$".format(re.escape(punc + ws)))
 """Regex that matches if an entire line is only comprised
 of whitespace and punctuation
 
@@ -80,5 +80,4 @@ def _translate_url(tld="com", path=""):
     Returns:
         string: A Google Translate URL `https://translate.google.<tld>/path`
     """
-    _GOOGLE_TTS_URL = "https://translate.google.{}/{}"
-    return _GOOGLE_TTS_URL.format(tld, path)
+    return f"https://translate.google.{tld}/{path}"

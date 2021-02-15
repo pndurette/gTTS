@@ -9,10 +9,10 @@ SUB_PAIRS = [
     ('Esq.', 'Esquire')
 ]
 
-ALL_PUNC = u"?!？！.,¡()[]¿…‥،;:—。，、：\n"
+ALL_PUNC = "?!？！.,¡()[]¿…‥،;:—。，、：\n"
 
-TONE_MARKS = u"?!？！"
+TONE_MARKS = "?!？！"
 
-PERIOD_COMMA = u".,"
+PERIOD_COMMA = ".,"
 
-COLON = u":"
+COLON = ":"

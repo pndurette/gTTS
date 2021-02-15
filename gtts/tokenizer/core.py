@@ -23,7 +23,7 @@ class RegexBuilder():
         To create a simple regex that matches on the characters "a", "b",
         or "c", followed by a period::
 
-            >>> rb = RegexBuilder('abc', lambda x: "{}\.".format(x))
+            >>> rb = RegexBuilder('abc', lambda x: f"{x}\.")
 
         Looking at ``rb.regex`` we get the following compiled regex::
 
@@ -39,7 +39,7 @@ class RegexBuilder():
         or "koda"::
 
             >>> words = ['lorem', 'ipsum', 'meili', 'koda']
-            >>> rb = RegexBuilder(words, lambda x: "(?<={}).".format(x))
+            >>> rb = RegexBuilder(words, lambda x: f"(?<={x}).")
 
         Looking at ``rb.regex`` we get the following compiled regex::
 
@@ -95,7 +95,7 @@ class PreProcessorRegex():
             >>> import re
             >>> words = ['lorem', 'ipsum']
             >>> pp = PreProcessorRegex(words,
-            ...                        lambda x: "({})".format(x), r'\\1!',
+            ...                        lambda x: f"({x})", r'\\1!',
             ...                        re.IGNORECASE)
 
         In this case, the regex is a group and the replacement uses its
@@ -142,7 +142,7 @@ class PreProcessorRegex():
     def __repr__(self):  # pragma: no cover
         subs_strs = []
         for r in self.regexes:
-            subs_strs.append("({}, repl='{}')".format(r, self.repl))
+            subs_strs.append(f"({r}, {self.repl=})")
         return ", ".join(subs_strs)
 
 
@@ -182,7 +182,7 @@ class PreProcessorSub():
 
     def __init__(self, sub_pairs, ignore_case=True):
         def search_func(x):
-            return u"{}".format(x)
+            return str(x)
 
         flags = re.I if ignore_case else 0
 
@@ -260,7 +260,7 @@ class Tokenizer():
             ...     return re.compile("\,")
             >>>
             >>> def case2():
-            ...     return RegexBuilder('abc', lambda x: "{}\.".format(x)).regex
+            ...     return RegexBuilder('abc', lambda x: f"{x}\.").regex
             >>>
             >>> t = Tokenizer([case1, case2])
 

@@ -9,13 +9,13 @@ from gtts.tokenizer.core import RegexBuilder, PreProcessorRegex, PreProcessorSub
 
 class TestRegexBuilder(unittest.TestCase):
     def test_regexbuilder(self):
-        rb = RegexBuilder('abc', lambda x: "{}".format(x))
+        rb = RegexBuilder('abc', lambda x: str(x))
         self.assertEqual(rb.regex, re.compile('a|b|c'))
 
 
 class TestPreProcessorRegex(unittest.TestCase):
     def test_preprocessorregex(self):
-        pp = PreProcessorRegex('ab', lambda x: "{}".format(x), 'c')
+        pp = PreProcessorRegex('ab', lambda x: str(x), 'c')
         self.assertEqual(len(pp.regexes), 2)
         self.assertEqual(pp.regexes[0].pattern, 'a')
         self.assertEqual(pp.regexes[1].pattern, 'b')
@@ -37,7 +37,7 @@ class TestTokenizer(unittest.TestCase):
 
     # tokenizer case 2
     def case2(self):
-        return RegexBuilder('abc', lambda x: r"{}\.".format(x)).regex
+        return RegexBuilder('abc', lambda x: rf"{x}\.").regex
 
     def test_tokenizer(self):
         t = Tokenizer([self.case1, self.case2])

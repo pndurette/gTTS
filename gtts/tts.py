@@ -3,6 +3,14 @@ from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
 from gtts.utils import _minimize, _clean_tokens, _translate_url
 from gtts.lang import tts_langs, _fallback_deprecated_lang
 
+import logging
+import aiohttp
+import asyncio
+import base64
+import json
+import re
+
+import requests
 from six.moves import urllib
 try:
     from urllib.parse import quote
@@ -10,11 +18,6 @@ try:
 except ImportError:
     from urllib import quote
     import urllib2
-import requests
-import logging
-import json
-import re
-import base64
 
 __all__ = ['gTTS', 'gTTSError']
 
@@ -89,7 +92,8 @@ class gTTS:
 
     """
 
-    GOOGLE_TTS_MAX_CHARS = 100  # Max characters the Google TTS API takes at a time
+    GOOGLE_TTS_MAX_CHARS = 200  # Max characters the Google TTS API takes at a time
+    GOOGLE_TTS_PATH = "_/TranslateWebserverUi/data/batchexecute"
     GOOGLE_TTS_HEADERS = {
         "Referer": "http://translate.google.com/",
         "User-Agent":
@@ -199,8 +203,8 @@ class gTTS:
         translate_url = _translate_url(tld=self.tld, path="_/TranslateWebserverUi/data/batchexecute")
 
         text_parts = self._tokenize(self.text)
-        log.debug("text_parts: %s", str(text_parts))
-        log.debug("text_parts: %i", len(text_parts))
+        log.debug(f"{str(text_parts)}=")
+        log.debug(f"{len(text_parts)}=")
         assert text_parts, 'No text to send to TTS API'
 
         prepared_requests = []
@@ -236,6 +240,34 @@ class gTTS:
         """
         return [pr.body for pr in self._prepare_requests()]
 
+    
+    async def fetch_part(self, session, part):
+        # Request(s) URL
+        url = _translate_url(
+            tld=self.tld,
+            path=GOOGLE_TTS_PATH
+        )
+
+        data = self._package_rpc(part)
+
+        async with session.post(url, data) as response:
+            return await response.text()
+
+
+    async def write_to_fp2(self, fp):
+        # Tokenize text
+        text_parts = self._tokenize(self.text)
+
+        log.debug(f"{str(text_parts)}=")
+        log.debug(f"{len(text_parts)}=")
+        
+        assert text_parts, 'No text to send to TTS API'
+
+        async with aiohttp.ClientSession(headers=GOOGLE_TTS_HEADERS) as session:
+            requests = [fetch_part(session, part) for part in text_parts]
+            responses = await asyncio.gather(*requests)
+
+
     def write_to_fp(self, fp):
         """Do the TTS API request(s) and write bytes to a file-like object.
 
@@ -247,14 +279,6 @@ class gTTS:
             TypeError: When ``fp`` is not a file-like object that takes bytes.
 
         """
-        # When disabling ssl verify in requests (for proxies and firewalls),
-        # urllib3 prints an insecure warning on stdout. We disable that.
-        try:
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        except:
-            pass
- 
-
 
         prepared_requests = self._prepare_requests()
         for idx, pr in enumerate(prepared_requests):

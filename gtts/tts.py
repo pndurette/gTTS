@@ -203,8 +203,8 @@ class gTTS:
         translate_url = _translate_url(tld=self.tld, path="_/TranslateWebserverUi/data/batchexecute")
 
         text_parts = self._tokenize(self.text)
-        log.debug(f"{text_parts=}")
-        log.debug(f"{len(text_parts)=}")
+        log.debug(f"text_parts: {text_parts}")
+        log.debug(f"text_parts: {len(text_parts)}")
         assert text_parts, 'No text to send to TTS API'
 
         prepared_requests = []
@@ -258,8 +258,8 @@ class gTTS:
         # Tokenize text
         text_parts = self._tokenize(self.text)
 
-        log.debug(f"{text_parts=}")
-        log.debug(f"{len(text_parts)=}")
+        log.debug(f"text_parts: {text_parts}")
+        log.debug(f"text_parts: {len(text_parts)}")
         
         assert text_parts, 'No text to send to TTS API'
 

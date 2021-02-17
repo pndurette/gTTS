@@ -142,7 +142,7 @@ class PreProcessorRegex():
     def __repr__(self):  # pragma: no cover
         subs_strs = []
         for r in self.regexes:
-            subs_strs.append(f"({r}, {self.repl=})")
+            subs_strs.append(f"({r}, {self.repl})")
         return ", ".join(subs_strs)
 
 

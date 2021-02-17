@@ -2,6 +2,7 @@
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
 from gtts.utils import _minimize, _clean_tokens, _translate_url
 from gtts.lang import tts_langs, _fallback_deprecated_lang
+from gtts.version import __version__
 
 import logging
 import aiohttp
@@ -126,6 +127,7 @@ class gTTS:
     ):
 
         # Debug
+        log.debug(f"gTTS v{__version__}")
         for k, v in dict(locals()).items():
             if k == 'self':
                 continue

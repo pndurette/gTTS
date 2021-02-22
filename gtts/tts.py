@@ -151,7 +151,7 @@ class gTTS:
             try:
                 langs = tts_langs()
                 if self.lang not in langs:
-                   raise ValueError("Language not supported: %s" % lang)
+                    raise ValueError("Language not supported: %s" % lang)
             except RuntimeError as e:
                 log.debug(str(e), exc_info=True)
                 log.warning(str(e))
@@ -242,33 +242,33 @@ class gTTS:
         """
         return [pr.body for pr in self._prepare_requests()]
 
-    
-    async def fetch_part(self, session, part):
+    async def fetch_part(self, session, url, text):
+        data = self._package_rpc(part)
+
+        try:
+            async with session.post(url, data) as response:
+                return await response.content
+        except aiohttp.ClientResponseError as e:
+            log.debug(str(e))
+        #TODO except others?
+
+    async def write_to_fp2(self, fp):
+        # Tokenize text
+        text_parts = self._tokenize(self.text)
+        log.debug(f"text_parts: {text_parts}")
+        log.debug(f"text_parts: {len(text_parts)}")
+        assert text_parts, 'No text to send to TTS API'
+
         # Request(s) URL
         url = _translate_url(
             tld=self.tld,
             path=GOOGLE_TTS_PATH
         )
 
-        data = self._package_rpc(part)
-
-        async with session.post(url, data) as response:
-            return await response.text()
-
-
-    async def write_to_fp2(self, fp):
-        # Tokenize text
-        text_parts = self._tokenize(self.text)
-
-        log.debug(f"text_parts: {text_parts}")
-        log.debug(f"text_parts: {len(text_parts)}")
-        
-        assert text_parts, 'No text to send to TTS API'
-
-        async with aiohttp.ClientSession(headers=GOOGLE_TTS_HEADERS) as session:
-            requests = [fetch_part(session, part) for part in text_parts]
-            responses = await asyncio.gather(*requests)
-
+        async with aiohttp.ClientSession(headers=GOOGLE_TTS_HEADERS,
+                                         raise_for_status=True, trust_env=True) as session:
+            request_tasks = [fetch_part(session, url, text) for text in text_parts]
+            responses = await asyncio.gather(*request_tasks)
 
     def write_to_fp(self, fp):
         """Do the TTS API request(s) and write bytes to a file-like object.
@@ -307,13 +307,18 @@ class gTTS:
 
             try:
                 # Write
+                log.debug(f"headers: {r.headers}")
                 for line in r.iter_lines(chunk_size=1024):
+                    log.debug(f"line: {line}")
                     decoded_line = line.decode('utf-8')
+                    log.debug(f"decoded_line: {decoded_line}")
                     if 'jQ1olc' in decoded_line:
                         audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
                         if audio_search:
                             as_bytes = audio_search.group(1).encode('ascii')
+                            log.debug(f"as_bytes: {as_bytes}")
                             decoded = base64.b64decode(as_bytes)
+                            log.debug(f"decoded: {decoded}")
                             fp.write(decoded)
                         else:
                             # Request successful, good response,

@@ -12,12 +12,22 @@ class gBatchPayload:
     data: list
 
 
+class gBatchExecuteException(Exception):
+    pass
+
+
+class gBatchExecuteDecodeException(gBatchExecuteException):
+    pass
+
+
 class gBatchExecute():
 
     def __init__(self, payload: List[gBatchPayload],
                 url = None, host = None, user = None, app = None,
-                query: dict = None, reqid: int = 0, idx: int = 1) -> None:
+                query: dict = None, reqid: int = 0, idx: int = 1, **kwargs) -> None:
         
+        # TODO: Handle extra optionals w/ **kwargs
+
         if not url:
             if not user:
                 self.url = f'https://{host}/_/{app}/data/batchexecute'
@@ -40,9 +50,13 @@ class gBatchExecute():
 
         self.data = self._data()
 
+        self.headers = self._headers()
+
 
     def _query(self, reqid, idx) -> dict:
-        return {
+        # TODO: Clean optionals
+
+        query = {
             # Comma-deleted string of all rpcids
             'rpcids': ','.join([p.rpcid for p in self.payload]),
             
@@ -67,8 +81,11 @@ class gBatchExecute():
             # 'hl': '',
         }
 
+        return urlencode(query)
+
 
     def _data(self, at: str = None):
+        # TODO: at (for auth)
 
         data = {
             'f.req': self._freq()
@@ -102,8 +119,55 @@ class gBatchExecute():
         ]
 
 
-    def decode(self):
-        pass
+    def _headers(self):
+        # TODO: Cookie (for auth)
+
+        return {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        }
+
+
+    def decode(self, raw: str):
+
+        # TODO: Can't find any example of a reponse with more than
+        #   than one rpcid response. This method will always assume
+        #   that there was only one rpcid (first one).
+
+        rpcid = self.payload[0].rpcid
+
+        """
+        Raw response to decode, e.g.:
+
+            )]}'
+            2593
+            [["wrb.fr","rptSGc","[[[\"c8351307351755208604\", ... \n]\n]\n]\n",null,null,null,"generic"]
+            ]
+            57
+            [["di",79]
+            ,["af.httprm",79,"246063832929204055",128]
+            ]
+            27
+            [["e",4,null,null,2691]
+            ]
+
+        """
+
+        # Split on digits following with a newline
+        # ('content-lenght' of what follows)
+        resps = re.split(r'\d+\n', raw)
+
+        # Json Decode second element to json, i.e.:
+        #   [["wrb.fr", "<rpcid>", "<data>", null, null, null, "generic"]]
+        decoded_resp = json.loads(resps[1])
+
+        if decoded_resp[0][1] != rpcid:
+            pass
+            # raise gBatchExecuteDecodeException('rpcid not found in resp.')
+
+        # The <data> of the reponse itself is a json string
+        decoded_data = json.loads(decoded_resp[0][2])
+
+        return [(rpcid, decoded_data)]
 
 
 
@@ -115,6 +179,8 @@ needs:
 * rpcids
 * regex matching the result
 * payload: [<rpcid>, <payload>]
+
+re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
 
 """
 """

@@ -9,7 +9,7 @@ import re
 @dataclass
 class gBatchPayload:
     rpcid: str
-    data: list
+    args: list
 
 
 class gBatchExecuteException(Exception):
@@ -113,9 +113,9 @@ class gBatchExecute():
 
         return [
             payload.rpcid,
-            json.dumps(payload.data, separators=(',', ':')),
+            json.dumps(payload.args, separators=(',', ':')),
             None,
-            idx if idx > 0 else 'generic'
+            str(idx) if idx > 0 else 'generic'
         ]
 
 
@@ -127,87 +127,67 @@ class gBatchExecute():
         }
 
 
-    def decode(self, raw: str):
+    def decode(self, raw: str, strict: bool = False):
 
-        # TODO: Can't find any example of a reponse with more than
-        #   than one rpcid response. This method will always assume
-        #   that there was only one rpcid (first one).
+        # Regex pattern to extract raw data responses (frames)
+        p = re.compile(
+            pattern=r"""
+                (\d+\n)         # <number><\n>
+                (?P<frame>.+?)  # 'frame': anything incl. <\n> (re.DOTALL)
+                (?=\d+\n|$)     # until <number><\n> or <end>
+            """,
+            flags=re.DOTALL | re.VERBOSE
+        )
 
-        rpcid = self.payload[0].rpcid
+        # TODO: sort in idx order (if not 'generic')
+        # TODO: except if rpcid not found
+        # TODO: except if data is empty
 
-        """
-        Raw response to decode, e.g.:
+        decoded = []
 
-            )]}'
-            2593
-            [["wrb.fr","rptSGc","[[[\"c8351307351755208604\", ... \n]\n]\n]\n",null,null,null,"generic"]
-            ]
-            57
-            [["di",79]
-            ,["af.httprm",79,"246063832929204055",128]
-            ]
-            27
-            [["e",4,null,null,2691]
-            ]
+        for item in p.finditer(raw):
 
-        """
+            # The 'frame' group is a json string
+            # e.g.: [["wrb.fr","jQ1olc","[\"/abc\"]\n",null,null,null,"generic"]
+            frame_raw = item.group('frame')
+            frame = json.loads(frame_raw)
 
-        # Split on digits following with a newline
-        # ('content-lenght' of what follows)
-        resps = re.split(r'\d+\n', raw)
+            # Ignore frames that don't have 'wrb.fr' at [0][0]
+            # (they're not rpc reponses but analytics etc.)
+            if frame[0][0] != 'wrb.fr':
+                continue
 
-        # Json Decode second element to json, i.e.:
-        #   [["wrb.fr", "<rpcid>", "<data>", null, null, null, "generic"]]
-        decoded_resp = json.loads(resps[1])
+            # rpcid (at [0][1])
+            # rpcid's response (at [0][2], a json string)
+            rpcid = frame[0][1]
+            data = json.loads(frame[0][2])
 
-        if decoded_resp[0][1] != rpcid:
-            pass
-            # raise gBatchExecuteDecodeException('rpcid not found in resp.')
+            if strict and data == []:
+                raise gBatchExecuteDecodeException("empty data")
 
-        # The <data> of the reponse itself is a json string
-        decoded_data = json.loads(decoded_resp[0][2])
+            # Append as tuple
+            decoded.append(
+                (rpcid, data)
+            )
 
-        return [(rpcid, decoded_data)]
+        if strict:
+            in_rpcids = [p.rpcid for p in self.payload]
+            out_rpcids = [rpcid for rpcid, data in decoded]
+
+            in_len = len(in_rpcids)
+            out_len = len(out_rpcids)
+
+            if in_len != out_len:
+                raise gBatchExecuteDecodeException("in/out not same len")
+
+            if set(in_rpcids) != set(out_rpcids):
+                raise gBatchExecuteDecodeException("items not the same")
+
+        return decoded
 
 
 
 """
 https://kovatch.medium.com/deciphering-google-batchexecute-74991e4e446c
 https://github.com/Boudewijn26/gTTS-token/blob/master/docs/november-2020-translate-changes.md
-
-needs:
-* rpcids
-* regex matching the result
-* payload: [<rpcid>, <payload>]
-
-re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
-
-"""
-"""
-parameter = [text, self.lang, self.speed, "null"]
-escaped_parameter = json.dumps(parameter, separators=(',', ':'))
-
-rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]
-espaced_rpc = json.dumps(rpc, separators=(',', ':'))
-return f"f.req={quote(espaced_rpc)}&"
-"""
-
-"""
-
-[[["rptSGc","[[\"c8351307351755208604\"]]",null,"generic"]]]
-
-[[["jQ1olc","[\"test\",\"en\",true,\"null\"]",null,"generic"]]]
-[[["jQ1olc","[\"test\",\"en\",true,\"null\"]",null,"generic"]]]
-
-[[["jQ1olc","[\"test\",\"en\",null,\"null\"]",null,"generic"]]]
-[[["jQ1olc","[\"test\",\"en\",true,\"null\"]",null,"generic"]]]
-
-f.req=%5B%5B%5B%22jQ1olc%22%2C%22%5B%5C%22test%5C%22%2C%5C%22en%5C%22%2Cnull%2C%5C%22null%5C%22%5D%22%2Cnull%2C%22generic%22%5D%5D%5D
-f.req=%5B%5B%5B%22jQ1olc%22%2C%22%5B%5C%22test%5C%22%2C%5C%22en%5C%22%2Ctrue%2C%5C%22null%5C%22%5D%22%2Cnull%2C%22generic%22%5D%5D%5D
-
-
-curl 'https://translate.google.com/_/TranslateWebserverUi/data/batchexecute' \
--X 'POST' \
--H 'Content-Type: application/x-www-form-urlencoded;charset=utf-8' \
--d 'f.req=%5B%5B%5B%22jQ1olc%22%2C%22%5B%5C%22test%5C%22%2C%5C%22en%5C%22%2Cnull%2C%5C%22null%5C%22%5D%22%2Cnull%2C%22generic%22%5D%5D%5D'
 """

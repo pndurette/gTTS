@@ -200,7 +200,7 @@ def tts_cli(text, file, output, slow, tld, lang, nocheck):
             slow=slow,
             tld=tld,
             lang_check=not nocheck)
-        tts.write_to_fp(output)
+        tts.write_to_fp2(output)
     except (ValueError, AssertionError) as e:
         raise click.UsageError(str(e))
     except gTTSError as e:

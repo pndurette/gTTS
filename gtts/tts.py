@@ -2,6 +2,7 @@
 from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
 from gtts.utils import _minimize, _clean_tokens, _translate_url
 from gtts.lang import tts_langs, _fallback_deprecated_lang
+from gtts.gbe.core import gBatchPayload, gBatchExecute
 from gtts.version import __version__
 
 import logging
@@ -11,6 +12,7 @@ import base64
 import json
 import re
 
+from random import randint
 import requests
 from six.moves import urllib
 try:
@@ -243,16 +245,40 @@ class gTTS:
         return [pr.body for pr in self._prepare_requests()]
 
     async def fetch_part(self, session, url, text):
-        data = self._package_rpc(part)
+        ##data = self._package_rpc(part)
+
+        tts_rpc_payload = gBatchPayload('jQ1olc', [text, self.lang, self.speed, 'null'])
+        # tts_rpc = gBatchExecute(url, payload=tts_rpc_payload)
+
+        #TODO: Proper reqid?
+        #TODO: handle read() errors
+        #TODO: pass charset for gBatchExecute.decode()
+        #TODO: handle try/except for base64, write to fp
+        #TODO: asynio return exceptions
+        #TODO: get results outside of loop for write to fp https://gist.github.com/dmfigol/3e7d5b84a16d076df02baa9f53271058
+
+        reqid = randint(0, 99999)
+        tts_rpc = gBatchExecute(payload=tts_rpc_payload,
+                     url="https://translate.google.com/_/TranslateWebserverUi/data/batchexecute",
+                     reqid=reqid, idx=1)
+
+        log.debug(tts_rpc.data)
 
         try:
-            async with session.post(url, data) as response:
-                return await response.content
+            async with session.post(url=url,
+                                    params=tts_rpc.query,
+                                    data=tts_rpc.data,
+                                    headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers)) as response:
+                resp = await response.content.read()
+                return tts_rpc.decode(resp.decode(response.charset))
+
         except aiohttp.ClientResponseError as e:
             log.debug(str(e))
+        # except aiohttp.ClientPayloadError as e:
+        #     log.debug(str(e))
         #TODO except others?
 
-    async def write_to_fp2(self, fp):
+    async def fetch(self, fp):
         # Tokenize text
         text_parts = self._tokenize(self.text)
         log.debug(f"text_parts: {text_parts}")
@@ -262,13 +288,27 @@ class gTTS:
         # Request(s) URL
         url = _translate_url(
             tld=self.tld,
-            path=GOOGLE_TTS_PATH
+            path=self.GOOGLE_TTS_PATH
         )
 
-        async with aiohttp.ClientSession(headers=GOOGLE_TTS_HEADERS,
+        async with aiohttp.ClientSession(#headers=GOOGLE_TTS_HEADERS,
                                          raise_for_status=True, trust_env=True) as session:
-            request_tasks = [fetch_part(session, url, text) for text in text_parts]
+            request_tasks = [self.fetch_part(session, url, text) for text in text_parts]
             responses = await asyncio.gather(*request_tasks)
+            #log.debug(responses)
+
+        try:
+            for idx, r in enumerate(responses):
+                rpcid, data = r[0]
+                base64_audio = data[0]
+                audio = base64.b64decode(base64_audio)
+                log.debug(f"Wrting {idx}")
+                fp.write(audio)
+        except Exception as e:
+            log.debug(str(e))
+
+    def write_to_fp2(self, fp):
+        asyncio.run(self.fetch(fp))
 
     def write_to_fp(self, fp):
         """Do the TTS API request(s) and write bytes to a file-like object.

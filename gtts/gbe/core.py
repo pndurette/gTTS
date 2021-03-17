@@ -86,12 +86,14 @@ class gBatchExecute():
 
     def _data(self, at: str = None):
         # TODO: at (for auth)
+        # TODO: return urlencode
 
         data = {
             'f.req': self._freq()
         }
 
-        return urlencode(data)
+        return data
+        # return urlencode(data)
 
 
     def _freq(self):

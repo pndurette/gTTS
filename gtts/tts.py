@@ -247,8 +247,13 @@ class gTTS:
     async def fetch_part(self, session, url, text):
         ##data = self._package_rpc(part)
 
-        tts_rpc_payload = gBatchPayload('jQ1olc', [text, self.lang, self.speed, 'null'])
-        # tts_rpc = gBatchExecute(url, payload=tts_rpc_payload)
+        # When it's only one part
+        # tts_rpc_payload = gBatchPayload('jQ1olc', [text, self.lang, self.speed, 'null'])
+
+        # When it's all text parts
+        tts_rpc_payload = [
+            gBatchPayload('jQ1olc', [t, self.lang, self.speed, 'null']) for t in text
+        ]
 
         #TODO: Proper reqid?
         #TODO: handle read() errors
@@ -264,16 +269,24 @@ class gTTS:
 
         log.debug(tts_rpc.data)
 
+        quoted_payload = f"f.req={quote(tts_rpc.data['f.req'])}"
+        quoted_payload_size = len(quoted_payload.encode('utf-8'))
+        #log.debug(quoted_payload)
+        log.debug(f"{quoted_payload_size=}B")
+        log.debug(f"{quoted_payload_size/1024=}KB")
+
         try:
-            async with session.post(url=url,
-                                    params=tts_rpc.query,
-                                    data=tts_rpc.data,
-                                    headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers)) as response:
-                resp = await response.content.read()
-                return tts_rpc.decode(resp.decode(response.charset))
+            # async with session.post(url=url,
+            #                         params=tts_rpc.query,
+            #                         data=tts_rpc.data,
+            #                         headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers)) as response:
+            #     resp = await response.content.read()
+            #     return tts_rpc.decode(resp.decode(response.charset))
+            pass
 
         except aiohttp.ClientResponseError as e:
             log.debug(str(e))
+            log.debug("error here")
         # except aiohttp.ClientPayloadError as e:
         #     log.debug(str(e))
         #TODO except others?
@@ -293,17 +306,27 @@ class gTTS:
 
         async with aiohttp.ClientSession(#headers=GOOGLE_TTS_HEADERS,
                                          raise_for_status=True, trust_env=True) as session:
-            request_tasks = [self.fetch_part(session, url, text) for text in text_parts]
+            # request_tasks = [self.fetch_part(session, url, text) for text in text_parts]
+            request_tasks = [self.fetch_part(session, url, text_parts)]
             responses = await asyncio.gather(*request_tasks)
             #log.debug(responses)
 
         try:
             for idx, r in enumerate(responses):
-                rpcid, data = r[0]
-                base64_audio = data[0]
-                audio = base64.b64decode(base64_audio)
-                log.debug(f"Wrting {idx}")
-                fp.write(audio)
+                # One rpc call per response:
+                # rpcid, data = r[0]
+                # base64_audio = data[0]
+                # audio = base64.b64decode(base64_audio)
+                # fp.write(audio)
+
+                # Multiple rpc calls per response:
+                for p in r:
+                    rpcidx, rpcid, data = p
+                    base64_audio = data[0]
+                    audio = base64.b64decode(base64_audio)
+                    log.debug(f"Wrting {rpcid} ({rpcidx})")
+                    fp.write(audio)
+
         except Exception as e:
             log.debug(str(e))
 

@@ -141,7 +141,7 @@ class gBatchExecute():
             flags=re.DOTALL | re.VERBOSE
         )
 
-        # TODO: sort in idx order (if not 'generic')
+        # TODO: decode charset here?
         # TODO: except if rpcid not found
         # TODO: except if data is empty
 
@@ -149,8 +149,13 @@ class gBatchExecute():
 
         for item in p.finditer(raw):
 
-            # The 'frame' group is a json string
-            # e.g.: [["wrb.fr","jQ1olc","[\"/abc\"]\n",null,null,null,"generic"]
+            # A 'frame' group is a json string
+            # e.g.: '[["wrb.fr","jQ1olc","[\"/abc\"]\n",null,null,null,"generic"]]'
+            #          ^^^^^^^^  ^^^^^^   ^^^^^^^^^^^^                 ^^^^^^^^^
+            #          [0][0]    [0][1]   [0][2]                       [0][6]
+            #          constant  rpc id   rpc response                 frame index or
+            #          (str)     (str)    (json str)                   "generic" if single frame
+            #                                                          (str)
             frame_raw = item.group('frame')
             frame = json.loads(frame_raw)
 
@@ -158,6 +163,14 @@ class gBatchExecute():
             # (they're not rpc reponses but analytics etc.)
             if frame[0][0] != 'wrb.fr':
                 continue
+
+            # index (at [0][6], string)
+            # index is 1-based
+            # index is "generic" if the response contains a single frame
+            if frame[0][6] == 'generic':
+                index = 1
+            else:
+                index = int(frame[0][6])
 
             # rpcid (at [0][1])
             # rpcid's response (at [0][2], a json string)
@@ -169,8 +182,11 @@ class gBatchExecute():
 
             # Append as tuple
             decoded.append(
-                (rpcid, data)
+                (index, rpcid, data)
             )
+
+        # Sort responses by index ([0])
+        decoded = sorted(decoded, key=lambda frame: frame[0])
 
         if strict:
             in_rpcids = [p.rpcid for p in self.payload]

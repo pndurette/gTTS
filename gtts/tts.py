@@ -5,22 +5,13 @@ from gtts.lang import tts_langs, _fallback_deprecated_lang
 from gtts.gbe.core import gBatchPayload, gBatchExecute
 from gtts.version import __version__
 
+import requests
 import logging
-import aiohttp
-import asyncio
 import base64
 import json
 import re
 
 from random import randint
-import requests
-from six.moves import urllib
-try:
-    from urllib.parse import quote
-    import urllib3
-except ImportError:
-    from urllib import quote
-    import urllib2
 
 __all__ = ['gTTS', 'gTTSError']
 
@@ -33,8 +24,8 @@ class Speed:
     """Read Speed
 
     The Google TTS Translate API supports two speeds:
-        Slow: True
-        Normal: None
+        Slow: ``True``
+        Normal: ``None``
     """
     SLOW = True
     NORMAL = None
@@ -127,13 +118,14 @@ class gTTS:
                 tokenizer_cases.other_punctuation
             ]).run
     ):
+        # Debug flag
+        self.DEBUG = log.getEffectiveLevel() == logging.DEBUG
 
-        # Debug
-        log.debug(f"gTTS v{__version__}")
-        for k, v in dict(locals()).items():
-            if k == 'self':
-                continue
-            log.debug("%s: %s", k, v)
+        if self.DEBUG:
+            log.debug(f"gTTS v{__version__}")
+            for k, v in dict(locals()).items():
+                if k == 'self': continue
+                log.debug("%s: %s", k, v)
 
         # Text
         assert text, 'No text to speak'
@@ -197,101 +189,31 @@ class gTTS:
 
         return min_tokens
 
-    def _prepare_requests(self):
-        """Created the TTS API the request(s) without sending them.
+    def write_to_fp(self, fp):
+        """Do the TTS API request and write bytes to a file-like object.
 
-        Returns:
-            list: ``requests.PreparedRequests_``. <https://2.python-requests.org/en/master/api/#requests.PreparedRequest>`_``.
+        Args:
+            fp (file object): Any file-like object to write the ``mp3`` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+            TypeError: When ``fp`` is not a file-like object that takes bytes.
+
         """
-        # TTS API URL
-        translate_url = _translate_url(tld=self.tld, path="_/TranslateWebserverUi/data/batchexecute")
 
-        text_parts = self._tokenize(self.text)
-        log.debug(f"text_parts: {text_parts}")
-        log.debug(f"text_parts: {len(text_parts)}")
-        assert text_parts, 'No text to send to TTS API'
-
-        prepared_requests = []
-        for idx, part in enumerate(text_parts):
-            data = self._package_rpc(part)
-
-            log.debug("data-%i: %s", idx, data)
-
-            # Request
-            r = requests.Request(method='POST',
-                                 url=translate_url,
-                                 data=data,
-                                 headers=self.GOOGLE_TTS_HEADERS)
-
-            # Prepare request
-            prepared_requests.append(r.prepare())
-
-        return prepared_requests
-
-    def _package_rpc(self, text):
-        parameter = [text, self.lang, self.speed, "null"]
-        escaped_parameter = json.dumps(parameter, separators=(',', ':'))
-
-        rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]
-        espaced_rpc = json.dumps(rpc, separators=(',', ':'))
-        return f"f.req={quote(espaced_rpc)}&"
-
-    def get_bodies(self):
-        """Get TTS API request bodies(s) that would be sent to the TTS API.
-
-        Returns:
-            list: A list of TTS API request bodiess to make.
-        """
-        return [pr.body for pr in self._prepare_requests()]
-
-    async def fetch_part(self, session, url, text):
-        ##data = self._package_rpc(part)
-
-        # When it's only one part
-        # tts_rpc_payload = gBatchPayload('jQ1olc', [text, self.lang, self.speed, 'null'])
-
-        # When it's all text parts
-        tts_rpc_payload = [
-            gBatchPayload('jQ1olc', [t, self.lang, self.speed, 'null']) for t in text
-        ]
-
+        #TODO: write_to_fp docs
         #TODO: Proper reqid?
-        #TODO: handle read() errors
-        #TODO: pass charset for gBatchExecute.decode()
-        #TODO: handle try/except for base64, write to fp
-        #TODO: asynio return exceptions
-        #TODO: get results outside of loop for write to fp https://gist.github.com/dmfigol/3e7d5b84a16d076df02baa9f53271058
+        #TODO: try/except for base64
+        #TODO: try/except for gbe decode
+        """
+        print(f"{quoted_payload_size=}B")
+        print(f"{quoted_payload_size/1024=:.2f}KB")
 
-        reqid = randint(0, 99999)
-        tts_rpc = gBatchExecute(payload=tts_rpc_payload,
-                     url="https://translate.google.com/_/TranslateWebserverUi/data/batchexecute",
-                     reqid=reqid, idx=1)
+        log.debug("headers-%i: %s", idx, r.request.headers)
+        log.debug("url-%i: %s", idx, r.request.url)
+        log.debug("status-%i: %s", idx, r.status_code)
+        """
 
-        log.debug(tts_rpc.data)
-
-        quoted_payload = f"f.req={quote(tts_rpc.data['f.req'])}"
-        quoted_payload_size = len(quoted_payload.encode('utf-8'))
-        #log.debug(quoted_payload)
-        log.debug(f"{quoted_payload_size=}B")
-        log.debug(f"{quoted_payload_size/1024=}KB")
-
-        try:
-            # async with session.post(url=url,
-            #                         params=tts_rpc.query,
-            #                         data=tts_rpc.data,
-            #                         headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers)) as response:
-            #     resp = await response.content.read()
-            #     return tts_rpc.decode(resp.decode(response.charset))
-            pass
-
-        except aiohttp.ClientResponseError as e:
-            log.debug(str(e))
-            log.debug("error here")
-        # except aiohttp.ClientPayloadError as e:
-        #     log.debug(str(e))
-        #TODO except others?
-
-    async def fetch(self, fp):
         # Tokenize text
         text_parts = self._tokenize(self.text)
         log.debug(f"text_parts: {text_parts}")
@@ -304,91 +226,45 @@ class gTTS:
             path=self.GOOGLE_TTS_PATH
         )
 
-        async with aiohttp.ClientSession(#headers=GOOGLE_TTS_HEADERS,
-                                         raise_for_status=True, trust_env=True) as session:
-            # request_tasks = [self.fetch_part(session, url, text) for text in text_parts]
-            request_tasks = [self.fetch_part(session, url, text_parts)]
-            responses = await asyncio.gather(*request_tasks)
-            #log.debug(responses)
+        tts_rpc_payload = [
+            gBatchPayload('jQ1olc', [t, self.lang, self.speed, 'null']) for t in text_parts
+        ]
+
+        reqid = randint(0, 99999)
+        tts_rpc = gBatchExecute(payload=tts_rpc_payload,
+            url="https://translate.google.com/_/TranslateWebserverUi/data/batchexecute",
+            reqid=reqid, idx=1)
+
+        with requests.Session() as session:
+            raw_response = session.post(url=url,
+                params=tts_rpc.query,
+                data=tts_rpc.data,
+                headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers))
 
         try:
-            for idx, r in enumerate(responses):
-                # One rpc call per response:
-                # rpcid, data = r[0]
-                # base64_audio = data[0]
-                # audio = base64.b64decode(base64_audio)
-                # fp.write(audio)
+            raw_response.raise_for_status()
+        except:
+            pass
 
-                # Multiple rpc calls per response:
-                for p in r:
-                    rpcidx, rpcid, data = p
-                    base64_audio = data[0]
-                    audio = base64.b64decode(base64_audio)
-                    log.debug(f"Wrting {rpcid} ({rpcidx})")
-                    fp.write(audio)
+        try:
+            response = tts_rpc.decode(raw_response.content, charset=raw_response.encoding)
+        
+            for segment in response:
+                rpcidx, rpcid, data = segment
+                base64_audio = data[0]
+                audio = base64.b64decode(base64_audio)
+                log.debug(f"Wrting {rpcid} ({rpcidx})")
+                fp.write(audio)
 
-        except Exception as e:
-            log.debug(str(e))
-
-    def write_to_fp2(self, fp):
-        asyncio.run(self.fetch(fp))
-
-    def write_to_fp(self, fp):
-        """Do the TTS API request(s) and write bytes to a file-like object.
-
-        Args:
-            fp (file object): Any file-like object to write the ``mp3`` to.
-
-        Raises:
-            :class:`gTTSError`: When there's an error with the API request.
-            TypeError: When ``fp`` is not a file-like object that takes bytes.
-
-        """
-
-        prepared_requests = self._prepare_requests()
-        for idx, pr in enumerate(prepared_requests):
-            try:
-                with requests.Session() as s:
-                    # Send request
-                    r = s.send(request=pr,
-                               proxies=urllib.request.getproxies(),
-                               verify=False)
-
-                log.debug("headers-%i: %s", idx, r.request.headers)
-                log.debug("url-%i: %s", idx, r.request.url)
-                log.debug("status-%i: %s", idx, r.status_code)
-
-                r.raise_for_status()
-            except requests.exceptions.HTTPError as e:  # pragma: no cover
+        except requests.exceptions.HTTPError as e:  # pragma: no cover
                 # Request successful, bad response
                 log.debug(str(e))
                 raise gTTSError(tts=self, response=r)
-            except requests.exceptions.RequestException as e:  # pragma: no cover
+        except requests.exceptions.RequestException as e:  # pragma: no cover
                 # Request failed
                 log.debug(str(e))
                 raise gTTSError(tts=self)
-
-            try:
-                # Write
-                log.debug(f"headers: {r.headers}")
-                for line in r.iter_lines(chunk_size=1024):
-                    log.debug(f"line: {line}")
-                    decoded_line = line.decode('utf-8')
-                    log.debug(f"decoded_line: {decoded_line}")
-                    if 'jQ1olc' in decoded_line:
-                        audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
-                        if audio_search:
-                            as_bytes = audio_search.group(1).encode('ascii')
-                            log.debug(f"as_bytes: {as_bytes}")
-                            decoded = base64.b64decode(as_bytes)
-                            log.debug(f"decoded: {decoded}")
-                            fp.write(decoded)
-                        else:
-                            # Request successful, good response,
-                            # no audio stream in response
-                            raise gTTSError(tts=self, response=r)
-                log.debug("part-%i written to %s", idx, fp)
-            except (AttributeError, TypeError) as e:
+        except (AttributeError, TypeError) as e:
                 raise TypeError(
                     "'fp' is not a file-like object or it does not take bytes: %s" %
                     str(e))

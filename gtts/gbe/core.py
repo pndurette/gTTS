@@ -57,9 +57,9 @@ class gBatchExecute():
         # TODO: Clean optionals
 
         query = {
-            # Comma-deleted string of all rpcids
-            'rpcids': ','.join([p.rpcid for p in self.payload]),
-            
+            # Comma-deleted string of all unique (via set()) rpcids
+            'rpcids': ','.join(set([p.rpcid for p in self.payload])),
+
             # Response type. Always 'c'.
             'rt': 'c',
 
@@ -129,7 +129,7 @@ class gBatchExecute():
         }
 
 
-    def decode(self, raw: str, strict: bool = False):
+    def decode(self, raw: str, charset: str = None, strict: bool = False):
 
         # Regex pattern to extract raw data responses (frames)
         p = re.compile(
@@ -141,9 +141,9 @@ class gBatchExecute():
             flags=re.DOTALL | re.VERBOSE
         )
 
-        # TODO: decode charset here?
-        # TODO: except if rpcid not found
-        # TODO: except if data is empty
+        # TODO Except decode error
+        if charset:
+            raw = raw.decode(charset)
 
         decoded = []
 

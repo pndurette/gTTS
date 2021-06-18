@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+2.2.3 (2021-06-17)
+------------------
+
+Features
+~~~~~~~~
+
+- Added Bulgarian language support (`#302 <https://github.com/pndurette/gTTS/issues/302>`_)
+
+
 2.2.2 (2021-02-03)
 ------------------
 

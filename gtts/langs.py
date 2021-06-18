@@ -2,6 +2,7 @@
 _langs = {
     "af": "Afrikaans",
     "ar": "Arabic",
+    "bg": "Bulgarian",
     "bn": "Bengali",
     "bs": "Bosnian",
     "ca": "Catalan",

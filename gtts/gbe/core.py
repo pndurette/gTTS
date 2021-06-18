@@ -20,19 +20,27 @@ class gBatchExecuteDecodeException(gBatchExecuteException):
     pass
 
 
-class gBatchExecute():
+class gBatchExecute:
+    def __init__(
+        self,
+        payload: List[gBatchPayload],
+        url=None,
+        host=None,
+        user=None,
+        app=None,
+        query: dict = None,
+        reqid: int = 0,
+        idx: int = 1,
+        **kwargs,
+    ) -> None:
 
-    def __init__(self, payload: List[gBatchPayload],
-                url = None, host = None, user = None, app = None,
-                query: dict = None, reqid: int = 0, idx: int = 1, **kwargs) -> None:
-        
         # TODO: Handle extra optionals w/ **kwargs
 
         if not url:
             if not user:
-                self.url = f'https://{host}/_/{app}/data/batchexecute'
+                self.url = f"https://{host}/_/{app}/data/batchexecute"
             else:
-                self.url = f'https://{host}/u/{user}/_/{app}/data/batchexecute'
+                self.url = f"https://{host}/u/{user}/_/{app}/data/batchexecute"
         else:
             self.url = url
 
@@ -52,30 +60,34 @@ class gBatchExecute():
 
         self.headers = self._headers()
 
-
     def _query(self, reqid, idx) -> dict:
+        """Do the TTS API request and write bytes to a file-like object.
+
+        Args:
+            fp (file object): Any file-like object to write the ``mp3`` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+            TypeError: When ``fp`` is not a file-like object that takes bytes.
+
+        """
+
         # TODO: Clean optionals
 
         query = {
-            # Comma-deleted string of all unique (via set()) rpcids
-            'rpcids': ','.join(set([p.rpcid for p in self.payload])),
-
+            # Comma-deleted string of all unique rpcids
+            "rpcids": ",".join(set([p.rpcid for p in self.payload])),
             # Response type. Always 'c'.
-            'rt': 'c',
-
+            "rt": "c",
             # 5-character
-            '_reqid': reqid + (idx * 100000),
-
+            "_reqid": reqid + (idx * 100000),
             # Optionals:
-
             # Signed 64-bit integer consistant for a single page load
             # e.g. 6781970813608854611
             # 'f.sid': 0,
-
             # Name and version of the backend software handling the requests
             # e.g. 'boq_translate-webserver_20210217.12_p0'
             #'bl': '',
-            
             # 2-character ISO 639–1 language code the UI is in
             # e.g. 'en'
             # 'hl': '',
@@ -83,18 +95,14 @@ class gBatchExecute():
 
         return urlencode(query)
 
-
     def _data(self, at: str = None):
         # TODO: at (for auth)
         # TODO: return urlencode
 
-        data = {
-            'f.req': self._freq()
-        }
+        data = {"f.req": self._freq()}
 
         return data
         # return urlencode(data)
-
 
     def _freq(self):
 
@@ -108,26 +116,23 @@ class gBatchExecute():
             freq.append(self._envelope(p, idx))
 
         freq = [freq]
-        return json.dumps(freq, separators=(',', ':'))
-
+        return json.dumps(freq, separators=(",", ":"))
 
     def _envelope(self, payload: gBatchPayload, idx: int = 0):
 
         return [
             payload.rpcid,
-            json.dumps(payload.args, separators=(',', ':')),
+            json.dumps(payload.args, separators=(",", ":")),
             None,
-            str(idx) if idx > 0 else 'generic'
+            str(idx) if idx > 0 else "generic",
         ]
-
 
     def _headers(self):
         # TODO: Cookie (for auth)
 
         return {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         }
-
 
     def decode(self, raw: str, charset: str = None, strict: bool = False):
 
@@ -138,7 +143,7 @@ class gBatchExecute():
                 (?P<frame>.+?)  # 'frame': anything incl. <\n> (re.DOTALL)
                 (?=\d+\n|$)     # until <number><\n> or <end>
             """,
-            flags=re.DOTALL | re.VERBOSE
+            flags=re.DOTALL | re.VERBOSE,
         )
 
         # TODO Except decode error
@@ -156,18 +161,18 @@ class gBatchExecute():
             #          constant  rpc id   rpc response                 frame index or
             #          (str)     (str)    (json str)                   "generic" if single frame
             #                                                          (str)
-            frame_raw = item.group('frame')
+            frame_raw = item.group("frame")
             frame = json.loads(frame_raw)
 
             # Ignore frames that don't have 'wrb.fr' at [0][0]
             # (they're not rpc reponses but analytics etc.)
-            if frame[0][0] != 'wrb.fr':
+            if frame[0][0] != "wrb.fr":
                 continue
 
             # index (at [0][6], string)
             # index is 1-based
             # index is "generic" if the response contains a single frame
-            if frame[0][6] == 'generic':
+            if frame[0][6] == "generic":
                 index = 1
             else:
                 index = int(frame[0][6])
@@ -181,9 +186,7 @@ class gBatchExecute():
                 raise gBatchExecuteDecodeException("empty data")
 
             # Append as tuple
-            decoded.append(
-                (index, rpcid, data)
-            )
+            decoded.append((index, rpcid, data))
 
         # Sort responses by index ([0])
         decoded = sorted(decoded, key=lambda frame: frame[0])
@@ -202,7 +205,6 @@ class gBatchExecute():
                 raise gBatchExecuteDecodeException("items not the same")
 
         return decoded
-
 
 
 """

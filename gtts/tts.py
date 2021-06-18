@@ -13,7 +13,7 @@ import re
 
 from random import randint
 
-__all__ = ['gTTS', 'gTTSError']
+__all__ = ["gTTS", "gTTSError"]
 
 # Logger
 log = logging.getLogger(__name__)
@@ -27,6 +27,7 @@ class Speed:
         Slow: ``True``
         Normal: ``None``
     """
+
     SLOW = True
     NORMAL = None
 
@@ -90,45 +91,48 @@ class gTTS:
     GOOGLE_TTS_PATH = "_/TranslateWebserverUi/data/batchexecute"
     GOOGLE_TTS_HEADERS = {
         "Referer": "http://translate.google.com/",
-        "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; WOW64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/47.0.2526.106 Safari/537.36",
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/47.0.2526.106 Safari/537.36",
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     }
     GOOGLE_TTS_RPC = "jQ1olc"
 
     def __init__(
-            self,
-            text,
-            tld='com',
-            lang='en',
-            slow=False,
-            lang_check=True,
-            pre_processor_funcs=[
-                pre_processors.tone_marks,
-                pre_processors.end_of_line,
-                pre_processors.abbreviations,
-                pre_processors.word_sub
-            ],
-            tokenizer_func=Tokenizer([
+        self,
+        text,
+        tld="com",
+        lang="en",
+        slow=False,
+        lang_check=True,
+        pre_processor_funcs=[
+            pre_processors.tone_marks,
+            pre_processors.end_of_line,
+            pre_processors.abbreviations,
+            pre_processors.word_sub,
+        ],
+        tokenizer_func=Tokenizer(
+            [
                 tokenizer_cases.tone_marks,
                 tokenizer_cases.period_comma,
                 tokenizer_cases.colon,
-                tokenizer_cases.other_punctuation
-            ]).run
-    ):
+                tokenizer_cases.other_punctuation,
+            ]
+        ).run,
+    ) -> None:
+    
         # Debug flag
         self.DEBUG = log.getEffectiveLevel() == logging.DEBUG
 
         if self.DEBUG:
             log.debug(f"gTTS v{__version__}")
             for k, v in dict(locals()).items():
-                if k == 'self': continue
+                if k == "self":
+                    continue
                 log.debug("%s: %s", k, v)
 
         # Text
-        assert text, 'No text to speak'
+        assert text, "No text to speak"
         self.text = text
 
         # Translate URL top-level domain
@@ -182,7 +186,7 @@ class gTTS:
         # Minimize
         min_tokens = []
         for t in tokens:
-            min_tokens += _minimize(t, ' ', self.GOOGLE_TTS_MAX_CHARS)
+            min_tokens += _minimize(t, " ", self.GOOGLE_TTS_MAX_CHARS)
 
         # Filter empty tokens, post-minimize
         tokens = [t for t in min_tokens if t]
@@ -201,10 +205,10 @@ class gTTS:
 
         """
 
-        #TODO: write_to_fp docs
-        #TODO: Proper reqid?
-        #TODO: try/except for base64
-        #TODO: try/except for gbe decode
+        # TODO: write_to_fp docs
+        # TODO: Proper reqid?
+        # TODO: try/except for base64
+        # TODO: try/except for gbe decode
         """
         print(f"{quoted_payload_size=}B")
         print(f"{quoted_payload_size/1024=:.2f}KB")
@@ -218,28 +222,30 @@ class gTTS:
         text_parts = self._tokenize(self.text)
         log.debug(f"text_parts: {text_parts}")
         log.debug(f"text_parts: {len(text_parts)}")
-        assert text_parts, 'No text to send to TTS API'
+        assert text_parts, "No text to send to TTS API"
 
         # Request(s) URL
-        url = _translate_url(
-            tld=self.tld,
-            path=self.GOOGLE_TTS_PATH
-        )
+        url = _translate_url(tld=self.tld, path=self.GOOGLE_TTS_PATH)
 
         tts_rpc_payload = [
-            gBatchPayload('jQ1olc', [t, self.lang, self.speed, 'null']) for t in text_parts
+            gBatchPayload("jQ1olc", [t, self.lang, self.speed, "null"])
+            for t in text_parts
         ]
 
-        reqid = randint(0, 99999)
-        tts_rpc = gBatchExecute(payload=tts_rpc_payload,
+        tts_rpc = gBatchExecute(
+            payload=tts_rpc_payload,
             url="https://translate.google.com/_/TranslateWebserverUi/data/batchexecute",
-            reqid=reqid, idx=1)
+            reqid=randint(0, 99999),
+            idx=1,
+        )
 
         with requests.Session() as session:
-            raw_response = session.post(url=url,
+            raw_response = session.post(
+                url=url,
                 params=tts_rpc.query,
                 data=tts_rpc.data,
-                headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers))
+                headers=self.GOOGLE_TTS_HEADERS.update(tts_rpc.headers),
+            )
 
         try:
             raw_response.raise_for_status()
@@ -247,8 +253,10 @@ class gTTS:
             pass
 
         try:
-            response = tts_rpc.decode(raw_response.content, charset=raw_response.encoding)
-        
+            response = tts_rpc.decode(
+                raw_response.content, charset=raw_response.encoding
+            )
+
             for segment in response:
                 rpcidx, rpcid, data = segment
                 base64_audio = data[0]
@@ -257,17 +265,17 @@ class gTTS:
                 fp.write(audio)
 
         except requests.exceptions.HTTPError as e:  # pragma: no cover
-                # Request successful, bad response
-                log.debug(str(e))
-                raise gTTSError(tts=self, response=r)
+            # Request successful, bad response
+            log.debug(str(e))
+            raise gTTSError(tts=self, response=r)
         except requests.exceptions.RequestException as e:  # pragma: no cover
-                # Request failed
-                log.debug(str(e))
-                raise gTTSError(tts=self)
+            # Request failed
+            log.debug(str(e))
+            raise gTTSError(tts=self)
         except (AttributeError, TypeError) as e:
-                raise TypeError(
-                    "'fp' is not a file-like object or it does not take bytes: %s" %
-                    str(e))
+            raise TypeError(
+                "'fp' is not a file-like object or it does not take bytes: %s" % str(e)
+            )
 
     def save(self, savefile):
         """Do the TTS API request and write result to file.
@@ -279,7 +287,7 @@ class gTTS:
             :class:`gTTSError`: When there's an error with the API request.
 
         """
-        with open(str(savefile), 'wb') as f:
+        with open(str(savefile), "wb") as f:
             self.write_to_fp(f)
             log.debug("Saved to %s", savefile)
 
@@ -288,8 +296,8 @@ class gTTSError(Exception):
     """Exception that uses context to present a meaningful error message"""
 
     def __init__(self, msg=None, **kwargs):
-        self.tts = kwargs.pop('tts', None)
-        self.rsp = kwargs.pop('response', None)
+        self.tts = kwargs.pop("tts", None)
+        self.rsp = kwargs.pop("response", None)
         if msg:
             self.msg = msg
         elif self.tts is not None:
@@ -308,7 +316,7 @@ class gTTSError(Exception):
         if rsp is None:
             premise = "Failed to connect"
 
-            if tts.tld != 'com':
+            if tts.tld != "com":
                 host = _translate_url(tld=tts.tld)
                 cause = f"Host '{host}' is not reachable"
 
@@ -323,7 +331,10 @@ class gTTSError(Exception):
             if status == 403:
                 cause = "Bad token or upstream API changes"
             elif status == 200 and not tts.lang_check:
-                cause = "No audio stream in response. Unsupported language '%s'" % self.tts.lang
+                cause = (
+                    "No audio stream in response. Unsupported language '%s'"
+                    % self.tts.lang
+                )
             elif status >= 500:
                 cause = "Uptream API error. Try again later."
 

@@ -123,7 +123,7 @@ class gTTS:
 
         # Debug
         for k, v in dict(locals()).items():
-            if k == 'self':
+            if k == 'self' or k == "tokenizer_func":
                 continue
             log.debug("%s: %s", k, v)
 

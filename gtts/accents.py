@@ -1,7 +1,7 @@
 # try adding these to the tld
 accents = ['com', 'ad', 'ae', 'com.af', 'com.ag', 'com.ai',
-           'com.ar', 'as', 'at', 'com.au', 'az', 'ba', 'com.bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj',
-           'bn', 'bo', 'br', 'bs', 'bt', 'co.bw', 'by', 'com.bz', 'ca', 'cd', 'ch', 'ci', 'co.ck',
+           'com.ar', 'as', 'at', 'com.au', 'az', 'ba', 'com.bd', 'be', 'bf', 'bg', 'bj',
+           'br', 'bs', 'bt', 'co.bw', 'by', 'com.bz', 'ca', 'cd', 'ch', 'ci', 'co.ck',
            'cl', 'cm', 'cn', 'com.co', 'co.cr', 'cv', 'dj', 'dm', 'com.do', 'dz', 'com.ec',
            'ee', 'com.eg', 'es', 'et', 'fi', 'com.fj', 'fm', 'fr', 'ga', 'ge', 'gg', 'com.gh',
            'com.gi', 'gl', 'gm', 'gr', 'com.gt', 'gy', 'com.hk', 'hn', 'ht', 'hr', 'hu', 'co.id',

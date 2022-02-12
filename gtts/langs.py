@@ -19,7 +19,7 @@ _langs = {
     "fr": "French",
     "gu": "Gujarati",
     "hi": "Hindi",
-    "he": "Hebrew",
+    "iw": "Hebrew",
     "hr": "Croatian",
     "hu": "Hungarian",
     "hy": "Armenian",

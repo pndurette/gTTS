@@ -25,6 +25,7 @@ _langs = {
     "id": "Indonesian",
     "is": "Icelandic",
     "it": "Italian",
+    "iw": "Hebrew",
     "ja": "Japanese",
     "jw": "Javanese",
     "km": "Khmer",

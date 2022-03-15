@@ -9,6 +9,22 @@ Changelog
 
 .. towncrier release notes start
 
+2.2.4 (2022-03-14)
+------------------
+
+Features
+~~~~~~~~
+
+- Added Malay language support (`#316 <https://github.com/pndurette/gTTS/issues/316>`_)
+- Added Hebrew language support (`#324 <https://github.com/pndurette/gTTS/issues/324>`_)
+- Added new ``gTTS.stream()`` method to stream bytes (`#319 <https://github.com/pndurette/gTTS/issues/319>`_)
+
+Misc
+~~~~
+
+- `#334 <https://github.com/pndurette/gTTS/issues/334>`_
+
+
 2.2.3 (2021-06-17)
 ------------------
 

@@ -12,7 +12,7 @@ updates:
     ignore:
       - dependency-name: "pytest"
         # Until Python 2 is ripped out
-        versions: ["5.x", "6.x"]
+        versions: ["5.x", "6.x", "7.x"]
         
   - package-ecosystem: "github-actions"
     directory: "/"

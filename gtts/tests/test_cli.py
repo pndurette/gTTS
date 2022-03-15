@@ -131,7 +131,7 @@ test
 123"""
 
 # Text for stdin ('-' for <text> or <file>) (Unicode)
-textstdin_unicode = """你吃饭了吗？
+textstdin_unicode = u"""你吃饭了吗？
 你最喜欢哪部电影？
 我饿了，我要去做饭了。"""
 
@@ -142,7 +142,7 @@ How much will it cost the website doesn't have the theme i was going for."""
 textfile_ascii = os.path.join(pwd, "input_files", "test_cli_test_ascii.txt")
 
 # Text for <text> and <file> (Unicode)
-text_unicode = """这是一个三岁的小孩
+text_unicode = u"""这是一个三岁的小孩
 在讲述她从一系列照片里看到的东西。
 对这个世界， 她也许还有很多要学的东西，
 但在一个重要的任务上， 她已经是专家了：

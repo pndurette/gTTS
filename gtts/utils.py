@@ -3,7 +3,7 @@ from gtts.tokenizer.symbols import ALL_PUNC as punc
 from string import whitespace as ws
 import re
 
-_ALL_PUNC_OR_SPACE = re.compile("^[{}]*$".format(re.escape(punc + ws)))
+_ALL_PUNC_OR_SPACE = re.compile(u"^[{}]*$".format(re.escape(punc + ws)))
 """Regex that matches if an entire line is only comprised
 of whitespace and punctuation
 
@@ -36,7 +36,7 @@ def _minimize(the_string, delim, max_size):
     # i.e. prevent a recursive infinite loop on `the_string[0:0]`
     # if `the_string` starts with `delim` and is larger than `max_size`
     if the_string.startswith(delim):
-        the_string = the_string[_len(delim) :]
+        the_string = the_string[_len(delim):]
 
     if _len(the_string) > max_size:
         try:
@@ -48,7 +48,8 @@ def _minimize(the_string, delim, max_size):
             # i.e. `the_string` will be cut in half arbitrarily on `max_size`
             idx = max_size
         # Call itself again for `the_string[idx:]`
-        return [the_string[:idx]] + _minimize(the_string[idx:], delim, max_size)
+        return [the_string[:idx]] + \
+            _minimize(the_string[idx:], delim, max_size)
     else:
         return [the_string]
 

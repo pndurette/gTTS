@@ -36,6 +36,7 @@ _langs = {
     "mk": "Macedonian",
     "ml": "Malayalam",
     "mr": "Marathi",
+    "ms": "Malay",
     "my": "Myanmar (Burmese)",
     "ne": "Nepali",
     "nl": "Dutch",

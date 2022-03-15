@@ -227,6 +227,7 @@ class gTTS:
 
         return prepared_requests
 
+    
     def _package_rpc(self, text):
         parameter = [text, self.lang, self.speed, "null"]
         escaped_parameter = json.dumps(parameter, separators=(",", ":"))

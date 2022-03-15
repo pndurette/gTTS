@@ -26,9 +26,9 @@ For a given language, Google Translate text-to-speech can speak in different
 local 'accents' depending on the Google domain (``google.<tld>``) of the request,
 with some examples shown in the table below.
 
-.. note:: This is an **incomplete** list. Try different combinations of language codes and
+.. note:: This is an **incomplete** list. Try different combinaisons of language codes and
     `known localized Google domains <https://www.google.com/supported_domains>`_. Feel
-    free to add new combinations to this list via a Pull Request!
+    free to add new combinaisons to this list via a Pull Request!
 
 +---------------------------+--------------------------+----------------------------+
 |       Local accent        | Language code (``lang``) | Top-level domain (``tld``) |

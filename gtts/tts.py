@@ -42,10 +42,11 @@ class gTTS:
     Args:
         text (string): The text to be read.
         tld (string): Top-level domain for the Google Translate host,
-            i.e `https://translate.google.<tld>`. This is useful
-            when ``google.com`` might be blocked within a network but
-            a local or different Google host (e.g. ``google.cn``) is not.
-            Default is ``com``.
+            i.e `https://translate.google.<tld>`. Different Google domains
+            can produce different localized 'accents' for a given
+            language. This is also useful when ``google.com`` might be blocked
+            within a network but a local or different Google host
+            (e.g. ``google.cn``) is not. Default is ``com``.
         lang (string, optional): The language (IETF language tag) to
             read the text in. Default is ``en``.
         slow (bool, optional): Reads text more slowly. Defaults to ``False``.
@@ -226,18 +227,6 @@ class gTTS:
         rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]
         espaced_rpc = json.dumps(rpc, separators=(',', ':'))
         return "f.req={}&".format(quote(espaced_rpc))
-
-    def get_urls(self):
-        """Get TTS API request URL(s) that would be sent to the TTS API.
-
-        Returns:
-            list: A list of TTS API request URLs to make.
-
-                This is particularly useful to get the list of URLs generated
-                by ``gTTS`` but not yet fullfilled,
-                for example to be used by an external program.
-        """
-        return [pr.url for pr in self._prepare_requests()]
 
     def get_bodies(self):
         """Get TTS API request bodies(s) that would be sent to the TTS API.

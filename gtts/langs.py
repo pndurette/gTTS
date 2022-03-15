@@ -2,6 +2,7 @@
 _langs = {
     "af": "Afrikaans",
     "ar": "Arabic",
+    "bg": "Bulgarian",
     "bn": "Bengali",
     "bs": "Bosnian",
     "ca": "Catalan",
@@ -24,6 +25,7 @@ _langs = {
     "id": "Indonesian",
     "is": "Icelandic",
     "it": "Italian",
+    "iw": "Hebrew",
     "ja": "Japanese",
     "jw": "Javanese",
     "km": "Khmer",

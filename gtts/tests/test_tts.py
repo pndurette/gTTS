@@ -25,28 +25,28 @@ ex.: { 'fetch' : {'en': 'English', 'fr': 'French'},
        'extra' : {'en': 'English', 'fr': 'French'} }
 ex.: { 'environ' : ['en', 'fr'] }
 """
-env = os.environ.get('TEST_LANGS')
-if not env or env == 'all':
+env = os.environ.get("TEST_LANGS")
+if not env or env == "all":
     langs = _main_langs()
     langs.update(_extra_langs())
-elif env == 'main':
+elif env == "main":
     langs = _main_langs()
-elif env == 'extra':
+elif env == "extra":
     langs = _extra_langs()
 else:
-    env_langs = {l: l for l in env.split(',') if l}
+    env_langs = {l: l for l in env.split(",") if l}
     langs = env_langs
 
 
 @pytest.mark.net
-@pytest.mark.parametrize('lang', langs.keys(), ids=list(langs.values()))
+@pytest.mark.parametrize("lang", langs.keys(), ids=list(langs.values()))
 def test_TTS(tmp_path, lang):
     """Test all supported languages and file save"""
 
     text = "This is a test"
     """Create output .mp3 file successfully"""
     for slow in (False, True):
-        filename = tmp_path / 'test_{}_.mp3'.format(lang)
+        filename = tmp_path / "test_{}_.mp3".format(lang)
         # Create gTTS and save
         tts = gTTS(text=text, lang=lang, slow=slow, lang_check=False)
         tts.save(filename)
@@ -58,7 +58,7 @@ def test_TTS(tmp_path, lang):
 @pytest.mark.net
 def test_unsupported_language_check():
     """Raise ValueError on unsupported language (with language check)"""
-    lang = 'xx'
+    lang = "xx"
     text = "Lorem ipsum"
     check = True
     with pytest.raises(ValueError):
@@ -76,17 +76,18 @@ def test_no_text_parts(tmp_path):
     """Raises AssertionError on no content to send to API (no text_parts)"""
     text = "                                                                                                          ..,\n"
     with pytest.raises(AssertionError):
-        filename = tmp_path / 'no_content.txt'
+        filename = tmp_path / "no_content.txt"
         tts = gTTS(text=text)
         tts.save(filename)
 
 
 # Test write_to_fp()/save() cases not covered elsewhere in this file
 
+
 def test_bad_fp_type():
     """Raise TypeError if fp is not a file-like object (no .write())"""
     # Create gTTS and save
-    tts = gTTS(text='test')
+    tts = gTTS(text="test")
     with pytest.raises(TypeError):
         tts.write_to_fp(5)
 
@@ -94,9 +95,9 @@ def test_bad_fp_type():
 @pytest.mark.net
 def test_save(tmp_path):
     """Save .mp3 file successfully"""
-    filename = tmp_path / 'save.mp3'
+    filename = tmp_path / "save.mp3"
     # Create gTTS and save
-    tts = gTTS(text='test')
+    tts = gTTS(text="test")
     tts.save(filename)
 
     # Check if file created is > 2k
@@ -106,18 +107,18 @@ def test_save(tmp_path):
 @pytest.mark.net
 def test_get_bodies():
     """get request bodies list"""
-    tts = gTTS(text='test', tld='com', lang='en')
+    tts = gTTS(text="test", tld="com", lang="en")
     body = tts.get_bodies()[0]
-    assert 'test' in body
+    assert "test" in body
     # \"en\" url-encoded
-    assert '%5C%22en%5C%22' in body
+    assert "%5C%22en%5C%22" in body
 
 
 def test_msg():
     """Test gTTsError internal exception handling
     Set exception message successfully"""
-    error1 = gTTSError('test')
-    assert 'test' == error1.msg
+    error1 = gTTSError("test")
+    assert "test" == error1.msg
 
     error2 = gTTSError()
     assert error2.msg is None
@@ -129,33 +130,45 @@ def test_infer_msg():
     # Without response:
 
     # Bad TLD
-    ttsTLD = Mock(tld='invalid')
+    ttsTLD = Mock(tld="invalid")
     errorTLD = gTTSError(tts=ttsTLD)
-    assert errorTLD.msg == "Failed to connect. Probable cause: Host 'https://translate.google.invalid/' is not reachable"
+    assert (
+        errorTLD.msg
+        == "Failed to connect. Probable cause: Host 'https://translate.google.invalid/' is not reachable"
+    )
 
     # With response:
 
     # 403
     tts403 = Mock()
-    response403 = Mock(status_code=403, reason='aaa')
+    response403 = Mock(status_code=403, reason="aaa")
     error403 = gTTSError(tts=tts403, response=response403)
-    assert error403.msg == "403 (aaa) from TTS API. Probable cause: Bad token or upstream API changes"
+    assert (
+        error403.msg
+        == "403 (aaa) from TTS API. Probable cause: Bad token or upstream API changes"
+    )
 
     # 200 (and not lang_check)
-    tts200 = Mock(lang='xx', lang_check=False)
-    response404 = Mock(status_code=200, reason='bbb')
+    tts200 = Mock(lang="xx", lang_check=False)
+    response404 = Mock(status_code=200, reason="bbb")
     error200 = gTTSError(tts=tts200, response=response404)
-    assert error200.msg == "200 (bbb) from TTS API. Probable cause: No audio stream in response. Unsupported language 'xx'"
+    assert (
+        error200.msg
+        == "200 (bbb) from TTS API. Probable cause: No audio stream in response. Unsupported language 'xx'"
+    )
 
     # >= 500
     tts500 = Mock()
-    response500 = Mock(status_code=500, reason='ccc')
+    response500 = Mock(status_code=500, reason="ccc")
     error500 = gTTSError(tts=tts500, response=response500)
-    assert error500.msg == "500 (ccc) from TTS API. Probable cause: Uptream API error. Try again later."
+    assert (
+        error500.msg
+        == "500 (ccc) from TTS API. Probable cause: Uptream API error. Try again later."
+    )
 
     # Unknown (ex. 100)
     tts100 = Mock()
-    response100 = Mock(status_code=100, reason='ddd')
+    response100 = Mock(status_code=100, reason="ddd")
     error100 = gTTSError(tts=tts100, response=response100)
     assert error100.msg == "100 (ddd) from TTS API. Probable cause: Unknown"
 
@@ -167,15 +180,15 @@ def test_WebRequest(tmp_path):
     text = "Lorem ipsum"
 
     """Raise gTTSError on unsupported language (without language check)"""
-    lang = 'xx'
+    lang = "xx"
     check = False
 
     with pytest.raises(gTTSError):
-        filename = tmp_path / 'xx.txt'
+        filename = tmp_path / "xx.txt"
         # Create gTTS
         tts = gTTS(text=text, lang=lang, lang_check=check)
         tts.save(filename)
 
 
-if __name__ == '__main__':
-    pytest.main(['-x', __file__])
+if __name__ == "__main__":
+    pytest.main(["-x", __file__])

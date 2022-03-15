@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import unittest
-from gtts.tokenizer.pre_processors import tone_marks, end_of_line, abbreviations, word_sub
+from gtts.tokenizer.pre_processors import (
+    tone_marks,
+    end_of_line,
+    abbreviations,
+    word_sub,
+)
 
 
 class TestPreProcessors(unittest.TestCase):
@@ -26,5 +31,5 @@ ing"""
         self.assertEqual(word_sub(_in), _out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

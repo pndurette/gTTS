@@ -59,8 +59,9 @@ _langs = {
     "uk": "Ukrainian",
     "ur": "Urdu",
     "vi": "Vietnamese",
-    "zh-CN": "Chinese"
+    "zh-CN": "Chinese",
 }
+
 
 def _main_langs():
     return _langs

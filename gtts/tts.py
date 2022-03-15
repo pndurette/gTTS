@@ -236,11 +236,8 @@ class gTTS:
         """
         return [pr.body for pr in self._prepare_requests()]
 
-    def write_to_fp(self, fp):
-        """Do the TTS API request(s) and write bytes to a file-like object.
-
-        Args:
-            fp (file object): Any file-like object to write the ``mp3`` to.
+    def stream(self):
+        """Do the TTS API request(s) and stream bytes
 
         Raises:
             :class:`gTTSError`: When there's an error with the API request.
@@ -253,7 +250,7 @@ class gTTS:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         except:
             pass
- 
+
 
 
         prepared_requests = self._prepare_requests()
@@ -279,25 +276,40 @@ class gTTS:
                 log.debug(str(e))
                 raise gTTSError(tts=self)
 
-            try:
-                # Write
-                for line in r.iter_lines(chunk_size=1024):
-                    decoded_line = line.decode('utf-8')
-                    if 'jQ1olc' in decoded_line:
-                        audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
-                        if audio_search:
-                            as_bytes = audio_search.group(1).encode('ascii')
-                            decoded = base64.b64decode(as_bytes)
-                            fp.write(decoded)
-                        else:
-                            # Request successful, good response,
-                            # no audio stream in response
-                            raise gTTSError(tts=self, response=r)
+            # Write
+            for line in r.iter_lines(chunk_size=1024):
+                decoded_line = line.decode('utf-8')
+                if 'jQ1olc' in decoded_line:
+                    audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
+                    if audio_search:
+                        as_bytes = audio_search.group(1).encode('ascii')
+                        yield base64.b64decode(as_bytes)
+                    else:
+                        # Request successful, good response,
+                        # no audio stream in response
+                        raise gTTSError(tts=self, response=r)
+            log.debug("part-%i created", idx)
+
+    def write_to_fp(self, fp):
+        """Do the TTS API request(s) and write bytes to a file-like object.
+
+        Args:
+            fp (file object): Any file-like object to write the ``mp3`` to.
+
+        Raises:
+            :class:`gTTSError`: When there's an error with the API request.
+            TypeError: When ``fp`` is not a file-like object that takes bytes.
+
+        """
+
+        try:
+            for idx, decoded in enumerate(self.stream()):
+                fp.write(decoded)
                 log.debug("part-%i written to %s", idx, fp)
-            except (AttributeError, TypeError) as e:
-                raise TypeError(
-                    "'fp' is not a file-like object or it does not take bytes: %s" %
-                    str(e))
+        except (AttributeError, TypeError) as e:
+            raise TypeError(
+                "'fp' is not a file-like object or it does not take bytes: %s" %
+                str(e))
 
     def save(self, savefile):
         """Do the TTS API request and write result to file.

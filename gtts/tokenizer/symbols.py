@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 
-ABBREVIATIONS = ["dr", "jr", "mr", "mrs", "ms", "msgr", "prof", "sr", "st"]
+ABBREVIATIONS = [
+    'dr', 'jr', 'mr',
+    'mrs', 'ms', 'msgr',
+    'prof', 'sr', 'st']
 
-SUB_PAIRS = [("Esq.", "Esquire")]
+SUB_PAIRS = [
+    ('Esq.', 'Esquire')
+]
 
-ALL_PUNC = "?!？！.,¡()[]¿…‥،;:—。，、：\n"
+ALL_PUNC = u"?!？！.,¡()[]¿…‥،;:—。，、：\n"
 
-TONE_MARKS = "?!？！"
+TONE_MARKS = u"?!？！"
 
-PERIOD_COMMA = ".,"
+PERIOD_COMMA = u".,"
 
-COLON = ":"
+COLON = u":"

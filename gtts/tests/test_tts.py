@@ -104,6 +104,20 @@ def test_save(tmp_path):
 
 
 @pytest.mark.net
+def test_get_urls():
+    """Get request URLs list"""
+
+    tts = gTTS(text='test', tld='com', lang='en')
+    urls = tts.get_urls()
+
+    # Check the url
+    r = urllib.parse.urlparse(urls[0])
+    assert r.scheme == 'https'
+    assert r.netloc == 'translate.google.com'
+    assert r.path == '/_/TranslateWebserverUi/data/batchexecute'
+
+
+@pytest.mark.net
 def test_get_bodies():
     """get request bodies list"""
     tts = gTTS(text='test', tld='com', lang='en')

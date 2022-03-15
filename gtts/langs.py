@@ -2,7 +2,6 @@
 _langs = {
     "af": "Afrikaans",
     "ar": "Arabic",
-    "bg": "Bulgarian",
     "bn": "Bengali",
     "bs": "Bosnian",
     "ca": "Catalan",
@@ -25,7 +24,6 @@ _langs = {
     "id": "Indonesian",
     "is": "Icelandic",
     "it": "Italian",
-    "iw": "Hebrew",
     "ja": "Japanese",
     "jw": "Javanese",
     "km": "Khmer",
@@ -34,7 +32,6 @@ _langs = {
     "la": "Latin",
     "lv": "Latvian",
     "mk": "Macedonian",
-    "ms": "Malay",
     "ml": "Malayalam",
     "mr": "Marathi",
     "my": "Myanmar (Burmese)",
@@ -60,9 +57,8 @@ _langs = {
     "uk": "Ukrainian",
     "ur": "Urdu",
     "vi": "Vietnamese",
-    "zh-CN": "Chinese",
+    "zh-CN": "Chinese"
 }
-
 
 def _main_langs():
     return _langs

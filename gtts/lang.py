@@ -3,7 +3,7 @@ from gtts.langs import _main_langs
 from warnings import warn
 import logging
 
-__all__ = ["tts_langs"]
+__all__ = ['tts_langs']
 
 # Logger
 log = logging.getLogger(__name__)
@@ -47,8 +47,8 @@ def _extra_langs():
     """
     return {
         # Chinese
-        "zh-TW": "Chinese (Mandarin/Taiwan)",
-        "zh": "Chinese (Mandarin)",
+        'zh-TW': 'Chinese (Mandarin/Taiwan)',
+        'zh': 'Chinese (Mandarin)'
     }
 
 
@@ -74,26 +74,13 @@ def _fallback_deprecated_lang(lang):
 
     deprecated = {
         # '<fallback>': [<list of deprecated langs>]
-        "en": [
-            "en-us",
-            "en-ca",
-            "en-uk",
-            "en-gb",
-            "en-au",
-            "en-gh",
-            "en-in",
-            "en-ie",
-            "en-nz",
-            "en-ng",
-            "en-ph",
-            "en-za",
-            "en-tz",
-        ],
-        "fr": ["fr-ca", "fr-fr"],
-        "pt": ["pt-br", "pt-pt"],
-        "es": ["es-es", "es-us"],
-        "zh-CN": ["zh-cn"],
-        "zh-TW": ["zh-tw"],
+        'en': ['en-us', 'en-ca', 'en-uk', 'en-gb', 'en-au', 'en-gh', 'en-in',
+               'en-ie', 'en-nz', 'en-ng', 'en-ph', 'en-za', 'en-tz'],
+        'fr': ['fr-ca', 'fr-fr'],
+        'pt': ['pt-br', 'pt-pt'],
+        'es': ['es-es', 'es-us'],
+        'zh-CN': ['zh-cn'],
+        'zh-TW': ['zh-tw'],
     }
 
     for fallback_lang, deprecated_langs in deprecated.items():

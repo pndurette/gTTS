@@ -161,7 +161,7 @@ def logcapture_str(lc):
     if not lc.records:
         return "No logging captured"
 
-    return "\n".join(["%s %s\n  %s" % r for r in lc.actual()])
+    return "\n".join([u"%s %s\n  %s" % r for r in lc.actual()])
 
 
 @pytest.mark.net

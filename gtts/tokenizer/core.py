@@ -182,7 +182,7 @@ class PreProcessorSub:
 
     def __init__(self, sub_pairs, ignore_case=True):
         def search_func(x):
-            return "{}".format(x)
+            return u"{}".format(x)
 
         flags = re.I if ignore_case else 0
 

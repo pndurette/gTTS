@@ -12,7 +12,7 @@ def tone_marks(text):
     """
     return PreProcessorRegex(
         search_args=symbols.TONE_MARKS,
-        search_func=lambda x: "(?<={})".format(x),
+        search_func=lambda x: u"(?<={})".format(x),
         repl=" ",
     ).run(text)
 
@@ -24,7 +24,7 @@ def end_of_line(text):
 
     """
     return PreProcessorRegex(
-        search_args="-", search_func=lambda x: "{}\n".format(x), repl=""
+        search_args="-", search_func=lambda x: u"{}\n".format(x), repl=""
     ).run(text)
 
 

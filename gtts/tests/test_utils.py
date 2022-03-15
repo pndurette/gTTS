@@ -19,8 +19,8 @@ def test_ascii_no_delim():
 
 
 def test_unicode():
-    _in = "这是一个三岁的小孩在讲述他从一系列照片里看到的东西。"
-    _out = ["这是一个三岁的小孩在", "讲述他从一系列照片里", "看到的东西。"]
+    _in = u"这是一个三岁的小孩在讲述他从一系列照片里看到的东西。"
+    _out = [u"这是一个三岁的小孩在", u"讲述他从一系列照片里", u"看到的东西。"]
     assert _minimize(_in, delim, Lmax) == _out
 
 
@@ -36,7 +36,7 @@ def test_len_ascii():
 
 
 def test_len_unicode():
-    text = "但在一个重要的任务上"
+    text = u"但在一个重要的任务上"
     assert _len(text) == 10
 
 

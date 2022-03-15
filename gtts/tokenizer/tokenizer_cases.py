@@ -9,7 +9,7 @@ def tone_marks():
     not be any space after a tone-modifying punctuation mark.
     """
     return RegexBuilder(
-        pattern_args=symbols.TONE_MARKS, pattern_func=lambda x: "(?<={}).".format(x)
+        pattern_args=symbols.TONE_MARKS, pattern_func=lambda x: u"(?<={}).".format(x)
     ).regex
 
 
@@ -57,7 +57,7 @@ def other_punctuation():
         - set(symbols.PERIOD_COMMA)
         - set(symbols.COLON)
     )
-    return RegexBuilder(pattern_args=punc, pattern_func=lambda x: "{}".format(x)).regex
+    return RegexBuilder(pattern_args=punc, pattern_func=lambda x: u"{}".format(x)).regex
 
 
 def legacy_all_punctuation():  # pragma: no cover b/c tested but Coveralls: ¯\_(ツ)_/¯
@@ -66,4 +66,4 @@ def legacy_all_punctuation():  # pragma: no cover b/c tested but Coveralls: ¯\_
     Use as only tokenizer case to mimic gTTS 1.x tokenization.
     """
     punc = symbols.ALL_PUNC
-    return RegexBuilder(pattern_args=punc, pattern_func=lambda x: "{}".format(x)).regex
+    return RegexBuilder(pattern_args=punc, pattern_func=lambda x: u"{}".format(x)).regex

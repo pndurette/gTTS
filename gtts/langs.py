@@ -34,6 +34,7 @@ _langs = {
     "la": "Latin",
     "lv": "Latvian",
     "mk": "Macedonian",
+    "ms": "Malay",
     "ml": "Malayalam",
     "mr": "Marathi",
     "my": "Myanmar (Burmese)",

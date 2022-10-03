@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['2.x', 3.6, 3.7, 3.8, 3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
@@ -31,7 +31,7 @@ jobs:
           pip install -e .[tests]
 
       - name: Unit Tests
-        run: pytest -v -s gtts/ --cov=gtts --cov-config=setup.cfg --cov-report=xml
+        run: pytest -v --cov=gtts --cov-report=xml
         env:
           TEST_LANGS: all
 

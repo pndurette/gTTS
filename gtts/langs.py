@@ -7,12 +7,10 @@ _langs = {
     "bs": "Bosnian",
     "ca": "Catalan",
     "cs": "Czech",
-    "cy": "Welsh",
     "da": "Danish",
     "de": "German",
     "el": "Greek",
     "en": "English",
-    "eo": "Esperanto",
     "es": "Spanish",
     "et": "Estonian",
     "fi": "Finnish",
@@ -21,7 +19,6 @@ _langs = {
     "hi": "Hindi",
     "hr": "Croatian",
     "hu": "Hungarian",
-    "hy": "Armenian",
     "id": "Indonesian",
     "is": "Icelandic",
     "it": "Italian",
@@ -33,10 +30,9 @@ _langs = {
     "ko": "Korean",
     "la": "Latin",
     "lv": "Latvian",
-    "mk": "Macedonian",
-    "ms": "Malay",
     "ml": "Malayalam",
     "mr": "Marathi",
+    "ms": "Malay",
     "my": "Myanmar (Burmese)",
     "ne": "Nepali",
     "nl": "Dutch",
@@ -60,9 +56,9 @@ _langs = {
     "uk": "Ukrainian",
     "ur": "Urdu",
     "vi": "Vietnamese",
-    "zh-CN": "Chinese",
+    "zh-CN": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)"
 }
-
 
 def _main_langs():
     return _langs

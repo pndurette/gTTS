@@ -1,11 +1,9 @@
 name: Tests
+
 on:
-  push:
-    tags-ignore:
-      - 'v*'
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:

@@ -84,5 +84,5 @@ exclude_lines = [
 markers = ["net: marks tests that call use the net (using the URL endpoint, deselect with '-m \"not net\"')"]
 
 [build-system]
-requires = ["setuptools >= 61.2", "wheel"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"

@@ -62,8 +62,8 @@ version = {attr = "gtts.version.__version__"}
 
 # Package name (gTTS) differs from module name (gtts), help out automatic discovery
 # https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
-[tool.setuptools.package-dir]
-gtts = "gTTS"
+# [tool.setuptools.package-dir]
+# gtts = "gTTS"
 
 [tool.coverage.run]
 omit = [

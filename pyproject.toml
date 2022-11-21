@@ -52,7 +52,8 @@ docs = [
     "sphinx",
     "sphinx-autobuild",
     "sphinx_rtd_theme",
-    "sphinx-click"
+    "sphinx-click",
+    "sphinx-mdinclude"
 ]
 
 [project.scripts]

@@ -63,7 +63,7 @@ gtts-cli = "gtts.cli:tts_cli"
 homepage = "https://github.com/pndurette/gTTS"
 documentation = "https://gtts.readthedocs.io"
 repository = "https://github.com/pndurette/gTTS"
-changelog = "https://github.com/pndurette/gTTS/blob/main/CHANGELOG.rst"
+changelog = "https://github.com/pndurette/gTTS/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 #where = ["src"]  # list of folders that contain the packages (["."] by default)

@@ -1,11 +1,9 @@
 name: Tests
+
 on:
-  push:
-    tags-ignore:
-      - 'v*'
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
@@ -15,25 +13,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['2.x', 3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install -e .[tests]
+          pip install .[tests]
 
       - name: Unit Tests
-        run: pytest -v -s gtts/ --cov=gtts --cov-config=setup.cfg --cov-report=xml
+        run: pytest -v --cov=gtts --cov-report=xml
         env:
-          TEST_LANGS: all
+          # TODO: Test all langs on release branch
+          TEST_LANGS: en
 
       - name: Upload Coverage Report
         uses: codecov/codecov-action@v3.1.0

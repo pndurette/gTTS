@@ -60,6 +60,12 @@ changelog = "https://github.com/pndurette/gTTS/blob/main/CHANGELOG.rst"
 [tool.setuptools.dynamic]
 version = {attr = "gtts.version.__version__"}
 
+[tool.setuptools.packages.find]
+#where = ["src"]  # list of folders that contain the packages (["."] by default)
+#include = ["my_package*"]  # package names should match these glob patterns (["*"] by default)
+#exclude = ["my_package.tests*"]  # exclude packages matching these glob patterns (empty by default)
+namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+
 [tool.coverage.run]
 omit = [
     "gtts/tests/*",

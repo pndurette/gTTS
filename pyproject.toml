@@ -1,5 +1,6 @@
 [project]
 name = "gTTS"
+version = "2.2.4"
 description = "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API"
 authors = [{name = "Pierre Nicolas Durette", email = "pndurette@gmail.com"}]
 requires-python = ">=3.7"
@@ -33,7 +34,12 @@ dependencies = [
     "click ~= 8.1.3",
     "six ~= 1.16.0"
 ]
-dynamic = ["version"]
+
+# TODO: release-please [yet] doesn't support dynamic version for pyproject.toml
+# https://github.com/googleapis/release-please/blob/909d310defdf24adfd4858bbe1604668c14ef77f/src/updaters/python/pyproject-toml.ts#L54
+# dynamic = ["version"]
+# [tool.setuptools.dynamic]
+# version = {attr = "gtts.version.__version__"}
 
 [project.optional-dependencies]
 tests = [
@@ -57,9 +63,6 @@ homepage = "https://github.com/pndurette/gTTS"
 documentation = "https://gtts.readthedocs.io"
 repository = "https://github.com/pndurette/gTTS"
 changelog = "https://github.com/pndurette/gTTS/blob/main/CHANGELOG.rst"
-
-[tool.setuptools.dynamic]
-version = {attr = "gtts.version.__version__"}
 
 [tool.setuptools.packages.find]
 #where = ["src"]  # list of folders that contain the packages (["."] by default)

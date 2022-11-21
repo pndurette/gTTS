@@ -16,7 +16,6 @@
 * Languages added: `zh-CN` (Chinese (Simplified)), `zh-TW` (Chinese (Traditional)) ([5dbdf10](https://github.com/pndurette/gTTS/commit/5dbdf105b9ca4639577d8904001581434741fe34))
 * Languages removed: `cy` (Welsh),  `eo` (Esperanto), `mk` (Macedonian), `ms` (Malay), `zh-CN` (Chinese) ([5dbdf10](https://github.com/pndurette/gTTS/commit/5dbdf105b9ca4639577d8904001581434741fe34))
 
-## Changelog
 
 2.2.4 (2022-03-14)
 ------------------

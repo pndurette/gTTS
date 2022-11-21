@@ -17,15 +17,7 @@ Submitting Patches
      $ pip install .[docs]
      $ cd docs && make html # generated in docs/_build/html/
 
-4. **Open Pull Request**. To the ``master`` branch.
-5. **Changelog**. This project uses towncrier_ for managing the changelog. Please consider
-   creating one or more 'news fragment' in the ``/news/`` directory and adding them to
-   your PR, in the style of ``<issue_or_pr_number>.<type>`` where 'type' is one of:
-   'feature', 'bugfix', 'doc', 'removal' or 'misc'.
-
-   See towncrier_ (New Fragments) for more details. Example::
-
-      $ echo 'Fixed a thing!' > gtts/news/1234.bugfix
+4. **Open Pull Request**. To the ``main`` branch.
 
 .. note:: | Please don't hesitate to contribute! While good tests, docs and structure are
           | encouraged, I do welcome great ideas over absolute comformity to the above!

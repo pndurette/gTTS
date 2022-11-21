@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'gTTS'
-copyright = '2014-2021 Pierre Nicolas Durette'
+copyright = '2014-2022 Pierre Nicolas Durette'
 author = 'Pierre Nicolas Durette'
 
 # The short X.Y version
@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_click.ext',
     'sphinx.ext.napoleon',
+    'sphinx_mdinclude',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

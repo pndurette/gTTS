@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: temp_lang_file
-          path: $TEMP_LANG_FILE_PATH
+          path: ${{env.TEMP_LANG_FILE_PATH}}
 
 # jobs:
 #   release-please:

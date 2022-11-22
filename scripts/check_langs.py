@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# TODO: Add logging to gen_langs.py (it takes 28 seconds to run!)
-
 # Order of things:
-# X Generate new file to temp location
-# X Load existing file
-# X Load new file
-# X Do a diff (?)
-# X Get list of added
-# X Get list of removed
 # If any of the above is not empty:
 #   Copy temp file to existing file
 #   Create commit to new branch
@@ -52,9 +44,9 @@ added_markdown = ", ".join([f"`{k}` ({v})" for k,v in added_dict.items()])
 removed_markdown = ", ".join([f"`{k}` ({v})" for k,v in removed_dict.items()])
 changed_markdown = ", ".join([f"`{k}` ({v})" for k,v in changed_dict.items()])
 
-added_commit = f"fix: Language{'s' if added > 1 else ''} added: {added_markdown}"
-removed_commit = f"fix: Language{'s' if removed > 1 else ''} removed: {removed_markdown}"
-changed_commit = f"fix: Language{'s' if changed > 1 else ''} changed: {changed_markdown}"
+added_commit = f"fix: Language{'s' if len(added_dict) > 1 else ''} added: {added_markdown}"
+removed_commit = f"fix: Language{'s' if len(removed_dict) > 1 else ''} removed: {removed_markdown}"
+changed_commit = f"fix: Language{'s' if len(changed_dict) > 1 else ''} changed: {changed_markdown}"
 
 print(f"{added_commit=}")
 print(f"{removed_commit=}")

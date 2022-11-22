@@ -12,7 +12,8 @@ on:
       - main
 
 env:
-  TEMP_LANG_FILE_PATH: ${{github.workspace}}/langs_temp.py
+  CURR_LANG_FILE_PATH: ${{github.workspace}}/gtts/langs.py
+  TEMP_LANG_FILE_PATH: ${{github.workspace}}/gtts/langs_temp.py
 
 jobs:
   gen_langs:
@@ -33,11 +34,19 @@ jobs:
       - name: Run gen_langs.py
         run: |
           python scripts/gen_langs.py ${TEMP_LANG_FILE_PATH}
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: temp_lang_file
-          path: ${{env.TEMP_LANG_FILE_PATH}}
+      - name: Run check_langs.py
+        run: |
+          python scripts/check_langs.py
+ 
+ 
+ 
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: temp_lang_file
+      #     path: ${{env.TEMP_LANG_FILE_PATH}}
+
+
 
 # jobs:
 #   release-please:

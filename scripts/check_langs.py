@@ -6,9 +6,9 @@
 #   Create commit to new branch
 #   Open PR
 
-# TODO: Expects the output of gen_langs.py gtts/langs_temp.py
+# TODO: Expects the output of gen_langs.py scripts/langs_temp.py
 from gtts.langs import _langs as _current_langs
-from gtts.langs_temp import _langs as _new_langs
+from langs_temp import _langs as _new_langs
 
 added_dict = {}
 removed_dict = {}

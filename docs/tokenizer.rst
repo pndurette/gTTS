@@ -12,7 +12,7 @@ Definitions
 -----------
 
 Pre-processor:
-    Function that takes text and returns text. Its goal is to modify text (for example correcting pronounciation), and/or to prepare text for proper tokenization (for example enuring spacing after certain characters).
+    Function that takes text and returns text. Its goal is to modify text (for example correcting pronounciation), and/or to prepare text for proper tokenization (for example ensuring spacing after certain characters).
 
 Tokenizer:
     Function that takes text and returns it split into a list of `tokens` (strings).

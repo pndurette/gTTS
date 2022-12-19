@@ -32,62 +32,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install .
       - name: Run gen_langs.py
+        # Generate languages from the source
         run: |
           python scripts/gen_langs.py ${TEMP_LANG_FILE_PATH}
       - name: Run check_langs.py
+        # Compare generated languages with current ones
         run: |
           python scripts/check_langs.py
- 
- 
- 
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: temp_lang_file
-      #     path: ${{env.TEMP_LANG_FILE_PATH}}
-
-
-
-# jobs:
-#   release-please:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Release Please
-#         uses: google-github-actions/release-please-action@v3
-#         id: release
-#         with:
-#           release-type: python
-#           package-name: gTTS
-
-#       # Only do the rest (package build/push) if a release was created
-#       - name: Checkout
-#         if: ${{ steps.release.outputs.release_created }}
-#         uses: actions/checkout@v3
-#       - name: Setup Python
-#         if: ${{ steps.release.outputs.release_created }}
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "3.10"
-#       - name: Install build dependencies
-#         if: ${{ steps.release.outputs.release_created }}
-#         run: |
-#           pip install --upgrade pip
-#           pip install build
-#       - name: Build package
-#         if: ${{ steps.release.outputs.release_created }}
-#         run: python -m build
-#       - name: Publish package
-#         if: ${{ steps.release.outputs.release_created }}
-#         uses: pypa/gh-action-pypi-publish@37f50c210e3d2f9450da2cd423303d6a14a6e29f
-#         with:
-#           user: __token__
-#           password: ${{ secrets.PYPI_API_TOKEN }}
-
-# References:
-# * Release Please:
-#   https://github.com/googleapis/release-please
-# * Release Please (GitHub Action)
-#   https://github.com/google-github-actions/release-please-action
-# * Conventional Commits:
-#   https://www.conventionalcommits.org/
+        # Create new PR with any changes

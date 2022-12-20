@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Generate Languages
 
+    # TODO: permissions to create branch, commit, PR
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,4 +41,5 @@ jobs:
         # Compare generated languages with current ones
         run: |
           python scripts/check_langs.py
-        # Create new PR with any changes
+        # Replace gtts langs.py with langs_temps if must_commit
+        # Create new branch/PR with any changes if must_commit

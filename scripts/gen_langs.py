@@ -70,11 +70,6 @@ def _fetch_langs(tld="com"):
         except (gTTSError, ValueError):  # Language not supported
             log.info(f"Rejected '{key}'")
 
-    # Temp: Inject some changes to test the auto-PR
-    working_languages["test1"] = "Add Test" # Add
-    working_languages.pop("fr")             # Remove
-    working_languages["es"] = "Change Test" # Change
-
     return working_languages
 
 

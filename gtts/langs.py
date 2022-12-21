@@ -1,6 +1,7 @@
 # Note: this file is generated
+# Change test
 _langs = {
-    "af": "Afrikaans",
+    "af": "Afrikaans", 
     "ar": "Arabic",
     "bg": "Bulgarian",
     "bn": "Bengali",

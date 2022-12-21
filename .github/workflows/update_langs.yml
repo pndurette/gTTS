@@ -5,11 +5,6 @@ on:
     # At 01:00 AM, on Monday
     - cron: 0 1 * * 1
   workflow_dispatch:
-  
-  # Temp, to test on PR:
-  pull_request:
-    branches:
-      - main
 
 env:
   CURR_LANG_FILE_PATH: ${{github.workspace}}/gtts/langs.py
@@ -18,7 +13,7 @@ env:
 jobs:
   gen_langs:
     runs-on: ubuntu-latest
-    name: Generate Languages
+    name: Create PR
 
     permissions:
       contents: write

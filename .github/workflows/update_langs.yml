@@ -41,11 +41,11 @@ jobs:
       # Only do the rest (update/create pr) if a commit is needed
       - name: Update langs.py
         # Replace gtts langs.py with langs_temps
-        if: ${{ steps.check_langs.outputs.must_commit }}
+        if: ${{ fromJSON(steps.check_langs.outputs.must_commit) }}
         run: cp "${TEMP_LANG_FILE_PATH}" "${CURR_LANG_FILE_PATH}"
         # Create new branch/PR with any changes
       - name: Create PR
-        if: ${{ steps.check_langs.outputs.must_commit }}
+        if: ${{ fromJSON(steps.check_langs.outputs.must_commit) }}
         uses: peter-evans/create-pull-request@v4
         with:
           add-paths: ${{ env.CURR_LANG_FILE_PATH }}

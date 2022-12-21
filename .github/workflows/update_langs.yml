@@ -56,6 +56,7 @@ jobs:
           add-paths: ${{ env.CURR_LANG_FILE_PATH }}
           commit-message: ${{ env.LANGS_COMMIT_MESSAGE }} # from check_langs
           delete-branch: true
+          base: main
           title: Language Updates
           body: |
             This PR was created automatically because languages

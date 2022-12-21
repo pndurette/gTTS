@@ -2,6 +2,14 @@
 import sys, os
 from utils import send_to_github_env, send_to_github_output
 
+# This script:
+# * Compares the current set of languages
+#   to one generated from the Internet
+# * Generates a commit message for these changes (if any)
+#   to the GitHub Actions environment's $LANGS_COMMIT_MESSAGE env var
+# * Sets the GitHub Actions step output 'must_commit' to 'true'
+#   if a commit is needed, 'false' otherwise
+
 # Pre-requisites:
 # * Generate a fresh copy of the languages list from the Internet
 #   to the same directory as the current script:

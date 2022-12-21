@@ -54,5 +54,5 @@ jobs:
           base: main
           title: Language Updates
           body: |
-            This PR was created automatically because languages
-            changes were detected upstream
+            This PR was created automatically because languages changes were detected upstream:
+            > ${{ env.LANGS_COMMIT_MESSAGE }}

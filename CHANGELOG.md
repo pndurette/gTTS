@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/pndurette/gTTS/compare/v2.3.0...v2.3.1) (2022-12-21)
+
+
+### Reverts
+
+* testing auto-update languages PR ([323d11d](https://github.com/pndurette/gTTS/commit/323d11d6f7d0a25d2a1981305dc43d07e11faf43))
+
 ## [2.3.0](https://github.com/pndurette/gTTS/compare/v2.2.4...v2.3.0) (2022-11-21)
 
 

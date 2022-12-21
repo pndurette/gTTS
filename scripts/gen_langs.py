@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
-from gtts.utils import _translate_url
-from gtts.tts import gTTSError
-from gtts import gTTS
-import requests
-import logging
-import uuid
-import json
-import sys
 import io
+import json
+import logging
+import logging.config
+import sys
+import uuid
+
+import requests
+from gtts import gTTS
+from gtts.tts import gTTSError
+from gtts.utils import _translate_url
+
+# Logger settings
+LOGGER_SETTINGS = {
+    "version": 1,
+    "formatters": {"default": {"format": "%(name)s - %(levelname)s - %(message)s"}},
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "default"}},
+    "loggers": {"gtts": {"handlers": ["console"], "level": "INFO"}},
+}
 
 # Logger
-log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler())
+logging.config.dictConfig(LOGGER_SETTINGS)
+log = logging.getLogger("gtts")
+
 
 # This file is used to generate the language dict (as a module)
 # Usage:
@@ -38,15 +49,13 @@ def _fetch_langs(tld="com"):
     LANGUAGES_URL = _translate_url(tld + "/translate_a/l").strip("/")
 
     headers = {
-        'User-Agent':
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-            "AppleWebKit/605.1.15 (KHTML, like Gecko) "
-            "Version/14.0 Safari/605.1.15"
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+        "Version/14.0 Safari/605.1.15"
     }
-    params = {
-        'client': 't',
-        'alpha': 'true'
-    }
+    params = {"client": "t", "alpha": "true"}
+
+    log.info("Getting language list...")
     data = requests.get(LANGUAGES_URL, headers=headers, params=params)
     json = data.json()
 
@@ -57,10 +66,12 @@ def _fetch_langs(tld="com"):
             tts = gTTS(test_text, lang=key)
             tts.write_to_fp(io.BytesIO())
             working_languages[key] = json["tl"][key]
-        except (gTTSError, ValueError): # Language not supported
-            pass
+            log.info(f"Added '{key}' ({working_languages[key]})")
+        except (gTTSError, ValueError):  # Language not supported
+            log.info(f"Rejected '{key}'")
 
     return working_languages
+
 
 if __name__ == "__main__":
     """Language list generation 'main'
@@ -74,7 +85,7 @@ if __name__ == "__main__":
     """
 
     lang_file_path = sys.argv[1]
-    with open(lang_file_path, 'w') as f:
+    with open(lang_file_path, "w") as f:
         langs = _fetch_langs()
 
         py_content = f"""# Note: this file is generated
@@ -83,5 +94,5 @@ _langs = {json.dumps(langs, indent=4, sort_keys=True)}
 def _main_langs():
     return _langs
 """
-
+        log.info(f"Writing to {lang_file_path}...")
         f.write(py_content)

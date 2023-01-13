@@ -31,7 +31,7 @@ with some examples shown in the table below.
     free to add new combinations to this list via a Pull Request!
 
 .. note:: The default ``tld`` is ``com`` which will use the local language accent
-    (according to Google) based on your geographical network location, if availabe.
+    (according to Google), if available, based on your geographical network location.
     For example, ``lang="en"`` with the default ``tld`` will sound British English.
 
 +---------------------------+--------------------------+----------------------------+

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import pytest
-from mock import Mock
+from unittest.mock import Mock
 from six.moves import urllib
 
 from gtts.tts import gTTS, gTTSError

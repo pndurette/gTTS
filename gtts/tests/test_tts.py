@@ -84,6 +84,7 @@ def test_no_text_parts(tmp_path):
 # Test write_to_fp()/save() cases not covered elsewhere in this file
 
 
+@pytest.mark.net
 def test_bad_fp_type():
     """Raise TypeError if fp is not a file-like object (no .write())"""
     # Create gTTS and save

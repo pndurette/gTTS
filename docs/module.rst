@@ -30,6 +30,10 @@ with some examples shown in the table below.
     `known localized Google domains <https://www.google.com/supported_domains>`_. Feel
     free to add new combinations to this list via a Pull Request!
 
+.. note:: The default ``tld`` is ``com`` which will use your most local language accent
+    (according to Google). For example, ``lang="en"`` with the default ``tld`` will
+    sound British English.
+
 +---------------------------+--------------------------+----------------------------+
 |       Local accent        | Language code (``lang``) | Top-level domain (``tld``) |
 +===========================+==========================+============================+
@@ -37,7 +41,7 @@ with some examples shown in the table below.
 +---------------------------+--------------------------+----------------------------+
 | English (United Kingdom)  | ``en``                   | ``co.uk``                  |
 +---------------------------+--------------------------+----------------------------+
-| English (United States)   | ``en``                   | ``com`` (default)          |
+| English (United States)   | ``en``                   | ``us``                     |
 +---------------------------+--------------------------+----------------------------+
 | English (Canada)          | ``en``                   | ``ca``                     |
 +---------------------------+--------------------------+----------------------------+
@@ -63,7 +67,7 @@ with some examples shown in the table below.
 +---------------------------+--------------------------+----------------------------+
 | Spanish (Spain)           | ``es``                   | ``es``                     |
 +---------------------------+--------------------------+----------------------------+
-| Spanish (United States)   | ``es``                   | ``com`` (default)          |
+| Spanish (United States)   | ``es``                   | ``us``                     |
 +---------------------------+--------------------------+----------------------------+
 
 

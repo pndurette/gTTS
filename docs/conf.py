@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'gTTS'
-copyright = '2014-2022 Pierre Nicolas Durette'
+copyright = '2014-2023 Pierre Nicolas Durette'
 author = 'Pierre Nicolas Durette'
 
 # The short X.Y version

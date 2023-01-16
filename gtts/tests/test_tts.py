@@ -2,7 +2,6 @@
 import os
 import pytest
 from unittest.mock import Mock
-from six.moves import urllib
 
 from gtts.tts import gTTS, gTTSError
 from gtts.langs import _main_langs

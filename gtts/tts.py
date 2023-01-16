@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
-from gtts.tokenizer import pre_processors, Tokenizer, tokenizer_cases
-from gtts.utils import _minimize, _len, _clean_tokens, _translate_url
-from gtts.lang import tts_langs, _fallback_deprecated_lang
-
-from six.moves import urllib
-
-try:
-    from urllib.parse import quote
-    import urllib3
-except ImportError:
-    from urllib import quote
-    import urllib2
-import requests
-import logging
-import json
-import re
 import base64
+import json
+import logging
+import re
+import urllib
+
+import requests
+
+from gtts.lang import _fallback_deprecated_lang, tts_langs
+from gtts.tokenizer import Tokenizer, pre_processors, tokenizer_cases
+from gtts.utils import _clean_tokens, _len, _minimize, _translate_url
 
 __all__ = ["gTTS", "gTTSError"]
 
@@ -233,7 +227,7 @@ class gTTS:
 
         rpc = [[[self.GOOGLE_TTS_RPC, escaped_parameter, None, "generic"]]]
         espaced_rpc = json.dumps(rpc, separators=(",", ":"))
-        return "f.req={}&".format(quote(espaced_rpc))
+        return "f.req={}&".format(urllib.parse.quote(espaced_rpc))
 
     def get_bodies(self):
         """Get TTS API request bodies(s) that would be sent to the TTS API.
@@ -253,7 +247,9 @@ class gTTS:
         # When disabling ssl verify in requests (for proxies and firewalls),
         # urllib3 prints an insecure warning on stdout. We disable that.
         try:
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            requests.packages.urllib3.disable_warnings(
+                requests.packages.urllib3.exceptions.InsecureRequestWarning
+            )
         except:
             pass
 

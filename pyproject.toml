@@ -63,11 +63,9 @@ documentation = "https://gtts.readthedocs.io"
 repository = "https://github.com/pndurette/gTTS"
 changelog = "https://github.com/pndurette/gTTS/blob/main/CHANGELOG.md"
 
-[tool.setuptools.packages.find]
-#where = ["src"]  # list of folders that contain the packages (["."] by default)
-#include = ["my_package*"]  # package names should match these glob patterns (["*"] by default)
-#exclude = ["my_package.tests*"]  # exclude packages matching these glob patterns (empty by default)
-namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+[tool.setuptools.package-data]
+# Tests support files
+"gtts.tests.input_files" = ["*.txt"]
 
 [tool.coverage.run]
 omit = [

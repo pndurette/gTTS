@@ -36,7 +36,7 @@ jobs:
         run: python -m build
       - name: Publish package
         if: ${{ steps.release.outputs.release_created }}
-        uses: pypa/gh-action-pypi-publish@a3a3bafbb3e5a75a854ae1bc53ae128cf22c4af4
+        uses: pypa/gh-action-pypi-publish@48b317d84d5f59668bb13be49d1697e36b3ad009
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}

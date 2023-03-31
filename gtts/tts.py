@@ -3,6 +3,7 @@ import base64
 import json
 import logging
 import re
+from typing import Dict, Optional
 import urllib
 
 import requests
@@ -52,6 +53,7 @@ class gTTS:
             Setting ``lang_check`` to ``False`` skips Web requests
             (to validate language) and therefore speeds up instanciation.
             Default is ``True``.
+        proxy (dict, optional): A dictionary of proxy settings to use when
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
             functions must take a string and return a string. Defaults to::
@@ -102,6 +104,7 @@ class gTTS:
         lang="en",
         slow=False,
         lang_check=True,
+        proxy=None,
         pre_processor_funcs=[
             pre_processors.tone_marks,
             pre_processors.end_of_line,
@@ -156,6 +159,12 @@ class gTTS:
         # Pre-processors and tokenizer
         self.pre_processor_funcs = pre_processor_funcs
         self.tokenizer_func = tokenizer_func
+
+        # Proxies
+        if proxy is None:
+            self.Proxies = urllib.request.getproxies()
+        else:
+            self.Proxies = _requests_proxies_arg(proxy)
 
     def _tokenize(self, text):
         # Pre-clean
@@ -259,7 +268,7 @@ class gTTS:
                 with requests.Session() as s:
                     # Send request
                     r = s.send(
-                        request=pr, proxies=urllib.request.getproxies(), verify=False
+                        request=pr, proxies=self.Proxies, verify=False
                     )
 
                 log.debug("headers-%i: %s", idx, r.request.headers)
@@ -280,7 +289,8 @@ class gTTS:
             for line in r.iter_lines(chunk_size=1024):
                 decoded_line = line.decode("utf-8")
                 if "jQ1olc" in decoded_line:
-                    audio_search = re.search(r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
+                    audio_search = re.search(
+                        r'jQ1olc","\[\\"(.*)\\"]', decoded_line)
                     if audio_search:
                         as_bytes = audio_search.group(1).encode("ascii")
                         yield base64.b64decode(as_bytes)
@@ -308,7 +318,8 @@ class gTTS:
                 log.debug("part-%i written to %s", idx, fp)
         except (AttributeError, TypeError) as e:
             raise TypeError(
-                "'fp' is not a file-like object or it does not take bytes: %s" % str(e)
+                "'fp' is not a file-like object or it does not take bytes: %s" % str(
+                    e)
             )
 
     def save(self, savefile):
@@ -373,3 +384,17 @@ class gTTSError(Exception):
                 cause = "Uptream API error. Try again later."
 
         return "{}. Probable cause: {}".format(premise, cause)
+
+
+def _requests_proxies_arg(proxy) -> Optional[Dict[str, str]]:
+    """Returns a value suitable for the 'proxies' argument to 'requests.request."""
+    if proxy is None:
+        return None
+    elif isinstance(proxy, str):
+        return {"http": proxy, "https": proxy}
+    elif isinstance(proxy, dict):
+        return proxy.copy()
+    else:
+        raise ValueError(
+            "'proxy' must be specified as either a string URL or a dict with string URL under the https and/or http keys."
+        )

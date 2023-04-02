@@ -54,6 +54,11 @@ class gTTS:
             (to validate language) and therefore speeds up instanciation.
             Default is ``True``.
         proxy (dict, optional): A dictionary of proxy settings to use when
+            connecting to Google Translate. For example::
+            proxy = {   'http': '192.168.3.3:7890, 'https': '192.168.3.3:7893'}
+            or:: proxy = '192.168.3.3:7890' ,call by _requests_proxies_arg(proxy) 
+            it will be converted to::
+            proxy = {   'http': '192.168.3.3:7890','https':'192.168.3.3:7890'}
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
             functions must take a string and return a string. Defaults to::
@@ -162,9 +167,9 @@ class gTTS:
 
         # Proxies
         if proxy is None:
-            self.Proxies = urllib.request.getproxies()
+            self.proxies = urllib.request.getproxies()
         else:
-            self.Proxies = _requests_proxies_arg(proxy)
+            self.proxies = _requests_proxies_arg(proxy)
 
     def _tokenize(self, text):
         # Pre-clean
@@ -268,7 +273,7 @@ class gTTS:
                 with requests.Session() as s:
                     # Send request
                     r = s.send(
-                        request=pr, proxies=self.Proxies, verify=False
+                        request=pr, proxies=self.proxies, verify=False
                     )
 
                 log.debug("headers-%i: %s", idx, r.request.headers)

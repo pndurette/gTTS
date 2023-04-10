@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from typing import Dict, Optional
 from gtts.tokenizer.symbols import ALL_PUNC as punc
 from string import whitespace as ws
 import re
@@ -99,3 +100,24 @@ def _translate_url(tld="com", path=""):
     """
     _GOOGLE_TTS_URL = "https://translate.google.{}/{}"
     return _GOOGLE_TTS_URL.format(tld, path)
+
+def _requests_proxies_arg(proxy) -> Optional[Dict[str, str]]:
+    """Returns a value suitable for the 'proxies' argument to 'requests.request.
+
+    Args:
+        proxy (dict, optional): must be specified as either a string URL or 
+            a dict with string URL under the https and/or http keys
+
+    Returns:
+        Optional[Dict[str, str]]: i.e {'http': '192.168.3.3:7890','https':'192.168.3.3:7890'}
+    """    
+    if proxy is None:
+        return None
+    elif isinstance(proxy, str):
+        return {"http": proxy, "https": proxy}
+    elif isinstance(proxy, dict):
+        return proxy.copy()
+    else:
+        raise ValueError(
+            "'proxy' must be specified as either a string URL or a dict with string URL under the https and/or http keys."
+        )

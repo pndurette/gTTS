@@ -3,14 +3,13 @@ import base64
 import json
 import logging
 import re
-from typing import Dict, Optional
 import urllib
 
 import requests
 
 from gtts.lang import _fallback_deprecated_lang, tts_langs
 from gtts.tokenizer import Tokenizer, pre_processors, tokenizer_cases
-from gtts.utils import _clean_tokens, _len, _minimize, _translate_url
+from gtts.utils import _clean_tokens, _len, _minimize, _requests_proxies_arg, _translate_url
 
 __all__ = ["gTTS", "gTTSError"]
 
@@ -53,12 +52,10 @@ class gTTS:
             Setting ``lang_check`` to ``False`` skips Web requests
             (to validate language) and therefore speeds up instanciation.
             Default is ``True``.
-        proxy (dict, optional): A dictionary of proxy settings to use when
-            connecting to Google Translate. For example::
-            proxy = {   'http': '192.168.3.3:7890, 'https': '192.168.3.3:7893'}
-            or:: proxy = '192.168.3.3:7890' ,call by _requests_proxies_arg(proxy) 
-            it will be converted to::
-            proxy = {   'http': '192.168.3.3:7890','https':'192.168.3.3:7890'}
+        proxy (dict, optional): must be specified as either a string URL or 
+            a dict with string URL under the https and/or http keys. For example::
+            proxy = {'http': '192.168.3.3:7890, 'https': '192.168.3.3:7893'}
+            or:: proxy = '192.168.3.3:7890'
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
             functions must take a string and return a string. Defaults to::
@@ -389,17 +386,3 @@ class gTTSError(Exception):
                 cause = "Uptream API error. Try again later."
 
         return "{}. Probable cause: {}".format(premise, cause)
-
-
-def _requests_proxies_arg(proxy) -> Optional[Dict[str, str]]:
-    """Returns a value suitable for the 'proxies' argument to 'requests.request."""
-    if proxy is None:
-        return None
-    elif isinstance(proxy, str):
-        return {"http": proxy, "https": proxy}
-    elif isinstance(proxy, dict):
-        return proxy.copy()
-    else:
-        raise ValueError(
-            "'proxy' must be specified as either a string URL or a dict with string URL under the https and/or http keys."
-        )

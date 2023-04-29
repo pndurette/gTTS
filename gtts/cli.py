@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from gtts import gTTS, gTTSError, __version__
-from gtts.lang import tts_langs
+from gtts.lang import tts_langs, _fallback_deprecated_lang
 import click
 import logging
 import logging.config
@@ -45,6 +45,9 @@ def validate_lang(ctx, param, lang):
     """
     if ctx.params["nocheck"]:
         return lang
+
+    # Fallback from deprecated language if needed
+    lang = _fallback_deprecated_lang(lang)
 
     try:
         if lang not in tts_langs():

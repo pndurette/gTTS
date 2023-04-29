@@ -8,6 +8,14 @@ on:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      # https://docs.pypi.org/trusted-publishers/using-a-publisher/
+      id-token: write
+    environment:
+      # Environment to narrow down the publish scope
+      name: production
+      url: https://pypi.org/project/gTTS/${{ steps.release.outputs.tag_name }}/
 
     steps:
       - name: Release Please
@@ -37,9 +45,6 @@ jobs:
       - name: Publish package
         if: ${{ steps.release.outputs.release_created }}
         uses: pypa/gh-action-pypi-publish@0bf742be3ebe032c25dd15117957dc15d0cfc38d
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
 
 # References:
 # * Release Please:

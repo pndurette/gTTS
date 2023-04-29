@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.3.2](https://github.com/pndurette/gTTS/compare/v2.3.2...v2.3.2) (2023-04-29)
+
+
+### Features
+
+* centralizes project metadata and config into a single `pyproject.toml` ([25d3c1c](https://github.com/pndurette/gTTS/commit/25d3c1c9ee16da81d1b766b9ee6649831a8a1719))
+* drops support for Python 2.7 (long overdue), Python 3.6 (end-of-life) ([25d3c1c](https://github.com/pndurette/gTTS/commit/25d3c1c9ee16da81d1b766b9ee6649831a8a1719))
+* modernize package config and build/release workflow ([25d3c1c](https://github.com/pndurette/gTTS/commit/25d3c1c9ee16da81d1b766b9ee6649831a8a1719))
+* Simplify language generator ([5dbdf10](https://github.com/pndurette/gTTS/commit/5dbdf105b9ca4639577d8904001581434741fe34))
+
+
+### Bug Fixes
+
+* add error case for when a custom tld gives a 404 ([5a860ed](https://github.com/pndurette/gTTS/commit/5a860edd27a6772d7facc384927e3b87439e2ccd))
+* **cli:** add deprecated language fallback support to CLI ([5a860ed](https://github.com/pndurette/gTTS/commit/5a860edd27a6772d7facc384927e3b87439e2ccd))
+* include missing required `*.txt` test files in dist ([#395](https://github.com/pndurette/gTTS/issues/395)) ([63f10ff](https://github.com/pndurette/gTTS/commit/63f10ff6aec877103c3459fc6d3c261d469b6770))
+* Languages added: `zh-CN` (Chinese (Simplified)), `zh-TW` (Chinese (Traditional)) ([5dbdf10](https://github.com/pndurette/gTTS/commit/5dbdf105b9ca4639577d8904001581434741fe34))
+* Languages removed: `cy` (Welsh),  `eo` (Esperanto), `mk` (Macedonian), `ms` (Malay), `zh-CN` (Chinese) ([5dbdf10](https://github.com/pndurette/gTTS/commit/5dbdf105b9ca4639577d8904001581434741fe34))
+* loosen dependancies for `click` and `requests`, removes `six` dependancy ([#394](https://github.com/pndurette/gTTS/issues/394)) ([a4ce0c9](https://github.com/pndurette/gTTS/commit/a4ce0c9a26778c079fd49c7e2d89ab03bbc22cc3))
+* **test:** missing `[@pytest](https://github.com/pytest).mark.net` on net-enabled test ([#391](https://github.com/pndurette/gTTS/issues/391)) ([3667f06](https://github.com/pndurette/gTTS/commit/3667f06d16152961df2ff8067384f11be9b327c0))
+* **test:** remove `mock` package test dependancy ([#390](https://github.com/pndurette/gTTS/issues/390)) ([9b54fc1](https://github.com/pndurette/gTTS/commit/9b54fc12b7839d3ab3ee0e948df45dfd840061c5))
+
+
+### Documentation
+
+* **cli:** use correct lang code and valid tld ([5a860ed](https://github.com/pndurette/gTTS/commit/5a860edd27a6772d7facc384927e3b87439e2ccd))
+* examples, notes, format, grammar ([1a446b1](https://github.com/pndurette/gTTS/commit/1a446b11ec69c4cbcac741edc67dabf012a47cee))
+* format, fixes ([920a281](https://github.com/pndurette/gTTS/commit/920a281a41ada0d81676c888327e104d846febf0))
+
+
+### Miscellaneous Chores
+
+* release 2.3.2 ([6880829](https://github.com/pndurette/gTTS/commit/688082934d88dd1bd0b648206a4ea34c8dea9ae1))
+
 ## [2.3.2](https://github.com/pndurette/gTTS/compare/v2.3.1...v2.3.2) (2023-04-29)
 
 

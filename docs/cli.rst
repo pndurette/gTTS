@@ -24,9 +24,9 @@ Read "c'est la vie" in French to ``cestlavie.mp3``::
 
    $ gtts-cli "c'est la vie" --lang fr --output cestlavie.mp3
 
-Read '你好' to ``你好.mp3`` (in Mandarin, using google.cn)::
+Read '你好' to ``你好.mp3`` (in Mandarin, using google.com.hk)::
 
-   $ gtts-cli '你好' --tld cn --lang zh-cn --output 你好.mp3
+   $ gtts-cli '你好' --tld .com.hk --lang zh-CN --output 你好.mp3
 
 Read 'slow' slowly to ``slow.mp3``::
 

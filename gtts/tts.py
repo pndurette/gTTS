@@ -42,7 +42,7 @@ class gTTS:
             can produce different localized 'accents' for a given
             language. This is also useful when ``google.com`` might be blocked
             within a network but a local or different Google host
-            (e.g. ``google.cn``) is not. Default is ``com``.
+            (e.g. ``google.com.hk``) is not. Default is ``com``.
         lang (string, optional): The language (IETF language tag) to
             read the text in. Default is ``en``.
         slow (bool, optional): Reads text more slowly. Defaults to ``False``.
@@ -364,6 +364,8 @@ class gTTSError(Exception):
 
             if status == 403:
                 cause = "Bad token or upstream API changes"
+            elif status == 404 and tts.tld != "com":
+                cause = "Unsupported tld '{}'".format(tts.tld)
             elif status == 200 and not tts.lang_check:
                 cause = (
                     "No audio stream in response. Unsupported language '%s'"

@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.2](https://github.com/pndurette/gTTS/compare/v2.3.1...v2.3.2) (2023-04-29)
+
+
+### Bug Fixes
+
+* add error case for when a custom tld gives a 404 ([5a860ed](https://github.com/pndurette/gTTS/commit/5a860edd27a6772d7facc384927e3b87439e2ccd))
+* **cli:** add deprecated language fallback support to CLI ([5a860ed](https://github.com/pndurette/gTTS/commit/5a860edd27a6772d7facc384927e3b87439e2ccd))
+
+
+### Documentation
+
+* **cli:** use correct lang code and valid tld ([5a860ed](https://github.com/pndurette/gTTS/commit/5a860edd27a6772d7facc384927e3b87439e2ccd))
+
 ## [2.3.1](https://github.com/pndurette/gTTS/compare/v2.3.0...v2.3.1) (2023-01-16)
 
 

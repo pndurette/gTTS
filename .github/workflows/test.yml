@@ -10,12 +10,10 @@ on:
 
   push:
     # Creates a status check for the main branch
-    # (so the badge on the README can show the status of the main branch)
+    # (so the badge on the README can show
+    # the status of the main branch)
     branches:
       - main
-    paths:
-      - 'gtts/**'
-      - 'pyproject.toml'
 
 jobs:
   test:

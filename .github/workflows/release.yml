@@ -31,7 +31,7 @@ jobs:
       # Only do the rest (package build/push) if a release was created
       - name: Checkout
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Python
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-python@v4

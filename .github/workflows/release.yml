@@ -36,7 +36,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.12"
       - name: Install build dependencies
         if: ${{ steps.release.outputs.release_created }}
         run: |

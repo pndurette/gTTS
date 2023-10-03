@@ -8,6 +8,13 @@ on:
       - 'gtts/**'
       - 'pyproject.toml'
 
+  push:
+    # Creates a status check for the main branch
+    # (so the badge on the README can show
+    # the status of the main branch)
+    branches:
+      - main
+
 jobs:
   test:
     name: Unit
@@ -20,7 +27,7 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v4
         with:
@@ -38,4 +45,5 @@ jobs:
           TEST_LANGS: en
 
       - name: Upload Coverage Report
-        uses: codecov/codecov-action@v3.1.3
+        if: github.event_name == 'pull_request'
+        uses: codecov/codecov-action@v3.1.4

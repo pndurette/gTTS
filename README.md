@@ -6,10 +6,10 @@ Write spoken `mp3` data to a file, a file-like object (bytestring) for further a
 
 [![PyPI version](https://img.shields.io/pypi/v/gTTS.svg)](https://pypi.org/project/gTTS/)
 [![Python versions](https://img.shields.io/pypi/pyversions/gTTS.svg)](https://pypi.org/project/gTTS/)
-[![Tests workflow](https://github.com/pndurette/gTTS/workflows/Tests/badge.svg)](https://github.com/pndurette/gTTS/actions)
+[![Tests workflow](https://github.com/pndurette/gtts/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/pndurette/gTTS/actions)
 [![codecov](https://codecov.io/gh/pndurette/gTTS/branch/master/graph/badge.svg)](https://codecov.io/gh/pndurette/gTTS)
 [![Commits Since](https://img.shields.io/github/commits-since/pndurette/gTTS/latest.svg)](https://github.com/pndurette/gTTS/commits/)
-[![PyPi Downloads](http://pepy.tech/badge/gtts)](http://pepy.tech/project/gtts)
+[![PyPi Downloads](https://static.pepy.tech/badge/gtts)](http://pepy.tech/project/gtts)
 [![Buy me a Coffee](https://img.shields.io/badge/buy%20me%20a-coffee-orange)](https://www.buymeacoffee.com/pndurette)
 
 ## Features

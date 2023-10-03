@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.0](https://github.com/pndurette/gTTS/compare/v2.3.2...v2.4.0) (2023-10-03)
+
+
+### Features
+
+* Add Python 3.12 support  ([75294b2](https://github.com/pndurette/gTTS/commit/75294b227f5c428436215abaf6cddc9f3d10f4de))
+* Remove Python 3.7 support (end-of-life) ([75294b2](https://github.com/pndurette/gTTS/commit/75294b227f5c428436215abaf6cddc9f3d10f4de))
+
 ## [2.3.2](https://github.com/pndurette/gTTS/compare/v2.3.1...v2.3.2) (2023-04-29)
 
 

@@ -9,7 +9,7 @@ import requests
 
 from gtts.lang import _fallback_deprecated_lang, tts_langs
 from gtts.tokenizer import Tokenizer, pre_processors, tokenizer_cases
-from gtts.utils import _clean_tokens, _len, _minimize, _translate_url
+from gtts.utils import _clean_tokens, _minimize, _translate_url
 
 __all__ = ["gTTS", "gTTSError"]
 
@@ -173,7 +173,7 @@ class gTTS:
             log.debug("pre-processing: %s", pp)
             text = pp(text)
 
-        if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
+        if len(text) <= self.GOOGLE_TTS_MAX_CHARS:
             return _clean_tokens([text])
 
         # Tokenize

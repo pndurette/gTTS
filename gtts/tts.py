@@ -191,7 +191,7 @@ class gTTS:
         # Filter empty tokens, post-minimize
         tokens = [t for t in min_tokens if t]
 
-        return min_tokens
+        return tokens
 
     def _prepare_requests(self):
         """Created the TTS API the request(s) without sending them.

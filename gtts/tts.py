@@ -50,7 +50,7 @@ class gTTS:
             to catch a language error early. If set to ``True``,
             a ``ValueError`` is raised if ``lang`` doesn't exist.
             Setting ``lang_check`` to ``False`` skips Web requests
-            (to validate language) and therefore speeds up instanciation.
+            (to validate language) and therefore speeds up instantiation.
             Default is ``True``.
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
@@ -240,7 +240,7 @@ class gTTS:
         """Get TTS API request bodies(s) that would be sent to the TTS API.
 
         Returns:
-            list: A list of TTS API request bodiess to make.
+            list: A list of TTS API request bodies to make.
         """
         return [pr.body for pr in self._prepare_requests()]
 

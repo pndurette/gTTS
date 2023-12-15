@@ -36,7 +36,7 @@ def _minimize(the_string, delim, max_size):
     # i.e. prevent a recursive infinite loop on `the_string[0:0]`
     # if `the_string` starts with `delim` and is larger than `max_size`
     if the_string.startswith(delim):
-        the_string = the_string[_len(delim) :]
+        the_string = the_string[_len(delim):]
 
     if _len(the_string) > max_size:
         try:

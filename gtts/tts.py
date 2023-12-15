@@ -73,6 +73,10 @@ class gTTS:
                     tokenizer_cases.other_punctuation
                 ]).run
 
+        timeout (float or tuple, optional): Seconds to wait for the server to
+            send data before giving up, as a float, or a ``(connect timeout,
+            read timeout)`` tuple. ``None`` will wait forever (default).
+
     See Also:
         :doc:`Pre-processing and tokenizing <tokenizer>`
 
@@ -116,6 +120,7 @@ class gTTS:
                 tokenizer_cases.other_punctuation,
             ]
         ).run,
+        timeout=None,
     ):
 
         # Debug
@@ -156,6 +161,8 @@ class gTTS:
         # Pre-processors and tokenizer
         self.pre_processor_funcs = pre_processor_funcs
         self.tokenizer_func = tokenizer_func
+
+        self.timeout = timeout
 
     def _tokenize(self, text):
         # Pre-clean
@@ -259,7 +266,10 @@ class gTTS:
                 with requests.Session() as s:
                     # Send request
                     r = s.send(
-                        request=pr, proxies=urllib.request.getproxies(), verify=False
+                        request=pr,
+                        verify=False,
+                        proxies=urllib.request.getproxies(),
+                        timeout=self.timeout,
                     )
 
                 log.debug("headers-%i: %s", idx, r.request.headers)
@@ -372,6 +382,6 @@ class gTTSError(Exception):
                     % self.tts.lang
                 )
             elif status >= 500:
-                cause = "Uptream API error. Try again later."
+                cause = "Upstream API error. Try again later."
 
         return "{}. Probable cause: {}".format(premise, cause)

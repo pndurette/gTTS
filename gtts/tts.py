@@ -9,7 +9,7 @@ import requests
 
 from gtts.lang import _fallback_deprecated_lang, tts_langs
 from gtts.tokenizer import Tokenizer, pre_processors, tokenizer_cases
-from gtts.utils import _clean_tokens, _len, _minimize, _translate_url
+from gtts.utils import _clean_tokens, _minimize, _translate_url
 
 __all__ = ["gTTS", "gTTSError"]
 
@@ -50,7 +50,7 @@ class gTTS:
             to catch a language error early. If set to ``True``,
             a ``ValueError`` is raised if ``lang`` doesn't exist.
             Setting ``lang_check`` to ``False`` skips Web requests
-            (to validate language) and therefore speeds up instanciation.
+            (to validate language) and therefore speeds up instantiation.
             Default is ``True``.
         pre_processor_funcs (list): A list of zero or more functions that are
             called to transform (pre-process) text before tokenizing. Those
@@ -72,6 +72,10 @@ class gTTS:
                     tokenizer_cases.colon,
                     tokenizer_cases.other_punctuation
                 ]).run
+
+        timeout (float or tuple, optional): Seconds to wait for the server to
+            send data before giving up, as a float, or a ``(connect timeout,
+            read timeout)`` tuple. ``None`` will wait forever (default).
 
     See Also:
         :doc:`Pre-processing and tokenizing <tokenizer>`
@@ -116,6 +120,7 @@ class gTTS:
                 tokenizer_cases.other_punctuation,
             ]
         ).run,
+        timeout=None,
     ):
 
         # Debug
@@ -157,6 +162,8 @@ class gTTS:
         self.pre_processor_funcs = pre_processor_funcs
         self.tokenizer_func = tokenizer_func
 
+        self.timeout = timeout
+
     def _tokenize(self, text):
         # Pre-clean
         text = text.strip()
@@ -166,7 +173,7 @@ class gTTS:
             log.debug("pre-processing: %s", pp)
             text = pp(text)
 
-        if _len(text) <= self.GOOGLE_TTS_MAX_CHARS:
+        if len(text) <= self.GOOGLE_TTS_MAX_CHARS:
             return _clean_tokens([text])
 
         # Tokenize
@@ -184,7 +191,7 @@ class gTTS:
         # Filter empty tokens, post-minimize
         tokens = [t for t in min_tokens if t]
 
-        return min_tokens
+        return tokens
 
     def _prepare_requests(self):
         """Created the TTS API the request(s) without sending them.
@@ -233,7 +240,7 @@ class gTTS:
         """Get TTS API request bodies(s) that would be sent to the TTS API.
 
         Returns:
-            list: A list of TTS API request bodiess to make.
+            list: A list of TTS API request bodies to make.
         """
         return [pr.body for pr in self._prepare_requests()]
 
@@ -259,7 +266,10 @@ class gTTS:
                 with requests.Session() as s:
                     # Send request
                     r = s.send(
-                        request=pr, proxies=urllib.request.getproxies(), verify=False
+                        request=pr,
+                        verify=False,
+                        proxies=urllib.request.getproxies(),
+                        timeout=self.timeout,
                     )
 
                 log.debug("headers-%i: %s", idx, r.request.headers)
@@ -372,6 +382,6 @@ class gTTSError(Exception):
                     % self.tts.lang
                 )
             elif status >= 500:
-                cause = "Uptream API error. Try again later."
+                cause = "Upstream API error. Try again later."
 
         return "{}. Probable cause: {}".format(premise, cause)

@@ -38,7 +38,7 @@ def _extra_langs():
     """Define extra languages.
 
     Returns:
-        dict: A dictionnary of extra languages manually defined.
+        dict: A dictionary of extra languages manually defined.
 
             Variations of the ones generated in `_main_langs`,
             observed to provide different dialects or accents or
@@ -64,7 +64,7 @@ def _fallback_deprecated_lang(lang):
 
     Returns:
         string: The language tag, as-is if not deprecated,
-            or a fallack if it exits.
+            or a fallback if it exits.
 
     Example:
         ``en-GB`` returns ``en``.

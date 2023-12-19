@@ -10,7 +10,7 @@ from gtts.lang import _extra_langs
 # Testing all languages takes some time.
 # Set TEST_LANGS envvar to choose languages to test.
 #  * 'main': Languages extracted from the Web
-#  * 'extra': Languagee set in Languages.EXTRA_LANGS
+#  * 'extra': Language set in Languages.EXTRA_LANGS
 #  * 'all': All of the above
 #  * <csv>: Languages tags list to test
 # Unset TEST_LANGS to test everything ('all')
@@ -125,7 +125,7 @@ def test_msg():
 
 
 def test_infer_msg():
-    """Infer message sucessfully based on context"""
+    """Infer message successfully based on context"""
 
     # Without response:
 
@@ -163,7 +163,7 @@ def test_infer_msg():
     error500 = gTTSError(tts=tts500, response=response500)
     assert (
         error500.msg
-        == "500 (ccc) from TTS API. Probable cause: Uptream API error. Try again later."
+        == "500 (ccc) from TTS API. Probable cause: Upstream API error. Try again later."
     )
 
     # Unknown (ex. 100)
@@ -187,6 +187,24 @@ def test_WebRequest(tmp_path):
         filename = tmp_path / "xx.txt"
         # Create gTTS
         tts = gTTS(text=text, lang=lang, lang_check=check)
+        tts.save(filename)
+
+
+@pytest.mark.net
+def test_timeout(tmp_path):
+    # Check default timeout
+    tts = gTTS(text="test")
+    assert tts.timeout is None
+
+    # Check passed in timeout
+    timeout = 1.2
+    tts = gTTS(text="test", timeout=timeout)
+    assert tts.timeout == timeout
+
+    # Make sure an exception is raised when a timeout occurs
+    tts = gTTS(text="test", timeout=0.000001)
+    filename = tmp_path / "save.mp3"
+    with pytest.raises(gTTSError):
         tts.save(filename)
 
 

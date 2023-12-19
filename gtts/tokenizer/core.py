@@ -229,7 +229,7 @@ class Tokenizer:
 
     Args:
         regex_funcs (list): List of compiled ``regex`` objects. Each
-            functions's pattern will be joined into a single pattern and
+            function's pattern will be joined into a single pattern and
             compiled.
         flags: ``re`` flag(s) to compile with the final regex. Defaults to
             ``re.IGNORECASE``

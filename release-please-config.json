@@ -3,6 +3,6 @@
     "plugins": ["sentence-case"],
     "release-type": "python",
     "packages": {
-        "gtts": {}
+        ".": {}
     }
 }

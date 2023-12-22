@@ -22,11 +22,8 @@ jobs:
 
     steps:
       - name: Release Please
-        uses: google-github-actions/release-please-action@v3
+        uses: google-github-actions/release-please-action@v4
         id: release
-        with:
-          release-type: python
-          package-name: gTTS
 
       # Only do the rest (package build/push) if a release was created
       - name: Checkout
@@ -34,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Python
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install build dependencies
@@ -47,7 +44,7 @@ jobs:
         run: python -m build
       - name: Publish package
         if: ${{ steps.release.outputs.release_created }}
-        uses: pypa/gh-action-pypi-publish@b7f401de30cb6434a1e19f805ff006643653240e
+        uses: pypa/gh-action-pypi-publish@2f6f737ca5f74c637829c0f5c3acd0e29ea5e8bf
 
 # References:
 # * Release Please:

@@ -2,7 +2,7 @@
 
 **gTTS** (*Google Text-to-Speech*), a Python library and CLI tool to interface with Google Translate's text-to-speech API. 
 Write spoken `mp3` data to a file, a file-like object (bytestring) for further audio manipulation, or `stdout`.
-<http://gtts.readthedocs.org/>
+<https://gtts.readthedocs.io/>
 
 [![PyPI version](https://img.shields.io/pypi/v/gTTS.svg)](https://pypi.org/project/gTTS/)
 [![Python versions](https://img.shields.io/pypi/pyversions/gTTS.svg)](https://pypi.org/project/gTTS/)
@@ -33,7 +33,7 @@ Module:
     >>> tts = gTTS('hello')
     >>> tts.save('hello.mp3')
 
-See <http://gtts.readthedocs.org/> for documentation and examples.
+See <https://gtts.readthedocs.io/> for documentation and examples.
 
 ### Disclaimer
 

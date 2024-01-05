@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/pndurette/gTTS/compare/v2.5.0...v2.5.1) (2024-01-05)
+
+
+### Documentation
+
+* Fix .readthedocs.yaml and update README.md ([#445](https://github.com/pndurette/gTTS/issues/445)) ([6c7f04c](https://github.com/pndurette/gTTS/commit/6c7f04c400a4c4410e2d9d8fd56f6a7926543526))
+
 ## [2.5.0](https://github.com/pndurette/gTTS/compare/v2.4.0...v2.5.0) (2023-12-20)
 
 

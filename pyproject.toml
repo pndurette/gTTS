@@ -1,6 +1,6 @@
 [project]
 name = "gTTS"
-version = "2.5.0"
+version = "2.5.1"
 description = "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API"
 authors = [{name = "Pierre Nicolas Durette", email = "pndurette@gmail.com"}]
 requires-python = ">=3.7"

@@ -333,6 +333,7 @@ class gTTS:
         """
         with open(str(savefile), "wb") as f:
             self.write_to_fp(f)
+            f.flush()
             log.debug("Saved to %s", savefile)
 
 

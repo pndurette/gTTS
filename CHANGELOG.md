@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/pndurette/gTTS/compare/v2.5.0...v2.5.1) (2024-01-29)
+
+
+### Bug Fixes
+
+* Flush file after saving ([#448](https://github.com/pndurette/gTTS/issues/448)) ([262c532](https://github.com/pndurette/gTTS/commit/262c5328981454ebeac07ed0e6f053b0e4e1daa7))
+
 ## [2.5.0](https://github.com/pndurette/gTTS/compare/v2.4.0...v2.5.0) (2023-12-20)
 
 

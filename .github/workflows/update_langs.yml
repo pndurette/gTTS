@@ -46,7 +46,7 @@ jobs:
         # Create new branch/PR with any changes
       - name: Create PR
         if: ${{ fromJSON(steps.check_langs.outputs.must_commit) }}
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           add-paths: ${{ env.CURR_LANG_FILE_PATH }}
           commit-message: ${{ env.LANGS_COMMIT_MESSAGE }} # from check_langs

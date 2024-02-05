@@ -1,7 +1,7 @@
 name: Upload Code Coverage
 
 # For the Codecov to do a code coverage diff in a PR,
-# it must have a code coverage of the PR base banch
+# it must have a code coverage of the PR base branch
 # (i.e. typically main). This Action runs tests on main
 # so the code coverage results can be uploaded and
 # a diff to appear in PRs.

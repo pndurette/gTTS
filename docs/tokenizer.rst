@@ -12,15 +12,15 @@ Definitions
 -----------
 
 Pre-processor:
-    Function that takes text and returns text. Its goal is to modify text (for example correcting pronounciation), and/or to prepare text for proper tokenization (for example ensuring spacing after certain characters).
+    Function that takes text and returns text. Its goal is to modify text (for example correcting pronunciation), and/or to prepare text for proper tokenization (for example ensuring spacing after certain characters).
 
 Tokenizer:
     Function that takes text and returns it split into a list of `tokens` (strings).
     In the ``gTTS`` context, its goal is to cut the text into smaller segments that do not exceed the maximum character size allowed for each TTS API request, while making the speech sound natural and continuous.
-    It does so by splitting text where speech would naturaly pause (for example on ".") while handling where it should not (for example on "10.5" or "U.S.A."). Such rules are called `tokenizer cases`, which it takes a list of.
+    It does so by splitting text where speech would naturally pause (for example on ".") while handling where it should not (for example on "10.5" or "U.S.A."). Such rules are called `tokenizer cases`, which it takes a list of.
 
 Tokenizer case:
-    Function that defines one of the specific cases used by :class:`gtts.tokenizer.core.Tokenizer`. More specefically, it returns a ``regex`` object that describes what to look for for a particular case. :class:`gtts.tokenizer.core.Tokenizer` then creates its main `regex` pattern by joining all `tokenizer cases` with "|".
+    Function that defines one of the specific cases used by :class:`gtts.tokenizer.core.Tokenizer`. More specifically, it returns a ``regex`` object that describes what to look for for a particular case. :class:`gtts.tokenizer.core.Tokenizer` then creates its main `regex` pattern by joining all `tokenizer cases` with "|".
 
 
 Pre-processing
@@ -104,7 +104,7 @@ This module provides a class to help build tokenizer cases: :class:`gtts.tokeniz
 Using a 3rd-party tokenizer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Even though :class:`gtts.tokenizer.core.Tokenizer` works well in this context, there are way more advanced tokenizers and tokenzing techniques. As long as you can restrict the lenght of output tokens, you can use any tokenizer you'd like, such as the ones in `NLTK <http://www.nltk.org>`_.
+Even though :class:`gtts.tokenizer.core.Tokenizer` works well in this context, there are way more advanced tokenizers and tokenzing techniques. As long as you can restrict the length of output tokens, you can use any tokenizer you'd like, such as the ones in `NLTK <http://www.nltk.org>`_.
 
 Minimizing
 ----------

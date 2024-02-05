@@ -11,7 +11,7 @@ class RegexBuilder:
     single pattern.
 
     Args:
-        pattern_args (iteratable): String element(s) to be each passed to
+        pattern_args (iterable): String element(s) to be each passed to
             ``pattern_func`` to create a regex pattern. Each element is
             ``re.escape``'d before being passed.
         pattern_func (callable): A 'template' function that should take a
@@ -78,7 +78,7 @@ class PreProcessorRegex:
     replacement parameter.
 
     Args:
-        search_args (iteratable): String element(s) to be each passed to
+        search_args (iterable): String element(s) to be each passed to
             ``search_func`` to create a regex pattern. Each element is
             ``re.escape``'d before being passed.
         search_func (callable): A 'template' function that should take a
@@ -159,7 +159,7 @@ class PreProcessorSub:
         ignore_case (bool): Ignore case during search. Defaults to ``True``.
 
     Example:
-        Replace all occurences of "Mac" to "PC" and "Firefox" to "Chrome"::
+        Replace all occurrences of "Mac" to "PC" and "Firefox" to "Chrome"::
 
             >>> sub_pairs = [('Mac', 'PC'), ('Firefox', 'Chrome')]
             >>> pp = PreProcessorSub(sub_pairs)
@@ -244,11 +244,11 @@ class Tokenizer:
 
     Warning:
         Joined ``regex`` patterns can easily interfere with one another in
-        unexpected ways. It is recommanded that each tokenizer case operate
-        on distinct or non-overlapping chracters/sets of characters
+        unexpected ways. It is recommended that each tokenizer case operate
+        on distinct or non-overlapping characters/sets of characters
         (For example, a tokenizer case for the period (".") should also
         handle not matching/cutting on decimals, instead of making that
-        a seperate tokenizer case).
+        a separate tokenizer case).
 
     Example:
         A tokenizer with a two simple case (*Note: these are bad cases to

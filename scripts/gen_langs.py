@@ -43,7 +43,7 @@ def _fetch_langs(tld="com"):
             Default is ``com``.
 
     Returns:
-        dict: A dictionnary of languages from Google Translate
+        dict: A dictionary of languages from Google Translate
 
     """
     LANGUAGES_URL = _translate_url(tld + "/translate_a/l").strip("/")

@@ -43,7 +43,7 @@ Read ``stdin`` to ``hello.mp3`` via ``<text>`` or ``<file>``::
 
 Read 'no check' to ``nocheck.mp3`` without language checking::
 
-   $ gtts-cli 'no check' --lang zh --nocheck --ouput nocheck.mp3
+   $ gtts-cli 'no check' --lang zh --nocheck --output nocheck.mp3
 
 .. note:: Using ``--nocheck`` can speed up execution. It exists mostly however to force a ``<lang>`` language tag that might not be documented but would work with the API, such as for specific regional sub-tags of documented tags (examples for 'en': 'en-gb', 'en-au', etc.).
 
@@ -53,4 +53,3 @@ Playing sound directly
 You can pipe the output of ``gtts-cli`` into any media player that supports ``stdin``. For example, using the ``play`` command from `SoX <http://sox.sourceforge.net>`_::
 
    $ gtts-cli 'hello' | play -t mp3 -
-

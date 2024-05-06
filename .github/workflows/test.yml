@@ -46,4 +46,4 @@ jobs:
 
       - name: Upload Coverage Report
         if: github.event_name == 'pull_request'
-        uses: codecov/codecov-action@v4.0.2
+        uses: codecov/codecov-action@v4.3.1

@@ -44,7 +44,7 @@ jobs:
         run: python -m build
       - name: Publish package
         if: ${{ steps.release.outputs.release_created }}
-        uses: pypa/gh-action-pypi-publish@81e9d935c883d0b210363ab89cf05f3894778450
+        uses: pypa/gh-action-pypi-publish@ec4db0b4ddc65acdf4bff5fa45ac92d78b56bdf0
 
 # References:
 # * Release Please:

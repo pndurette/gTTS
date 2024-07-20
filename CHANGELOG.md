@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2](https://github.com/pndurette/gTTS/compare/v2.5.1...v2.5.2) (2024-07-20)
+
+
+### Bug Fixes
+
+* **langs:** Languages added: `am` (Amharic), `cy` (Welsh), `eu` (Basque), `gl` (Galician), `ha` (Hausa), `lt` (Lithuanian), `pa` (Punjabi) ([#477](https://github.com/pndurette/gTTS/issues/477)) ([b04d6d1](https://github.com/pndurette/gTTS/commit/b04d6d1ccfdd5dbb468ddd680e7d63435e3dea2c))
+
 ## [2.5.1](https://github.com/pndurette/gTTS/compare/v2.5.0...v2.5.1) (2024-01-29)
 
 

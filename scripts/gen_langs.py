@@ -63,7 +63,7 @@ def _fetch_langs(tld="com"):
     test_text = str(uuid.uuid4())
     for key in json["tl"]:
         try:
-            tts = gTTS(test_text, lang=key)
+            tts = gTTS(test_text, lang=key, lang_check=False)
             tts.write_to_fp(io.BytesIO())
             working_languages[key] = json["tl"][key]
             log.info(f"Added '{key}' ({working_languages[key]})")

@@ -43,9 +43,10 @@ _langs = {
     "ne": "Nepali",
     "nl": "Dutch",
     "no": "Norwegian",
-    "pa": "Punjabi",
+    "pa": "Punjabi (Gurmukhi)",
     "pl": "Polish",
-    "pt": "Portuguese",
+    "pt": "Portuguese (Brazil)",
+    "pt-PT": "Portuguese (Portugal)",
     "ro": "Romanian",
     "ru": "Russian",
     "si": "Sinhala",
@@ -63,6 +64,7 @@ _langs = {
     "uk": "Ukrainian",
     "ur": "Urdu",
     "vi": "Vietnamese",
+    "yue": "Cantonese",
     "zh-CN": "Chinese (Simplified)",
     "zh-TW": "Chinese (Traditional)"
 }

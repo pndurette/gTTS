@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.3](https://github.com/pndurette/gTTS/compare/v2.5.2...v2.5.3) (2024-08-13)
+
+
+### Bug Fixes
+
+* **langs:** Languages added: `pt-PT` (Portuguese (Portugal)), `yue` (Cantonese); languages modified: `pa` (Punjabi (Gurmukhi)), `pt` (Portuguese (Brazil)) ([72a7e57](https://github.com/pndurette/gTTS/commit/72a7e57c0bfa2a6f1f81fc4ce485d9f920ae845c))
+
 ## [2.5.2](https://github.com/pndurette/gTTS/compare/v2.5.1...v2.5.2) (2024-07-20)
 
 

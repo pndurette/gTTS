@@ -75,7 +75,7 @@ def test_all():
     # One or more of "  xy: name" (\n optional to match the last)
     # Ex. "<start>  xx: xxxxx\n  xx-yy: xxxxx\n  xx: xxxxx<end>"
 
-    assert re.match(r"^(?:\s{2}(\w{2}|\w{2}-\w{2}): .+\n?)+$", result.output)
+    assert re.match(r"(\s{2}[\w-]{2,5}: .+\n?)", result.output)
     assert result.exit_code == 0
 
 

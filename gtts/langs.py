@@ -18,6 +18,7 @@ _langs = {
     "eu": "Basque",
     "fi": "Finnish",
     "fr": "French",
+    "fr-CA": "French (Canada)",
     "gl": "Galician",
     "gu": "Gujarati",
     "ha": "Hausa",

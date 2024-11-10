@@ -89,7 +89,7 @@ def _fallback_deprecated_lang(lang):
             "en-za",
             "en-tz",
         ],
-        "fr": ["fr-ca", "fr-fr"],
+        "fr": ["fr-fr"],
         "pt": ["pt-br", "pt-pt"],
         "es": ["es-es", "es-us"],
         "zh-CN": ["zh-cn"],

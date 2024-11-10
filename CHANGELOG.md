@@ -5,7 +5,6 @@
 
 ### Bug Fixes
 
-* **langs:** Language added: `fr-CA` (French (Canada)) ([defc400](https://github.com/pndurette/gTTS/commit/defc4000304f5745b1dfec40ef76eb584fb4a058))
 * **langs:** Language added: `fr-CA` (French (Canada)) ([#490](https://github.com/pndurette/gTTS/issues/490)) ([defc400](https://github.com/pndurette/gTTS/commit/defc4000304f5745b1dfec40ef76eb584fb4a058))
 
 ## [2.5.3](https://github.com/pndurette/gTTS/compare/v2.5.2...v2.5.3) (2024-08-13)

@@ -67,7 +67,8 @@ _langs = {
     "vi": "Vietnamese",
     "yue": "Cantonese",
     "zh-CN": "Chinese (Simplified)",
-    "zh-TW": "Chinese (Traditional)"
+    "zh-TW": "Chinese (Traditional)",
+    "uz": "Uzbek"
 }
 
 def _main_langs():

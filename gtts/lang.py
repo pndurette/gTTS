@@ -94,6 +94,7 @@ def _fallback_deprecated_lang(lang):
         "es": ["es-es", "es-us"],
         "zh-CN": ["zh-cn"],
         "zh-TW": ["zh-tw"],
+        "uz": ["uzbek"]
     }
 
     for fallback_lang, deprecated_langs in deprecated.items():

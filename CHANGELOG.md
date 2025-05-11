@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.5](https://github.com/pndurette/gTTS/compare/v2.5.4...v2.5.5) (2025-05-11)
+
+
+### Bug Fixes
+
+* **langs:** Upstream brought back 'fr-CA' (even though it sounds the same as 'fr') so removing it from the DeprecationWarning ([b8d1b3e](https://github.com/pndurette/gTTS/commit/b8d1b3e3fe1339058d1a8de3a75a0b86e4d39c64))
+
+
+### Documentation
+
+* Replaced the link the old one was broken ([#508](https://github.com/pndurette/gTTS/issues/508)) ([25271b2](https://github.com/pndurette/gTTS/commit/25271b29bea0d42745dca95f237313f3bf3eb5cb))
+
 ## [2.5.4](https://github.com/pndurette/gTTS/compare/v2.5.3...v2.5.4) (2024-11-10)
 
 

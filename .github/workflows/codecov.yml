@@ -36,4 +36,4 @@ jobs:
           TEST_LANGS: en
 
       - name: Upload Coverage Report
-        uses: codecov/codecov-action@v5.3.1
+        uses: codecov/codecov-action@v5.4.3

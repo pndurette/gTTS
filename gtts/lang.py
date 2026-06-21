@@ -96,6 +96,9 @@ def _fallback_deprecated_lang(lang):
         "zh-TW": ["zh-tw"],
     }
 
+    if lang in deprecated:
+        return lang
+
     for fallback_lang, deprecated_langs in deprecated.items():
         if lang.lower() in deprecated_langs:
             msg = (

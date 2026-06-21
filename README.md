@@ -39,6 +39,8 @@ See <https://gtts.readthedocs.io/> for documentation and examples.
 
 This project is *not* affiliated with Google or Google Cloud. Breaking upstream changes *can* occur without notice. This project is leveraging the undocumented [Google Translate](https://translate.google.com) speech functionality and is *different* from [Google Cloud Text-to-Speech](https://cloud.google.com/text-to-speech/).
 
+**Legal notice:** gTTS uses an API that is intended for use on the Google Translate website. Google's [Terms of Service](https://policies.google.com/terms) apply, and automated queries may be subject to restrictions. Using gTTS for commercial purposes, especially when a paid alternative (Google Cloud Text-to-Speech) exists, operates in a legal gray area. Users are responsible for ensuring their usage complies with applicable terms and laws.
+
 ### Project
 
 -   [Questions & community](https://github.com/pndurette/gTTS/discussions)

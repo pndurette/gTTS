@@ -98,6 +98,8 @@ def _fallback_deprecated_lang(lang):
 
     for fallback_lang, deprecated_langs in deprecated.items():
         if lang.lower() in deprecated_langs:
+            if lang == fallback_lang:
+                return lang
             msg = (
                 "'{}' has been deprecated, falling back to '{}'. "
                 "This fallback will be removed in a future version."

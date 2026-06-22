@@ -64,7 +64,7 @@ def _clean_tokens(tokens):
             that only consisted of whitespace and/or punctuation characters.
 
     """
-    return [t.strip() for t in tokens if not _ALL_PUNC_OR_SPACE.match(t)]
+    return [t.strip().replace('\xa0', ' ') for t in tokens if not _ALL_PUNC_OR_SPACE.match(t)]
 
 
 def _translate_url(tld="com", path=""):

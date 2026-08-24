@@ -3,9 +3,14 @@ import base64
 import json
 import logging
 import re
+import socket
 import urllib
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.connection import HTTPConnection, HTTPSConnection
+from urllib3.connectionpool import HTTPConnectionPool, HTTPSConnectionPool
+from urllib3.util import connection as urllib3_connection
 
 from gtts.lang import _fallback_deprecated_lang, tts_langs
 from gtts.tokenizer import Tokenizer, pre_processors, tokenizer_cases
@@ -16,6 +21,44 @@ __all__ = ["gTTS", "gTTSError"]
 # Logger
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
+
+
+def _new_ipv4_conn(self):
+    # urllib3 decides IPv4 vs IPv6 in one module-level helper, so pin it to
+    # IPv4 just while this connection opens its socket, then put it back.
+    original = urllib3_connection.allowed_gai_family
+    urllib3_connection.allowed_gai_family = lambda: socket.AF_INET
+    try:
+        return super(type(self), self)._new_conn()
+    finally:
+        urllib3_connection.allowed_gai_family = original
+
+
+class _IPv4HTTPConnection(HTTPConnection):
+    _new_conn = _new_ipv4_conn
+
+
+class _IPv4HTTPSConnection(HTTPSConnection):
+    _new_conn = _new_ipv4_conn
+
+
+class _IPv4HTTPConnectionPool(HTTPConnectionPool):
+    ConnectionCls = _IPv4HTTPConnection
+
+
+class _IPv4HTTPSConnectionPool(HTTPSConnectionPool):
+    ConnectionCls = _IPv4HTTPSConnection
+
+
+class _ForceIPv4Adapter(HTTPAdapter):
+    """A requests adapter that keeps all of its connections on IPv4."""
+
+    def init_poolmanager(self, *args, **kwargs):
+        super().init_poolmanager(*args, **kwargs)
+        self.poolmanager.pool_classes_by_scheme = {
+            "http": _IPv4HTTPConnectionPool,
+            "https": _IPv4HTTPSConnectionPool,
+        }
 
 
 class Speed:
@@ -76,6 +119,9 @@ class gTTS:
         timeout (float or tuple, optional): Seconds to wait for the server to
             send data before giving up, as a float, or a ``(connect timeout,
             read timeout)`` tuple. ``None`` will wait forever (default).
+        force_ipv4 (bool, optional): Only connect to the Google host over IPv4.
+            Useful on networks where IPv6 DNS or routing stalls the request.
+            Defaults to ``False`` (let the system pick IPv4 or IPv6).
 
     See Also:
         :doc:`Pre-processing and tokenizing <tokenizer>`
@@ -121,6 +167,7 @@ class gTTS:
             ]
         ).run,
         timeout=None,
+        force_ipv4=False,
     ):
 
         # Debug
@@ -163,6 +210,8 @@ class gTTS:
         self.tokenizer_func = tokenizer_func
 
         self.timeout = timeout
+
+        self.force_ipv4 = force_ipv4
 
     def _tokenize(self, text):
         # Pre-clean
@@ -264,6 +313,10 @@ class gTTS:
         for idx, pr in enumerate(prepared_requests):
             try:
                 with requests.Session() as s:
+                    if self.force_ipv4:
+                        s.mount("http://", _ForceIPv4Adapter())
+                        s.mount("https://", _ForceIPv4Adapter())
+
                     # Send request
                     r = s.send(
                         request=pr,

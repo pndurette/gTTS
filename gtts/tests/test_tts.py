@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+import http.server
 import os
+import socket
+import threading
 import pytest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
-from gtts.tts import gTTS, gTTSError
+from gtts.tts import gTTS, gTTSError, _ForceIPv4Adapter
 from gtts.langs import _main_langs
 from gtts.lang import _extra_langs
 
@@ -206,6 +209,52 @@ def test_timeout(tmp_path):
     filename = tmp_path / "save.mp3"
     with pytest.raises(gTTSError):
         tts.save(filename)
+
+
+def test_force_ipv4_default():
+    """force_ipv4 is off by default and stored when set"""
+    assert gTTS(text="test").force_ipv4 is False
+    assert gTTS(text="test", force_ipv4=True).force_ipv4 is True
+
+
+def test_force_ipv4_adapter_only_uses_ipv4():
+    """The force_ipv4 adapter asks for IPv4 address records only"""
+    import requests
+
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"ok")
+
+        def log_message(self, *args):
+            pass
+
+    server = http.server.HTTPServer(("127.0.0.1", 0), Handler)
+    port = server.server_address[1]
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+
+    families = []
+    real_getaddrinfo = socket.getaddrinfo
+
+    def spy(host, sport, family=0, *args, **kwargs):
+        families.append(family)
+        return real_getaddrinfo(host, sport, family, *args, **kwargs)
+
+    session = requests.Session()
+    session.mount("http://", _ForceIPv4Adapter())
+    try:
+        with patch("socket.getaddrinfo", spy):
+            # 'localhost' resolves to both IPv4 and IPv6, so a family of
+            # AF_INET here proves the adapter pinned the lookup.
+            response = session.get("http://localhost:{}/".format(port))
+    finally:
+        server.shutdown()
+
+    assert response.status_code == 200
+    assert families
+    assert all(f == socket.AF_INET for f in families)
 
 
 if __name__ == "__main__":

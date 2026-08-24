@@ -138,6 +138,12 @@ def set_debug(ctx, param, debug):
     help="Disable strict IETF language tag checking. Allow undocumented tags.",
 )
 @click.option(
+    "--force-ipv4",
+    default=False,
+    is_flag=True,
+    help="Only connect to the Google host over IPv4 (avoids IPv6 stalls).",
+)
+@click.option(
     "--all",
     default=False,
     is_flag=True,
@@ -156,7 +162,7 @@ def set_debug(ctx, param, debug):
     help="Show debug information.",
 )
 @click.version_option(version=__version__)
-def tts_cli(text, file, output, slow, tld, lang, nocheck):
+def tts_cli(text, file, output, slow, tld, lang, nocheck, force_ipv4):
     """Read <text> to mp3 format using Google Translate's Text-to-Speech API
     (set <text> or --file <file> to - for standard input)
     """
@@ -181,7 +187,14 @@ def tts_cli(text, file, output, slow, tld, lang, nocheck):
 
     # TTS
     try:
-        tts = gTTS(text=text, lang=lang, slow=slow, tld=tld, lang_check=not nocheck)
+        tts = gTTS(
+            text=text,
+            lang=lang,
+            slow=slow,
+            tld=tld,
+            lang_check=not nocheck,
+            force_ipv4=force_ipv4,
+        )
         tts.write_to_fp(output)
     except (ValueError, AssertionError) as e:
         raise click.UsageError(str(e))

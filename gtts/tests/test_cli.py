@@ -2,6 +2,7 @@
 import pytest
 import re
 import os
+from unittest.mock import patch
 from click.testing import CliRunner
 from gtts.cli import tts_cli
 
@@ -261,6 +262,19 @@ def test_file(tmp_path):
 
     # Check if files created is > 2k
     assert filename.stat().st_size > 2000
+    assert result.exit_code == 0
+
+
+def test_force_ipv4_flag():
+    """--force-ipv4 reaches the gTTS instance (read from debug log)"""
+    # Patch out the actual request so this stays offline; --nocheck keeps
+    # the language check from touching the network too.
+    with patch("gtts.cli.gTTS.write_to_fp"):
+        with LogCapture() as lc:
+            result = runner_debug(["--nocheck", "--force-ipv4", "test"])
+            log = logcapture_str(lc)
+
+    assert "force_ipv4: True" in log
     assert result.exit_code == 0
 
 

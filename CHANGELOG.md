@@ -1,5 +1,7 @@
 # Changelog
 
+* Removed support up to Python 3.10 and added support for up to Python 3.15.
+
 ## [2.5.4](https://github.com/pndurette/gTTS/compare/v2.5.3...v2.5.4) (2024-11-10)
 
 
